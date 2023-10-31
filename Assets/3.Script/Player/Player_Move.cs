@@ -4,7 +4,13 @@ using UnityEngine;
 
 public class Player_Move : MonoBehaviour
 {
-    public float speed = 10.0f;
+    public float speed = 4f;
+    Animator animator;
+
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     private void FixedUpdate()
     {
@@ -13,6 +19,31 @@ public class Player_Move : MonoBehaviour
 
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
 
+        if (moveHorizontal != 0 || moveVertical != 0)
+        {
+            Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);//해당 방향으로 캐릭터가 바라봄 
+            transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, speed * Time.deltaTime);//캐릭터 돌림
+
+            if(Input.GetKey(KeyCode.LeftShift))
+            {
+                animator.SetBool("isRun", true);
+                transform.position += movement * speed*2f * Time.deltaTime;
+            }
+            else if(!Input.GetKey(KeyCode.LeftShift))
+            {
+                animator.SetBool("isRun", false);
+                animator.SetBool("isWalik", true);
+                transform.position += movement * speed * Time.deltaTime;
+            }
+        }
+        else if (moveHorizontal == 0 && moveVertical == 0)
+        {
+            animator.SetBool("isRun", false);
+            animator.SetBool("isWalik", false);
+            
+        }
+
+        
         transform.position += movement * speed * Time.deltaTime;
     }
 }
