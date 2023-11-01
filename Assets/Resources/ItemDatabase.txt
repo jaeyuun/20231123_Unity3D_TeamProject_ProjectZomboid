@@ -1,0 +1,6 @@
+Item	Ammo	총알	1	FALSE
+Item	Health	체력	1	FALSE
+Item	Food	음식	1	FALSE
+Weapon	Bat	빠따	1	FALSE
+Weapon	Gun	총	1	FALSE
+Weapon	Sowrd	칼	1	FALSE
