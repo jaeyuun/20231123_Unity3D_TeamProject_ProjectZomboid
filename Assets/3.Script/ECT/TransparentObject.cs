@@ -99,7 +99,7 @@ public class TransparentObject : MonoBehaviour
             }
             if(isComplete)
             {
-               //CheckTime();
+                CheckTimer();
                 break;
             }
             yield return delay;
@@ -125,6 +125,31 @@ public class TransparentObject : MonoBehaviour
         }
 
         yield return resetDelay;
+    }
+
+    public void CheckTimer()
+    {
+        if (timeCheckCorutine != null) StopCoroutine(timeCheckCorutine);
+        timeCheckCorutine = StartCoroutine(CheckTimerCorutine());
+
+    }
+
+    private IEnumerator CheckTimerCorutine()
+    {
+        timer = 0f;
+        while(true)
+        {
+            timer += Time.deltaTime;
+
+            if(timer > Threshold_Max_Timer)
+            {
+                isReseting = true;
+                ResetOriginalTransparent();
+                break;
+            }
+            yield return null;
+        }
+
     }
 
         
