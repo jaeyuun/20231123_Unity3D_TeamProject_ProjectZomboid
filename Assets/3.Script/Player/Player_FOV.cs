@@ -10,6 +10,9 @@ public class Player_FOV : MonoBehaviour
         Mesh mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
 
+        float fov = 90f;
+        int rayCount = 2;
+
 
         Vector3[] vertices = new Vector3[3];
         Vector2[] uv = new Vector2[3];
