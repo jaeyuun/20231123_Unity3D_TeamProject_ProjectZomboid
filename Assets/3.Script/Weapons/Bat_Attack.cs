@@ -16,6 +16,7 @@ public class Bat_Attack : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        
         if (other.gameObject.CompareTag("Zombie") && player_Attack.isAttack)
         {
             sound.SetActive(true);
@@ -24,4 +25,5 @@ public class Bat_Attack : MonoBehaviour
         player_Attack.isAttack = false;
         sound.SetActive(false);
     }
+
 }
