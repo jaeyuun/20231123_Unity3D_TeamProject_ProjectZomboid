@@ -4,19 +4,22 @@ using UnityEngine;
 
 public class Bat_Attack : MonoBehaviour
 {
-   public GameObject sound;
-   public Player_Attack player_Attack;
+    public GameObject sound;
+    public Player_Attack player_Attack;
+    public AudioClip BatHit;
+    private AudioSource audioSource;
     void Start()
     {
-        player_Attack = GameObject.Find("Player").GetComponent<Player_Attack>();//플레이어를 찾아서 공격
+        audioSource = GetComponent<AudioSource>();
+        player_Attack = GameObject.Find("Player").GetComponent<Player_Attack>();//Player 게임오브젝트 찾기
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.CompareTag("Zombie")&& player_Attack.isAttack)
+        if (other.gameObject.CompareTag("Zombie") && player_Attack.isAttack)
         {
-            Debug.Log("때렸다.");
-            sound.SetActive(true);            
+            sound.SetActive(true);
+            audioSource.PlayOneShot(BatHit);
         }
         player_Attack.isAttack = false;
         sound.SetActive(false);
