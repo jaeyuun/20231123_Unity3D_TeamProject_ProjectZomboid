@@ -11,7 +11,7 @@ public class Bat_Attack : MonoBehaviour
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        player_Attack = GameObject.Find("Player").GetComponent<Player_Attack>();//Player 게임오브젝트 찾기
+        player_Attack = GameObject.Find("Player_MHK").GetComponent<Player_Attack>();//Player 게임오브젝트 찾기
     }
 
     private void OnTriggerEnter(Collider other)
