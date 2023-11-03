@@ -1,6 +1,9 @@
-Item	Ammo	총알	1	FALSE
-Item	Health	체력	1	FALSE
-Item	Food	음식	1	FALSE
-Weapon	Bat	빠따	1	FALSE
-Weapon	Gun	총	1	FALSE
-Weapon	Sowrd	칼	1	FALSE
+Item	Ammo	총알-총에 필요한 아이템	1	FALSE	0
+Item	Health	붕대-치료가 가능하다.	1	FALSE	1
+Item	flashlight	손전등- 앞을 밝혀준다.	1	FALSE	2
+Weapon	Bat	빠따-좀비를 후려친다.	1	FALSE	3
+Weapon	Gun	총- 좀비를 쏴 죽일 수 있다.	1	FALSE	4
+Weapon	Sowrd	칼-좀비를 벨 수 있다.	1	FALSE	5
+Food	Pizza	피자-배고픔을 해결한다.	1	FALSE	6
+Food	Beef	고기-배고픔을 해결한다.	1	FALSE	7
+Food	Lemon	레몬-배고픔을 조금 해결한다.	1	FALSE	8
