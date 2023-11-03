@@ -16,7 +16,6 @@ public class ZombieController : MonoBehaviour
     private Vector3 point;
 
     private Animator zombieAnim;
-    public bool isAttack = false;
     [SerializeField] private GameObject screamRange;
     [SerializeField] private bool isScreamZombie = false;
 
