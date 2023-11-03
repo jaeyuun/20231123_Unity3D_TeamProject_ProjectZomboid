@@ -4,65 +4,50 @@ using UnityEngine;
 
 public class Camera_Controller_Transparent : MonoBehaviour
 {
-    public Transform player;  // 플레이어의 Transform
-    public float offset;  // 플레이어와 카메라의 거리
-    public float zoomSpeed;  // 줌 속도
-    public float minZoom;  // 최소 줌
-    public float maxZoom;  // 최대 줌
+    private TransparentObject fader;
 
-    private float xOffset = 2f;
-    private float zOffset = 3f;
-
-    private void Start()
+    private void Update()
     {
-        Camera_Early();
-    }
+        GameObject player = GameObject.FindGameObjectWithTag("House");
 
-    private void LateUpdate()
-    {
-        Vector3 direction = (player.transform.position - transform.position).normalized;
-        RaycastHit[] hits = Physics.RaycastAll(transform.position, direction, Mathf.Infinity, 1 << LayerMask.NameToLayer("EnvironmentObject"));
-
-        for (int i = 0; i < hits.Length; i++)
+        if(player != null)
         {
-            TransparentObject[] obj = hits[i].transform.GetComponentsInChildren<TransparentObject>();
+            Vector3 direct = player.transform.position - transform.position;
+            Ray ray = new Ray(transform.position, direct.normalized);
+            RaycastHit[] hit;
 
-            for(int j=0; j< obj.Length; j++)
+            hit = Physics.RaycastAll(transform.position, transform.position, 1f);
+
+          for(int i = 0;i<hit.Length; i++)
             {
-                obj[j]?.becomeTransParent();
-            }
-            
-        }
+                if (Physics.Raycast(ray, out hit[i]))
+                {
 
+                    if (hit[i].collider == null)
+                        return;
 
-        float scrollData = Input.GetAxis("Mouse ScrollWheel");  // 스크롤 데이터
+                    fader = hit[i].collider.gameObject.GetComponent<TransparentObject>();
 
-        float nextOffset = offset - scrollData * (zoomSpeed*10);  // 다음 프레임에서의 offset 계산
-        nextOffset = Mathf.Clamp(nextOffset, minZoom, maxZoom);  // 줌 제한
+                    if (hit[i].collider.gameObject == player)
+                    {
 
-        // offset이 minZoom과 maxZoom 사이일 때만 xOffset, zOffset, offset 업데이트
-        if (nextOffset > minZoom && nextOffset < maxZoom)
-        {
-            if (scrollData > 0) // 스크롤을 올렸을 때
-            {
-                xOffset -= zoomSpeed; // X와 Z축에 대한 오프셋을 줄임.
-                zOffset -= zoomSpeed;
-                offset = nextOffset;
-            }
-            else if (scrollData < 0) // 스크롤을 내렸을 때
-            {
-                xOffset += zoomSpeed;
-                zOffset += zoomSpeed; // X와 Z축에 대한 오프셋을 늘림.
-                offset = nextOffset;
+                        if (fader != null)
+                        {
+                            fader.isDoFade = false;
+                            Debug.Log("House");
+                        }
+                    }
+                    else
+                    {
+                        if (fader == null)
+                        {
+                            fader.isDoFade = true;
+                        }
+                    }
+
+                }
             }
         }
-
-        transform.position = player.position + new Vector3(-xOffset, offset, -zOffset);  // 카메라 위치 업데이트
     }
 
-    private void Camera_Early()
-    {
-        transform.position = player.position + new Vector3(-xOffset, offset, -zOffset);  // 초기 카메라 위치 설정
-
-    }
 }
