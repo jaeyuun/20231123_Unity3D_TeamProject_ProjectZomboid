@@ -6,6 +6,8 @@ public class Player_Move : MonoBehaviour
 {
     public float speed = 4f;
     Animator animator;
+    public GameObject Sound_Walk;
+    public GameObject Sound_Run;
 
     private void Start()
     {
@@ -22,27 +24,34 @@ public class Player_Move : MonoBehaviour
         if (moveHorizontal != 0 || moveVertical != 0)
         {
             Turn(movement);
+            
 
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftShift) && !Input.GetMouseButton(1))
             {
+                Sound_Walk.SetActive(false);
+                Sound_Run.SetActive(true);
                 animator.SetBool("isRun", true);
-                transform.position += movement * speed*2f * Time.deltaTime;
+                transform.position += movement * speed * 2f * Time.deltaTime;
             }
-            else if(!Input.GetKey(KeyCode.LeftShift))
+            else if (!Input.GetKey(KeyCode.LeftShift) || Input.GetMouseButton(1))
             {
+                Sound_Walk.SetActive(false);
+                Sound_Walk.SetActive(true);
                 animator.SetBool("isRun", false);
-                animator.SetBool("isWalik", true);
+                animator.SetBool("isWalk", true);
                 transform.position += movement * speed * Time.deltaTime;
             }
         }
         else if (moveHorizontal == 0 && moveVertical == 0)
         {
+            Sound_Run.SetActive(false);
+            Sound_Walk.SetActive(false);
             animator.SetBool("isRun", false);
-            animator.SetBool("isWalik", false);
-            
+            animator.SetBool("isWalk", false);
+
         }
 
-        
+
         transform.position += movement * speed * Time.deltaTime;
     }
     private void Turn(Vector3 movement)
