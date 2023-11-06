@@ -9,6 +9,17 @@ public class Player_Attack : MonoBehaviour
     public AudioClip BatSwing;
     private AudioSource audioSource;
 
+    //등에 있는 배트
+    [SerializeField] private GameObject Bat_Spine;
+    private bool Bat_In=true;
+    
+    //손에 있는 배트
+    [SerializeField] private GameObject Bat_Hand;
+    private bool Bat_Out;
+
+
+    public bool Bat_Get;//배트를 가지고 있냐?
+    
     public bool Melee_weapon;
     public bool Range_weapon;
 
@@ -21,9 +32,22 @@ public class Player_Attack : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetButtonDown("Jump"))//동작하길 바란다...Todo 필요없다면 삭제 하길...
+        {
+            anim.SetLayerWeight(1, 0);
+            anim.SetTrigger("isKickig");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
+            Debug.Log("누르는중~~~");
+            Bat_take_out(Bat_Get);
+        }
 
         if (Input.GetMouseButton(1))//우클릭시
         {
+
             anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
             if (Melee_weapon)//근접무기를 들고 있다면
             {
@@ -34,6 +58,7 @@ public class Player_Attack : MonoBehaviour
                     isAttack = true;
                     Invoke("BatSWingClip", 0.3f);
                 }
+                
             }
             else if (Range_weapon)
             {
@@ -43,6 +68,7 @@ public class Player_Attack : MonoBehaviour
                     Debug.Log("탕");
                 }
             }
+   
         }
         else if(Input.GetMouseButtonUp(1))
         {
@@ -66,4 +92,35 @@ public class Player_Attack : MonoBehaviour
         audioSource.PlayOneShot(BatSwing);
 
     }
+
+    private void Bat_take_out(bool Bat)// 배트를 뽑는 애니메이션
+    {
+        if (Bat)
+        {
+            Debug.Log("배트는있어");
+            if (Bat_In)
+            {
+                Debug.Log("등뒤에 있어");
+                anim.SetTrigger("isOver");
+                StartCoroutine(ActivateWithDelay(Bat_Spine, Bat_Hand, false, true));
+            }
+            else if (Bat_Out)
+            {
+                anim.SetTrigger("isOver");
+                StartCoroutine(ActivateWithDelay(Bat_Hand, Bat_Spine, true, false));
+            }
+        }
+    }
+
+    private IEnumerator ActivateWithDelay(GameObject objectToDisable, GameObject objectToEnable, bool newBatIn, bool newBatOut)
+    {
+        yield return new WaitForSeconds(0.8f); // 대기 시간을 1초로 설정했습니다. 원하는 시간으로 변경 가능합니다.
+        objectToDisable.SetActive(false);
+        objectToEnable.SetActive(true);
+        Bat_In = newBatIn;
+        Bat_Out = newBatOut;
+    }
+
+
+
 }
