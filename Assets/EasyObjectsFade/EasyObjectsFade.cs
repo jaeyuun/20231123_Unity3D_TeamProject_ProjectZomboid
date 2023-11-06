@@ -39,7 +39,7 @@ public class EasyObjectsFade : MonoBehaviour
         get
         {
             if (time > 0.1f) return 0.01f;
-            else return 0.09f;
+            else return 0.05f;
         }
     }
 
@@ -214,8 +214,9 @@ public class EasyObjectsFade : MonoBehaviour
         Color c = mat.color;
         c.a = opacity;
         mat.color = c;
-    }
 
+    }
+ 
     private IEnumerator FadeIn(Material mat)
     {
 
@@ -233,6 +234,7 @@ public class EasyObjectsFade : MonoBehaviour
             yield return new WaitForSeconds((float)timeStep);
         }
 
+
         Color c = mat.color;
         c.a = opacity;
         mat.color = c;
@@ -240,4 +242,5 @@ public class EasyObjectsFade : MonoBehaviour
         StandardShaderUtils.ChangeTransparency(mat, false);
 
     }
+
 }
