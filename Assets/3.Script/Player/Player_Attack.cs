@@ -9,6 +9,8 @@ public class Player_Attack : MonoBehaviour
     public AudioClip BatSwing;
     private AudioSource audioSource;
 
+
+
     public bool Melee_weapon;
     public bool Range_weapon;
 
@@ -24,6 +26,7 @@ public class Player_Attack : MonoBehaviour
 
         if (Input.GetMouseButton(1))//우클릭시
         {
+
             anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
             if (Melee_weapon)//근접무기를 들고 있다면
             {
@@ -34,6 +37,7 @@ public class Player_Attack : MonoBehaviour
                     isAttack = true;
                     Invoke("BatSWingClip", 0.3f);
                 }
+                
             }
             else if (Range_weapon)
             {
@@ -43,6 +47,7 @@ public class Player_Attack : MonoBehaviour
                     Debug.Log("탕");
                 }
             }
+   
         }
         else if(Input.GetMouseButtonUp(1))
         {
@@ -66,4 +71,7 @@ public class Player_Attack : MonoBehaviour
         audioSource.PlayOneShot(BatSwing);
 
     }
+
+
+
 }
