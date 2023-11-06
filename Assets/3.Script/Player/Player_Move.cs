@@ -8,6 +8,7 @@ public class Player_Move : MonoBehaviour
     Animator animator;
     public GameObject Sound_Walk;
     public GameObject Sound_Run;
+    public GameObject Push;
     [SerializeField] private Camera followCamera;
 
     private void Start()
@@ -21,7 +22,11 @@ public class Player_Move : MonoBehaviour
         float moveVertical = Input.GetAxisRaw("Vertical");
 
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-
+        if(Input.GetButtonDown("Jump"))//스페이스 누를시에 상대방을 민다.
+        {
+            animator.SetTrigger("isKickig");
+            Push.SetActive(true);
+        }
         if (moveHorizontal != 0 || moveVertical != 0)
         {
 
@@ -75,4 +80,26 @@ public class Player_Move : MonoBehaviour
             transform.LookAt(transform.position + nextVec);
         }
     }
+    /*void OnCollisionEnter(Collision collision)//방식을 바꿔 볼까 생각중...
+    {
+        if(collision.gameObject.CompareTag("Zombie"))
+        {
+            // 충돌한 오브젝트를 가져옵니다
+            var otherObject = collision.gameObject;
+
+            // 현재 오브젝트로부터 다른 오브젝트로 향하는 벡터를 가져옵니다
+            var direction = otherObject.transform.position - transform.position;
+
+            // 벡터를 뒤집어 다른 오브젝트를 뒤로 미는 방향을 설정합니다
+            direction = -direction;
+
+            // 이동할 거리입니다
+            float pushBackDistance = 3f;
+
+            // 다른 오브젝트를 뒤로 미릅니다
+            otherObject.transform.position += direction.normalized * pushBackDistance;
+            Push.SetActive(false);
+        }
+     
+    }*/
 }

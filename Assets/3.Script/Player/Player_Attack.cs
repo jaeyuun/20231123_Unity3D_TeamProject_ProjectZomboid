@@ -23,6 +23,11 @@ public class Player_Attack : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetButtonDown("Jump"))//동작하길 바란다...Todo 필요없다면 삭제 하길...
+        {
+            anim.SetLayerWeight(1, 0);
+            anim.SetTrigger("isKickig");
+        }
 
         if (Input.GetMouseButton(1))//우클릭시
         {
