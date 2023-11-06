@@ -7,7 +7,7 @@ public class ZombieController : MonoBehaviour
 {
     // Zombie NavMesh
     private NavMeshAgent nav;
-    private Transform targetPos;
+    public Transform targetPos;
     private Transform randomTarget; // 플레이어 감지하지 않았을 때 위치
     private Transform player; // 플레이어의 위치
 
@@ -24,10 +24,13 @@ public class ZombieController : MonoBehaviour
         TryGetComponent(out nav);
         TryGetComponent(out zombieAnim);
 
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        if (GameObject.FindGameObjectWithTag("Player"))
+        {
+            player = GameObject.FindGameObjectWithTag("Player").transform;
+        }
         randomTarget = GameObject.FindGameObjectWithTag("RandomTarget").transform;
 
-        // isScreamZombie = zombieData; zombie 종류에 따라 schrlghk gownrl
+        // isScreamZombie = zombieData; zombie 종류에 따라 불러오기... todo
     }
 
     private void Start()
@@ -54,6 +57,13 @@ public class ZombieController : MonoBehaviour
             randomTarget.position = point;
         }
         targetPos = randomTarget;
+        if (Vector3.Distance(randomTarget.position, transform.position) <= 1.0f)
+        {
+            zombieAnim.SetBool("isIdle", true);
+        } else
+        {
+            zombieAnim.SetBool("isIdle", false);
+        }
         yield return new WaitForSeconds(5f);
         StartCoroutine(RandomTargetPos_Co());
     }
@@ -77,7 +87,7 @@ public class ZombieController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Sound"))
         {
             zombieAnim.SetBool("isPlayerFind", true);
             if (isScreamZombie && Vector3.Distance(player.position, transform.position) > 1.5f)
@@ -89,7 +99,7 @@ public class ZombieController : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player")) // Player Tag -> Sound Tag로 바꿔줄 것
+        if (other.CompareTag("Sound"))
         {
             targetPos = player;
             if (Vector3.Distance(player.position, transform.position) <= 1.5f)
@@ -107,7 +117,7 @@ public class ZombieController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Sound"))
         {
             zombieAnim.SetBool("isPlayerFind", false);
         }
