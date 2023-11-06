@@ -7,11 +7,14 @@ TagManager:
   - Zombie
   - House
 
+  - Item
+  - Weapon
   - Sound
   - RandomTarget
   - Scream
   - Attack
 
+ 
   layers:
   - Default
   - TransparentFX
