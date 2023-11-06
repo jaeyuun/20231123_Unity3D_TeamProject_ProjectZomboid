@@ -2340,9 +2340,9 @@ MonoBehaviour:
   BatSwing: {fileID: 8300000, guid: 8ef119a5533c5f446b5bb67f023280b9, type: 3}
   Bat_Spine: {fileID: 1473927648}
   Bat_Hand: {fileID: 8181540737533519986}
-  Bat_Get: 1
-  Melee_weapon: 1
-  Range_weapon: 0
+  Bat_Get: 0
+  Melee_weapon: 0
+  Range_weapon: 1
 --- !u!114 &1400365984801967294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3143,7 +3143,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6204308089860892140
 Transform:
   m_ObjectHideFlags: 0
