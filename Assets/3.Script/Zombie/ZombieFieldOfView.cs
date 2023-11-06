@@ -4,22 +4,30 @@ using UnityEngine;
 
 public class ZombieFieldOfView : MonoBehaviour
 {
-    // 1103... todo... zombieFieldOfView fixed 필요
-    [SerializeField] bool DebugMode = false;
-    [Range(0f, 360f)] [SerializeField] float ViewAngle = 0f;
-    [SerializeField] float ViewRadius = 1f;
-    [SerializeField] LayerMask TargetMask;
-    [SerializeField] LayerMask ObstacleMask;
-    List<Collider> hitTargetList = new List<Collider>();
+    private ZombieController zombieController;
+    // [Range(0f, 360f)] [SerializeField]
+    float ViewAngle = 130f; // 감지하는 범위 각도
+    [SerializeField] float ViewRadius = 2f; // 감지 범위
+    [SerializeField] LayerMask TargetMask; // 타겟 인식 레이어
+    [SerializeField] LayerMask ObstacleMask; // 가능한 범위
+    List<Collider> hitTargetList = new List<Collider>(); // 감지한 타겟 리스트
 
+    private void Awake()
+    {
+        TryGetComponent(out zombieController);
+    }
+
+    private void PlayerFind(Vector3 targetPos)
+    {
+        zombieController.targetPos.position = targetPos;
+    }
 
     private void OnDrawGizmos()
     {
-        if (!DebugMode) return;
-        Vector3 myPos = transform.position + Vector3.up * 0.5f;
+        Vector3 myPos = transform.position + Vector3.up; // 캐릭터 포지션
         Gizmos.DrawWireSphere(myPos, ViewRadius);
 
-        float lookingAngle = transform.eulerAngles.y;  //캐릭터가 바라보는 방향의 각도
+        float lookingAngle = transform.eulerAngles.y; //캐릭터가 바라보는 방향의 각도
         Vector3 rightDir = AngleToDir(transform.eulerAngles.y + ViewAngle * 0.5f);
         Vector3 leftDir = AngleToDir(transform.eulerAngles.y - ViewAngle * 0.5f);
         Vector3 lookDir = AngleToDir(lookingAngle);
@@ -29,18 +37,20 @@ public class ZombieFieldOfView : MonoBehaviour
         Debug.DrawRay(myPos, lookDir * ViewRadius, Color.cyan);
 
         hitTargetList.Clear();
-        Collider[] Targets = Physics.OverlapSphere(myPos, ViewRadius, TargetMask);
+        Collider[] targets = Physics.OverlapSphere(myPos, ViewRadius, TargetMask);
 
-        if (Targets.Length == 0) return;
-        foreach (Collider EnemyColli in Targets)
-        {
-            Vector3 targetPos = EnemyColli.transform.position;
+        if (targets.Length == 0) return;
+
+        foreach (Collider playerColli in targets)
+        { // target list
+            Vector3 targetPos = playerColli.transform.position;
             Vector3 targetDir = (targetPos - myPos).normalized;
             float targetAngle = Mathf.Acos(Vector3.Dot(lookDir, targetDir)) * Mathf.Rad2Deg;
             if (targetAngle <= ViewAngle * 0.5f && !Physics.Raycast(myPos, targetDir, ViewRadius, ObstacleMask))
             {
-                hitTargetList.Add(EnemyColli);
-                if (DebugMode) Debug.DrawLine(myPos, targetPos, Color.red);
+                hitTargetList.Add(playerColli);
+                PlayerFind(targetPos); // target 위치 변경해주기
+                Debug.DrawLine(myPos, targetPos, Color.red);
             }
         }
     }

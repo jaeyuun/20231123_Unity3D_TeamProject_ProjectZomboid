@@ -6,12 +6,9 @@ TagManager:
   tags:
   - Zombie
   - House
-
-  - Sound
-  - RandomTarget
   - Scream
-  - Attack
-
+  - RandomTarget
+  - Sound
   layers:
   - Default
   - TransparentFX
@@ -19,7 +16,7 @@ TagManager:
   - 
   - Water
   - UI
-  - EnvironmentObject
+  - Player
   - 
   - 
   - 
