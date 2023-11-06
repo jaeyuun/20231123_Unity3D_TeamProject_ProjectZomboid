@@ -6,11 +6,11 @@ public class ZombieFieldOfView : MonoBehaviour
 {
     private ZombieController zombieController;
     // [Range(0f, 360f)] [SerializeField]
-    float ViewAngle = 130f; // 감지하는 범위 각도
-    [SerializeField] float ViewRadius = 2f; // 감지 범위
-    [SerializeField] LayerMask TargetMask; // 타겟 인식 레이어
-    [SerializeField] LayerMask ObstacleMask; // 가능한 범위
-    List<Collider> hitTargetList = new List<Collider>(); // 감지한 타겟 리스트
+    private float ViewAngle = 130f; // 감지하는 범위 각도
+    [SerializeField] private float ViewRadius = 2f; // 감지 범위
+    [SerializeField] private LayerMask TargetMask; // 타겟 인식 레이어, Player
+    [SerializeField] private LayerMask ObstacleMask;
+    private List<Collider> hitTargetList = new List<Collider>(); // 감지한 타겟 리스트
 
     private void Awake()
     {
@@ -24,7 +24,7 @@ public class ZombieFieldOfView : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Vector3 myPos = transform.position + Vector3.up; // 캐릭터 포지션
+        Vector3 myPos = transform.position + Vector3.up * 1.5f; // 캐릭터 포지션
         Gizmos.DrawWireSphere(myPos, ViewRadius);
 
         float lookingAngle = transform.eulerAngles.y; //캐릭터가 바라보는 방향의 각도

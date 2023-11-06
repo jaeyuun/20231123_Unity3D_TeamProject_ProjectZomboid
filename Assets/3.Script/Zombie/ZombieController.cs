@@ -57,6 +57,13 @@ public class ZombieController : MonoBehaviour
             randomTarget.position = point;
         }
         targetPos = randomTarget;
+        if (Vector3.Distance(randomTarget.position, transform.position) <= 1.0f)
+        {
+            zombieAnim.SetBool("isIdle", true);
+        } else
+        {
+            zombieAnim.SetBool("isIdle", false);
+        }
         yield return new WaitForSeconds(5f);
         StartCoroutine(RandomTargetPos_Co());
     }
