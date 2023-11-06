@@ -461,6 +461,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 4
+  Sound_Walk: {fileID: 0}
+  Sound_Run: {fileID: 0}
 --- !u!1 &1581912034
 GameObject:
   m_ObjectHideFlags: 0
@@ -4342,6 +4344,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 1313230810317661799}
+  isAttack: 0
+  BatSwing: {fileID: 0}
+  Melee_weapon: 0
+  Range_weapon: 0
 --- !u!114 &1400365984801967294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4355,6 +4361,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 4
+  Sound_Walk: {fileID: 0}
+  Sound_Run: {fileID: 0}
 --- !u!54 &1400365984801967295
 Rigidbody:
   m_ObjectHideFlags: 0
