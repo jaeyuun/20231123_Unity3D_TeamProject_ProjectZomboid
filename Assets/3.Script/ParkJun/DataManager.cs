@@ -21,16 +21,24 @@ public class Item
     public bool isUsing;
 
 }
-public class Player_Data
+public class PlayerData
 {
-    public string name;
-    public int health;
+    public string name = "미스터 박";
+    public int health=90;
     public int maxhealth;
     public int attack;
+    public int ZombieCount = 1000000;
+    public PlayerData()
+    {
+        // 생성자에서 초기값을 설정합니다.
+        attack = 10; // 초기 공격력 값
+    }
 }
+
 public class DataManager : MonoBehaviour
 {
     [Header("아이템")]
+    #region
     //아이템 
     public TextAsset ItemDatabase;
     public List<Item> AllItemList, MyItemList, CurItemList;
@@ -47,19 +55,43 @@ public class DataManager : MonoBehaviour
     public InputField ItemNameInput, ItemNumberInput;
     RectTransform ExplainRect;
     IEnumerator PointerCoroutine;
+    #endregion
+
+
+    [Header("플레이어 데이터베이스")]
+    public string path;
+    public int nowSlot;
 
     [Header("플레이어")]
     //플레이어 
-    public Text name;
-    public Text attack;
-    public Text health;
-    public Text maxhealth;
-
 
     bool _OpenStat = false;
     public GameObject OpenStatPanel;
-   
 
+
+    public PlayerData nowPlayer = new PlayerData();
+
+
+    public static DataManager instance;
+
+ 
+    private void Awake()
+    {
+        #region 싱글톤 
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Destroy(instance.gameObject);
+        }
+        DontDestroyOnLoad(this.gameObject);
+        #endregion
+
+        path = Application.persistentDataPath + "/save";
+        print(path);
+    }
 
     private void Start()
     {
@@ -73,6 +105,8 @@ public class DataManager : MonoBehaviour
             AllItemList.Add(new Item(row[0], row[1], row[2], row[3], row[4] == "TRUE", row[5]));
         }
         Load();
+        PlayerLoadData();
+        
         ExplainRect = ExplainPanel.GetComponent<RectTransform>();
 
         OpenItemPanel.SetActive(_OpenInventory);
@@ -80,17 +114,14 @@ public class DataManager : MonoBehaviour
 
 
     }
-   
-  
-    private void Update()
-    {
 
+
+    private void FixedUpdate()
+    {
 
         //인벤토리 
         RectTransformUtility.ScreenPointToLocalPointInRectangle(CanvasRect, Input.mousePosition, Camera.main, out Vector2 anchoredPos);
-       ExplainRect.anchoredPosition = anchoredPos +new Vector2(-220, -200);
-
-
+        ExplainRect.anchoredPosition = anchoredPos + new Vector2(-220, -200);
     }
     public void GetItemClik()
     {
@@ -110,6 +141,38 @@ public class DataManager : MonoBehaviour
         }
         MyItemList.Sort((p1, p2) => p1.Index.CompareTo(p2.Index));
         Save();
+    }
+    public void GetBeef()
+    {
+        Item curltem = MyItemList.Find(x => x.Name == "Beef");
+
+        if (curltem != null)
+        {
+            int currentNumber = int.Parse(curltem.Number);
+            currentNumber++; // 아이템 획득 시 Number를 1 증가시킴
+            curltem.Number = currentNumber.ToString();
+
+         
+        }
+        else
+        {
+            Item newItem = AllItemList.Find(x => x.Name == "Beef");
+
+            MyItemList.Add(newItem); // 아이템을 MyItemList에 추가
+            newItem.Number = "1";
+
+        }
+      
+        //MyItemList.Sort((p1, p2) => p1.Index.CompareTo(p2.Index));
+        Save(); // 변경된 내용을 저장
+    }
+    public void GetPizza()
+    {
+
+    }
+    public void GetLemon()
+    {
+
     }
     public void RemoveItemClik()
     {
@@ -136,6 +199,30 @@ public class DataManager : MonoBehaviour
         MyItemList = new List<Item>() { BasicItem };
         Save();
     }
+    public void GetBat()
+    {
+        Item curltem = MyItemList.Find(x => x.Name == "Bat");
+
+        if (curltem != null)
+        {
+            int currentNumber = int.Parse(curltem.Number);
+            currentNumber++; // 아이템 획득 시 Number를 1 증가시킴
+            curltem.Number = currentNumber.ToString();
+
+
+        }
+        else
+        {
+            Item newItem = AllItemList.Find(x => x.Name == "Bat");
+
+            MyItemList.Add(newItem); // 아이템을 MyItemList에 추가
+            newItem.Number = "1";
+
+        }
+
+        //MyItemList.Sort((p1, p2) => p1.Index.CompareTo(p2.Index));
+        Save(); // 변경된 내용을 저장
+    }
     public void ToggleInventory()
     { 
             _OpenInventory = ! _OpenInventory;
@@ -150,35 +237,170 @@ public class DataManager : MonoBehaviour
     {
         Item CurItem = CurItemList[slotNum];
         Item UsingItem = CurItemList.Find(x => x.isUsing == true);
+        #region 
+        /*   if (currentType == "Item")
+           {
+               if (UsingItem != null) UsingItem.isUsing = false;
+               CurItem.isUsing = true;
+           }
+           else if(currentType == "Weapon")
+           {
+               CurItem.isUsing = !CurItem.isUsing;
+               if (UsingItem != null) UsingItem.isUsing = false;
+           }
+           else
+           {
+              // CurItem.isUsing = !CurItem.isUsing;
+               if (UsingItem != null) UsingItem.isUsing = false;
 
-        if (currentType == "Item")
+               int curNumber = int.Parse(CurItem.Number);
+
+               if (curNumber > 0)
+               {
+                   curNumber--;
+
+                   CurItem.Number = curNumber.ToString();
+               }
+               if (curNumber == 0)
+               {
+                   MyItemList.Remove(CurItem);
+
+               }
+
+           }*/
+        #endregion
+
+        if (currentType=="Food")
         {
+            // CurItem.isUsing = !CurItem.isUsing;
             if (UsingItem != null) UsingItem.isUsing = false;
-            CurItem.isUsing = true;
-        }
-        else if(currentType == "Weapon")
-        {
-            CurItem.isUsing = !CurItem.isUsing;
-            if (UsingItem != null) UsingItem.isUsing = false;
-        }
-        else
-        {
-           // CurItem.isUsing = !CurItem.isUsing;
-            if (UsingItem != null) UsingItem.isUsing = false;
-           
+
             int curNumber = int.Parse(CurItem.Number);
+            if (CurItem.Name=="Beef")
+            {         
+                if (curNumber > 0)
+                {
+                    curNumber--;
 
-            if (curNumber > 0)
+                    CurItem.Number = curNumber.ToString();
+
+                  
+                    Player_UI player_ui = FindObjectOfType<Player_UI>();
+                    player_ui.UsingBeef();
+                    PlayerSaveData();
+
+                    Debug.Log(nowPlayer.health);
+                      if (nowPlayer.health > nowPlayer.maxhealth)
+                       {
+                           nowPlayer.health = nowPlayer.maxhealth; // 최대 체력을 넘지 않도록 조정
+                       }
+                }
+
+                if (curNumber == 0)
+                {
+                    MyItemList.Remove(CurItem);
+                }
+            } 
+            if (CurItem.Name == "Lemon")
             {
-                curNumber--;
-                
-                CurItem.Number = curNumber.ToString();
+                if (curNumber > 0)
+                {
+                    curNumber--;
+
+                    CurItem.Number = curNumber.ToString();
+
+                    // 플레이어 체력을 증가시킴
+                    nowPlayer.health += 20; // 10만큼 체력을 증가시킴
+                    Debug.Log(nowPlayer.health);
+                      if (nowPlayer.health > nowPlayer.maxhealth)
+                       {
+                           nowPlayer.health = nowPlayer.maxhealth; // 최대 체력을 넘지 않도록 조정
+                       }
+                }
+
+                if (curNumber == 0)
+                {
+                    MyItemList.Remove(CurItem);
+                }
             }
-            if (curNumber == 0)
+            if (CurItem.Name == "Pizza")
             {
-                MyItemList.Remove(CurItem);
+                if (curNumber > 0)
+                {
+                    curNumber--;
+
+                    CurItem.Number = curNumber.ToString();
+
+                    // 플레이어 체력을 증가시킴
+                    nowPlayer.health += 40; // 10만큼 체력을 증가시킴
+                    Debug.Log(nowPlayer.health);
+                       if (nowPlayer.health > nowPlayer.maxhealth)
+                       {
+                           nowPlayer.health = nowPlayer.maxhealth; // 최대 체력을 넘지 않도록 조정
+                       }
+                }
+
+                if (curNumber == 0)
+                {
+                    MyItemList.Remove(CurItem);
+                }
             }
-            
+
+        }
+        else if (currentType =="Weapon")
+        {
+          
+
+            if (CurItem.Name == "Bat")
+            {
+                Player_UI player_ui = FindObjectOfType<Player_UI>();
+                if (CurItem.isUsing) // "Bat" 아이템이 사용 중인 경우에만 공격력을 올립니다.
+                {                
+                    player_ui.OffBat();
+                 
+                }
+                else
+                {             
+                    player_ui.UsingBat();
+                            
+                }
+                PlayerSaveData();
+                CurItem.isUsing = !CurItem.isUsing;
+
+                // 이미 다른 아이템이 사용 중이면 비사용으로 설정
+                if (UsingItem != null)
+                {
+                    UsingItem.isUsing = false;
+                }
+            }       
+            if (CurItem.Name == "Sowrd")
+           {
+
+                Player_UI player_ui = FindObjectOfType<Player_UI>();
+
+                if (CurItem.isUsing) // "Bat" 아이템이 사용 중인 경우에만 공격력을 올립니다.
+                {                 
+                    player_ui.OffSword();   
+                }
+                else
+                {
+                   player_ui.UsingSword();
+                    
+                }
+                PlayerSaveData();
+                CurItem.isUsing = !CurItem.isUsing;
+
+                // 이미 다른 아이템이 사용 중이면 비사용으로 설정
+                if (UsingItem != null)
+                {
+                    UsingItem.isUsing = false;
+                }
+            }
+          
+
+
+
+
         }
         Save();
     }
@@ -195,13 +417,15 @@ public class DataManager : MonoBehaviour
             bool isExist = i < CurItemList.Count;
             Slot[i].SetActive(isExist);
 
-            Slot[i].GetComponentInChildren<Text>().text = isExist ? CurItemList[i].Name : "";
+            Slot[i].GetComponentInChildren<Text>().text = isExist ? CurItemList[i].Name + "/" + CurItemList[i].Number : "";
+         
 
             // 아이템 이미지와 사용중인지 보이기
             if (isExist)
             {
-                ItemImage[i].sprite = ItemSprite[AllItemList.FindIndex(x => x.Name == CurItemList[i].Name)];
                 usingImage[i].SetActive(CurItemList[i].isUsing);
+                ItemImage[i].sprite = ItemSprite[AllItemList.FindIndex(x => x.Name == CurItemList[i].Name)];
+ 
             }
         }
 
@@ -240,18 +464,18 @@ public class DataManager : MonoBehaviour
     }
     IEnumerator PointerEnterDelay(int slotNum)
     {
-        yield return new WaitForSeconds(0.5f);
-        print(slotNum + "슬롯 들어옴 ");
+        yield return new WaitForSeconds(0.2f);
+       
         ExplainPanel.SetActive(true);
     }
     public void PointerExit(int slotNum)
 
     {
-        print(slotNum + "슬롯 나감 ");
+       
         StopCoroutine(PointerCoroutine);
         ExplainPanel.SetActive(false);
     }
-    void Save()
+    public void Save()
     {
         string jdata = JsonConvert.SerializeObject(MyItemList);
         print(jdata);
@@ -266,11 +490,24 @@ public class DataManager : MonoBehaviour
 
         TapItemClik(currentType);
     }
-    public void UpdateHealth()
+    
+    public void PlayerSaveData()
     {
-        health.text = $"체력 : {health} / {maxhealth}";
+        string data = JsonUtility.ToJson(nowPlayer);
+
+        File.WriteAllText(path + nowSlot.ToString(), data);
+
+        
     }
-
-
-
+    public void PlayerLoadData()
+    {
+        string data = File.ReadAllText(path + nowSlot.ToString());
+        nowPlayer = JsonUtility.FromJson<PlayerData>(data);
+    
+    }
+   /* public void DataClear()
+    {
+        nowSlot = -1;
+        nowPlayer = new PlayerData();
+    }*/
 }

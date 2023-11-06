@@ -22,6 +22,7 @@ public class Bat_Attack : MonoBehaviour
             sound.SetActive(true);
             audioSource.PlayOneShot(BatHit);
         }
+
         player_Attack.isAttack = false;
         sound.SetActive(false);
     }
