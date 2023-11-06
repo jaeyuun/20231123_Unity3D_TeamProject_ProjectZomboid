@@ -83,14 +83,4 @@ public class Player_Move : MonoBehaviour
         }
     }
 
-/*    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Zombie"))
-        {
-            Push.SetActive(false);
-
-        }
-
-    }*/
-
 }
