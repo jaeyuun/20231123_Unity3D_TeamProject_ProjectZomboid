@@ -24,9 +24,11 @@ public class Player_Move : MonoBehaviour
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
         if(Input.GetButtonDown("Jump"))//스페이스 누를시에 상대방을 민다.
         {
-            animator.SetTrigger("isKickig");
+            animator.SetTrigger("isKickig");//애니메이션 재생
             Push.SetActive(true);
         }
+
+
         if (moveHorizontal != 0 || moveVertical != 0)
         {
 
@@ -56,7 +58,7 @@ public class Player_Move : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, speed * Time.deltaTime);
         }
 
-        else if (moveHorizontal == 0 && moveVertical == 0) // 플레이어 속도가 0이 되었을때
+        if (moveHorizontal == 0 && moveVertical == 0) // 플레이어 속도가 0이 되었을때
         {
             Sound_Run.SetActive(false);
             Sound_Walk.SetActive(false);
@@ -65,7 +67,7 @@ public class Player_Move : MonoBehaviour
         }
     }
 
-    private void Rotate()
+    private void Rotate()//회전 메서드
     {
 
         //마우스 회전
@@ -80,26 +82,15 @@ public class Player_Move : MonoBehaviour
             transform.LookAt(transform.position + nextVec);
         }
     }
-    /*void OnCollisionEnter(Collision collision)//방식을 바꿔 볼까 생각중...
+
+/*    private void OnTriggerEnter(Collider other)
     {
-        if(collision.gameObject.CompareTag("Zombie"))
+        if (other.gameObject.CompareTag("Zombie"))
         {
-            // 충돌한 오브젝트를 가져옵니다
-            var otherObject = collision.gameObject;
-
-            // 현재 오브젝트로부터 다른 오브젝트로 향하는 벡터를 가져옵니다
-            var direction = otherObject.transform.position - transform.position;
-
-            // 벡터를 뒤집어 다른 오브젝트를 뒤로 미는 방향을 설정합니다
-            direction = -direction;
-
-            // 이동할 거리입니다
-            float pushBackDistance = 3f;
-
-            // 다른 오브젝트를 뒤로 미릅니다
-            otherObject.transform.position += direction.normalized * pushBackDistance;
             Push.SetActive(false);
+
         }
-     
+
     }*/
+
 }
