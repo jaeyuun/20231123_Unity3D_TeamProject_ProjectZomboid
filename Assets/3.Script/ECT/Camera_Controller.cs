@@ -4,51 +4,55 @@ using UnityEngine;
 
 public class Camera_Controller : MonoBehaviour
 {
-    public Transform follow;  // ÇÃ·¹ÀÌ¾îÀÇ Transform
-    private bool isCar;
-    public float offset;  // ÇÃ·¹ÀÌ¾î¿Í Ä«¸Ş¶óÀÇ °Å¸®
-    public float zoomSpeed;  // ÁÜ ¼Óµµ
-    public float minZoom;  // ÃÖ¼Ò ÁÜ
-    public float maxZoom;  // ÃÖ´ë ÁÜ
+    public Transform player;  // í”Œë ˆì´ì–´ì˜ Transform
 
-    private float xOffset = 2f;
-    private float zOffset = 3f;
+    public float zoomSpeed;  // ì¤Œ ì†ë„
+    public float minZoom;  // ìµœì†Œ ì¤Œ
+    public float maxZoom;  // ìµœëŒ€ ì¤Œ
+
+    [Header("ê¸°ë³¸ì˜¤í”„ì…‹")]
+    public float Yoffset;  // í”Œë ˆì´ì–´ì™€ ì¹´ë©”ë¼ì˜ ê±°ë¦¬
+    [SerializeField] private float xOffset;
+    [SerializeField] private float zOffset;
 
     private void Start()
     {
-        Camera_Early();
+        //Camera_Early();
     }
 
     private void LateUpdate()
     {
-        float scrollData = Input.GetAxis("Mouse ScrollWheel");  // ½ºÅ©·Ñ µ¥ÀÌÅÍ
+        float scrollData = Input.GetAxis("Mouse ScrollWheel");  // ìŠ¤í¬ë¡¤ ë°ì´í„°
 
-        float nextOffset = offset - scrollData * (zoomSpeed*10);  // ´ÙÀ½ ÇÁ·¹ÀÓ¿¡¼­ÀÇ offset °è»ê
-        nextOffset = Mathf.Clamp(nextOffset, minZoom, maxZoom);  // ÁÜ Á¦ÇÑ
+        float nextOffset = Yoffset - scrollData * (zoomSpeed*10);  // ë‹¤ìŒ í”„ë ˆì„ì—ì„œì˜ offset ê³„ì‚°
+        nextOffset = Mathf.Clamp(nextOffset, minZoom, maxZoom);  // ì¤Œ ì œí•œ
 
-        // offsetÀÌ minZoom°ú maxZoom »çÀÌÀÏ ¶§¸¸ xOffset, zOffset, offset ¾÷µ¥ÀÌÆ®
+        // offsetì´ minZoomê³¼ maxZoom ì‚¬ì´ì¼ ë•Œë§Œ xOffset, zOffset, offset ì—…ë°ì´íŠ¸
         if (nextOffset > minZoom && nextOffset < maxZoom)
         {
-            if (scrollData > 0) // ½ºÅ©·ÑÀ» ¿Ã·ÈÀ» ¶§
+            if (scrollData > 0) // ìŠ¤í¬ë¡¤ì„ ì˜¬ë ¸ì„ ë•Œ
             {
-                xOffset -= zoomSpeed; // X¿Í ZÃà¿¡ ´ëÇÑ ¿ÀÇÁ¼ÂÀ» ÁÙÀÓ.
+                xOffset -= zoomSpeed; // Xì™€ Zì¶•ì— ëŒ€í•œ ì˜¤í”„ì…‹ì„ ì¤„ì„.
                 zOffset -= zoomSpeed;
-                offset = nextOffset;
+                Yoffset = nextOffset;
             }
-            else if (scrollData < 0) // ½ºÅ©·ÑÀ» ³»·ÈÀ» ¶§
+            else if (scrollData < 0) // ìŠ¤í¬ë¡¤ì„ ë‚´ë ¸ì„ ë•Œ
             {
                 xOffset += zoomSpeed;
-                zOffset += zoomSpeed; // X¿Í ZÃà¿¡ ´ëÇÑ ¿ÀÇÁ¼ÂÀ» ´Ã¸².
-                offset = nextOffset;
+                zOffset += zoomSpeed; // Xì™€ Zì¶•ì— ëŒ€í•œ ì˜¤í”„ì…‹ì„ ëŠ˜ë¦¼.
+                Yoffset = nextOffset;
             }
         }
 
-        transform.position = follow.position + new Vector3(-xOffset, offset, -zOffset);  // Ä«¸Ş¶ó À§Ä¡ ¾÷µ¥ÀÌÆ®
+
+        transform.position = player.position + new Vector3(-xOffset, Yoffset, -zOffset);  // ì¹´ë©”ë¼ ìœ„ì¹˜ ì—…ë°ì´íŠ¸
+
     }
 
     private void Camera_Early()
     {
-        transform.position = follow.position + new Vector3(-xOffset, offset, -zOffset);  // ÃÊ±â Ä«¸Ş¶ó À§Ä¡ ¼³Á¤
+
+        transform.position = player.position + new Vector3(-8, 16, -8);  // ì´ˆê¸° ì¹´ë©”ë¼ ìœ„ì¹˜ ì„¤ì •
 
     }
 

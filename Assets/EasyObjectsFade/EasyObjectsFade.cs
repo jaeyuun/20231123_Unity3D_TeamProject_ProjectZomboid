@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class EasyObjectsFade : MonoBehaviour
 {
+   
+
     enum MeshDetectionType
     {
         UseAllMeshRenderers, UseAllMeshRenderersAlsoInChildren, UseOneMeshRenderer
@@ -34,14 +36,21 @@ public class EasyObjectsFade : MonoBehaviour
 
     private float rayDistance = 10f;
 
+    //public Camera camera;
+    //public float DeletRadius = 10f;
+    //public string objectTag = "Transparent";
+
     private float step
     {
         get
         {
             if (time > 0.1f) return 0.01f;
-            else return 0.05f;
+            else return 1f;
         }
     }
+
+    public float deletionRadius = 10f;
+
 
     // Update is called once per frame
     private void FixedUpdate()
@@ -190,6 +199,12 @@ public class EasyObjectsFade : MonoBehaviour
         }
     }
 
+ /*   private void Update()
+    {
+        Calcul();
+    }*/
+
+
     //Here are functions that are responsible for fading objets.
     // You could easily change this functions so they could fit your
     // own shader if you wish to make one yourself
@@ -198,7 +213,7 @@ public class EasyObjectsFade : MonoBehaviour
         StandardShaderUtils.ChangeTransparency(mat, true);
 
         float steps = (1 - minimalOpacity) / step;
-        double timeStep = time / steps;
+       // double timeStep = time / steps;
 
         float opacity = 1f;
         while (opacity >= minimalOpacity)
@@ -209,19 +224,19 @@ public class EasyObjectsFade : MonoBehaviour
             c1.a = opacity;
             mat.color = c1;
 
-            yield return new WaitForSeconds((float)timeStep);
+            yield return new WaitForSeconds(0f);
         }
         Color c = mat.color;
         c.a = opacity;
         mat.color = c;
 
     }
- 
+
     private IEnumerator FadeIn(Material mat)
     {
 
         float steps = (1 - minimalOpacity) / step;
-        double timeStep = time / steps;
+       // double timeStep = time / steps;
 
         float opacity = minimalOpacity;
         while (opacity < 1f)
@@ -231,7 +246,7 @@ public class EasyObjectsFade : MonoBehaviour
             c1.a = opacity;
             mat.color = c1;
 
-            yield return new WaitForSeconds((float)timeStep);
+            yield return new WaitForSeconds(2f);
         }
 
 
@@ -243,4 +258,22 @@ public class EasyObjectsFade : MonoBehaviour
 
     }
 
+/*    private void Calcul()
+    {
+        Vector3 midPoint = (camera.transform.position + transform.position) / 2f;
+
+        //특정 태그를 가진 오브젝트
+        GameObject[] gameObjectsTag = GameObject.FindGameObjectsWithTag("Except");
+
+        //반경 내에 있는 오브젝트 찾기
+        foreach (GameObject obj in gameObjectsTag)
+        {
+            float distanse = Vector3.Distance(midPoint, obj.transform.position);
+
+            if (distanse <= DeletRadius)
+            {
+                Destroy(obj);
+            }
+        }
+    }*/
 }
