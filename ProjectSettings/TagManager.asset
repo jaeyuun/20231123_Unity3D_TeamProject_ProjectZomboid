@@ -6,8 +6,13 @@ TagManager:
   tags:
   - Zombie
   - House
-  - Window
+  - Item
+  - Weapon
   - Sound
+  - RandomTarget
+  - Scream
+  - Attack
+  - Window
   - Selectable
   layers:
   - Default
@@ -16,6 +21,7 @@ TagManager:
   - 
   - Water
   - UI
+  - Player
   - Transparent
   - 
   - 
