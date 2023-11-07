@@ -8,6 +8,7 @@ public class Player_Attack : MonoBehaviour
     public bool isAttack;//판정을 위한 bool값
     public AudioClip BatSwing;
     private AudioSource audioSource;
+    [SerializeField] private Gun_Shot gun_Shot;
 
     //등에 있는 배트
     [SerializeField] private GameObject Bat_Spine;
@@ -27,6 +28,7 @@ public class Player_Attack : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
+        gun_Shot = GetComponent<Gun_Shot>();
 
     }
 
@@ -63,9 +65,11 @@ public class Player_Attack : MonoBehaviour
             else if (Range_weapon)
             {
                 anim.SetBool("isAiming", true);
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(0))//총쏘기
                 {
-                    Debug.Log("탕");
+
+                    gun_Shot.ShotEvent();
+                    anim.SetTrigger("isFiring");
                 }
             }
    
