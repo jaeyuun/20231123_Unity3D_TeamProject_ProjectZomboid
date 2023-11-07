@@ -12,6 +12,8 @@ TagManager:
   - RandomTarget
   - Scream
   - Attack
+  - Window
+  - Selectable
   layers:
   - Default
   - TransparentFX
@@ -20,6 +22,7 @@ TagManager:
   - Water
   - UI
   - Player
+  - Transparent
   - 
   - 
   - 
