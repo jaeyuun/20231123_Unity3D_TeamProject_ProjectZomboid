@@ -8,7 +8,7 @@ public class Gun_Shot : MonoBehaviour
     public GameObject projectile;
     public AudioClip gunShot;
     private AudioSource audioSource;
-
+    public GameObject Sound_Gun;
 
     private void Start()
     {
@@ -20,7 +20,7 @@ public class Gun_Shot : MonoBehaviour
     {
         Instantiate(projectile, tip.transform.position, tip.transform.rotation);
         audioSource.PlayOneShot(gunShot);
-
+        Sound_Gun.SetActive(true);
     }
 
 }

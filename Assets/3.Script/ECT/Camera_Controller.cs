@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Camera_Controller : MonoBehaviour
 {
-    public Transform player;  // 플레이어의 Transform
+    public Transform follow;  // 플레이어의 Transform
+    private bool isCar;
     public float offset;  // 플레이어와 카메라의 거리
     public float zoomSpeed;  // 줌 속도
     public float minZoom;  // 최소 줌
@@ -42,12 +43,13 @@ public class Camera_Controller : MonoBehaviour
             }
         }
 
-        transform.position = player.position + new Vector3(-xOffset, offset, -zOffset);  // 카메라 위치 업데이트
+        transform.position = follow.position + new Vector3(-xOffset, offset, -zOffset);  // 카메라 위치 업데이트
     }
 
     private void Camera_Early()
     {
-        transform.position = player.position + new Vector3(-xOffset, offset, -zOffset);  // 초기 카메라 위치 설정
+        transform.position = follow.position + new Vector3(-xOffset, offset, -zOffset);  // 초기 카메라 위치 설정
 
     }
+
 }

@@ -14,7 +14,9 @@ TagManager:
   - Attack
   - Window
   - Selectable
+  - Car
   - ZombieAttack
+
   layers:
   - Default
   - TransparentFX
@@ -25,7 +27,6 @@ TagManager:
   - Player
   - Transparent
   - Item
-  - 
   - 
   - 
   - 
