@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -8053198692057413785}
   - component: {fileID: -3434602638898601488}
   - component: {fileID: 9154880048893891944}
-  m_Layer: 8
+  m_Layer: 7
   m_Name: SubMachineGun
   m_TagString: Item
   m_Icon: {fileID: 0}

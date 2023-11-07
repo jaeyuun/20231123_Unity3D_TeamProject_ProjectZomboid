@@ -6,18 +6,19 @@ using UnityEngine.UI;
 public class ActionController : MonoBehaviour
 {
     [SerializeField]
-    private float range; //습득 가능한 최대 거리 
+    private float range; // 습득 가능한 최대 거리
 
-    private bool pickupActivated = false; //습득 가능할 시 true
+    private bool pickupActivated = false; // 습득 가능할 시 true
 
-    private RaycastHit hitinfo; //충돌체 정보 저장.
+    private Collider hitCollider; // 충돌한 콜라이더 정보 저장
 
-    //아이템 레이어에만 반응하도록 레이어 마스크 설정 
     [SerializeField]
-    private LayerMask layerMask;
+    private string itemTag = "Item"; // 아이템에 할당된 태그
 
     [SerializeField]
     private Text actionText;
+    [SerializeField]
+    private GameObject go_DropBase;
     [SerializeField]
     private Inventory theinventory;
 
@@ -26,58 +27,64 @@ public class ActionController : MonoBehaviour
         CheckItem();
         TryAction();
     }
+    public void ToggleDropBase()
+    {
+        go_DropBase.SetActive(!go_DropBase.activeSelf);
+    }
+
     private void TryAction()
     {
         if (Input.GetMouseButtonDown(1)) // 마우스 오른쪽 버튼 (1) 입력 확인
         {
-            CheckItem();
-            CanPickUp();
+            if (pickupActivated)
+            {
+                PickupItem();
+            }
         }
     }
-    private void CanPickUp()
+
+    private void PickupItem()
     {
-        if (pickupActivated)
+        if (hitCollider != null)
         {
-            if (hitinfo.transform !=null)
+            ItemPickup itemPickup = hitCollider.GetComponent<ItemPickup>();
+            if (itemPickup != null)
             {
-                Debug.Log(hitinfo.transform.GetComponent<ItemPickup>().item.itemName + "휙득");
-                theinventory.AcquireItem(hitinfo.transform.GetComponent<ItemPickup>().item);
-                Destroy(hitinfo.transform.gameObject);
+                Debug.Log(itemPickup.item.itemName + "획득");
+                theinventory.AcquireItem(itemPickup.item);
+                Destroy(hitCollider.gameObject);
                 infoDisAppear();
             }
         }
     }
+
     private void CheckItem()
     {
-        Vector3 rayStartPos = transform.position + new Vector3(0, 0.1f, 0);
-        if (Physics.Raycast(rayStartPos, transform.TransformDirection(Vector3.forward), out hitinfo, range, layerMask))
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, range);
+        
+        foreach (Collider col in hitColliders)
         {
-            if (hitinfo.transform.tag=="Item")
+            if (col.CompareTag(itemTag))
             {
-                ItemInfoAppear();
+                pickupActivated = true;
+                actionText.gameObject.SetActive(true);
+                go_DropBase.gameObject.SetActive(true);
+                hitCollider = col;
+                actionText.text = "획득" + "<color=yellow>" + "(마우스 오른쪽 버튼)" + "</color>";
+                return; // 첫 번째 아이템만 처리하고 나머지는 무시
             }
         }
-        else
-        {
-            infoDisAppear();
-        }
+
+        infoDisAppear();
     }
-    private void ItemInfoAppear()
-    {
-        pickupActivated = true;
-        actionText.gameObject.SetActive(true);
-        actionText.text = hitinfo.transform.GetComponent<ItemPickup>().item.itemName + "휙득";
-    }
+   
+
     private void infoDisAppear()
     {
         pickupActivated = false;
         actionText.gameObject.SetActive(false);
+       
     }
-    private void OnDrawGizmos()
-    {
-        // 기즈모로 레이 시각화
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * range);
-    }
+   
 }
 

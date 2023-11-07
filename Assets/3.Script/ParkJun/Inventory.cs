@@ -45,6 +45,13 @@ public class Inventory : MonoBehaviour
     {
         go_inventoryBase.SetActive(false);
     }
+    public void ToggleinventoryBase()
+    {
+        inventoryActiveated = !inventoryActiveated;
+        go_inventoryBase.SetActive(inventoryActiveated);
+    }
+
+   
     public void AcquireItem(Item _item, int _count = 1)
     {
         if (Item.ItemType.Equipment!=_item.itemType)
