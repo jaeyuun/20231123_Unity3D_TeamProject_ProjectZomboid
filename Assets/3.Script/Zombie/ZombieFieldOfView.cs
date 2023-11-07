@@ -6,7 +6,7 @@ public class ZombieFieldOfView : MonoBehaviour
 {
     private ZombieController zombieController;
     // [Range(0f, 360f)] [SerializeField]
-    private float ViewAngle = 130f; // 감지하는 범위 각도
+    private float viewAngle = 130f; // 감지하는 범위 각도
     [SerializeField] private float ViewRadius = 2f; // 감지 범위
     [SerializeField] private LayerMask TargetMask; // 타겟 인식 레이어, Player
     [SerializeField] private LayerMask ObstacleMask;
@@ -19,6 +19,7 @@ public class ZombieFieldOfView : MonoBehaviour
 
     private void PlayerFind(Vector3 targetPos)
     {
+        zombieController.isNonTarget = false;
         zombieController.targetPos.position = targetPos;
     }
 
@@ -28,8 +29,8 @@ public class ZombieFieldOfView : MonoBehaviour
         Gizmos.DrawWireSphere(myPos, ViewRadius);
 
         float lookingAngle = transform.eulerAngles.y; //캐릭터가 바라보는 방향의 각도
-        Vector3 rightDir = AngleToDir(transform.eulerAngles.y + ViewAngle * 0.5f);
-        Vector3 leftDir = AngleToDir(transform.eulerAngles.y - ViewAngle * 0.5f);
+        Vector3 rightDir = AngleToDir(transform.eulerAngles.y + viewAngle * 0.5f);
+        Vector3 leftDir = AngleToDir(transform.eulerAngles.y - viewAngle * 0.5f);
         Vector3 lookDir = AngleToDir(lookingAngle);
 
         Debug.DrawRay(myPos, rightDir * ViewRadius, Color.blue);
@@ -39,17 +40,21 @@ public class ZombieFieldOfView : MonoBehaviour
         hitTargetList.Clear();
         Collider[] targets = Physics.OverlapSphere(myPos, ViewRadius, TargetMask);
 
-        if (targets.Length == 0) return;
+        if (targets.Length == 0)
+        {
+            zombieController.isNonTarget = true;
+            return;
+        }
 
         foreach (Collider playerColli in targets)
         { // target list
             Vector3 targetPos = playerColli.transform.position;
             Vector3 targetDir = (targetPos - myPos).normalized;
             float targetAngle = Mathf.Acos(Vector3.Dot(lookDir, targetDir)) * Mathf.Rad2Deg;
-            if (targetAngle <= ViewAngle * 0.5f && !Physics.Raycast(myPos, targetDir, ViewRadius, ObstacleMask))
+            if (targetAngle <= viewAngle * 0.5f && !Physics.Raycast(myPos, targetDir, ViewRadius, ObstacleMask))
             {
                 hitTargetList.Add(playerColli);
-                PlayerFind(targetPos); // target 위치 변경해주기
+                PlayerFind(targetPos); // target 위치 변경
                 Debug.DrawLine(myPos, targetPos, Color.red);
             }
         }

@@ -6,9 +6,9 @@ using Newtonsoft.Json;
 using UnityEngine.UI;
 
 [System.Serializable]
-public class Item
+public class Item2
 {
-    public Item(string _Type, string _Name, string _Explain, string _Number, bool _isUsing, string _Index)
+    public Item2(string _Type, string _Name, string _Explain, string _Number, bool _isUsing, string _Index)
     {
         Type = _Type;
         Name = _Name;
@@ -41,7 +41,7 @@ public class DataManager : MonoBehaviour
     #region
     //아이템 
     public TextAsset ItemDatabase;
-    public List<Item> AllItemList, MyItemList, CurItemList;
+    public List<Item2> AllItemList, MyItemList, CurItemList;
     public string currentType = "Item";
     public GameObject[] Slot, usingImage;
     public Image[] TabImage, ItemImage;
@@ -102,7 +102,7 @@ public class DataManager : MonoBehaviour
         {
             string[] row = line[i].Split('\t');
 
-            AllItemList.Add(new Item(row[0], row[1], row[2], row[3], row[4] == "TRUE", row[5]));
+            AllItemList.Add(new Item2(row[0], row[1], row[2], row[3], row[4] == "TRUE", row[5]));
         }
         Load();
         PlayerLoadData();
@@ -125,14 +125,14 @@ public class DataManager : MonoBehaviour
     }
     public void GetItemClik()
     {
-        Item curItem = MyItemList.Find(x => x.Name == ItemNameInput.text);
+        Item2 curItem = MyItemList.Find(x => x.Name == ItemNameInput.text);
         if (curItem != null)
         {
             curItem.Number = (int.Parse(curItem.Number) + int.Parse(ItemNumberInput.text)).ToString();
         }
         else
         {
-            Item curAllItem = AllItemList.Find(x => x.Name == ItemNameInput.text);
+            Item2 curAllItem = AllItemList.Find(x => x.Name == ItemNameInput.text);
             if (curAllItem !=null)
             {
                 curAllItem.Number = ItemNumberInput.text;
@@ -144,7 +144,7 @@ public class DataManager : MonoBehaviour
     }
     public void GetBeef()
     {
-        Item curltem = MyItemList.Find(x => x.Name == "Beef");
+        Item2 curltem = MyItemList.Find(x => x.Name == "Beef");
 
         if (curltem != null)
         {
@@ -156,7 +156,7 @@ public class DataManager : MonoBehaviour
         }
         else
         {
-            Item newItem = AllItemList.Find(x => x.Name == "Beef");
+            Item2 newItem = AllItemList.Find(x => x.Name == "Beef");
 
             MyItemList.Add(newItem); // 아이템을 MyItemList에 추가
             newItem.Number = "1";
@@ -176,7 +176,7 @@ public class DataManager : MonoBehaviour
     }
     public void RemoveItemClik()
     {
-        Item curItem = MyItemList.Find(x => x.Name == ItemNameInput.text);
+        Item2 curItem = MyItemList.Find(x => x.Name == ItemNameInput.text);
         if (curItem !=null)
         {
             int curNumber = int.Parse(curItem.Number) - int.Parse(ItemNumberInput.text);
@@ -195,13 +195,13 @@ public class DataManager : MonoBehaviour
     }
     public void RemoveItem()
     {
-        Item BasicItem = AllItemList.Find(x => x.Name == "Ammo");
-        MyItemList = new List<Item>() { BasicItem };
+        Item2 BasicItem = AllItemList.Find(x => x.Name == "Ammo");
+        MyItemList = new List<Item2>() { BasicItem };
         Save();
     }
     public void GetBat()
     {
-        Item curltem = MyItemList.Find(x => x.Name == "Bat");
+        Item2 curltem = MyItemList.Find(x => x.Name == "Bat");
 
         if (curltem != null)
         {
@@ -213,7 +213,7 @@ public class DataManager : MonoBehaviour
         }
         else
         {
-            Item newItem = AllItemList.Find(x => x.Name == "Bat");
+            Item2 newItem = AllItemList.Find(x => x.Name == "Bat");
 
             MyItemList.Add(newItem); // 아이템을 MyItemList에 추가
             newItem.Number = "1";
@@ -235,8 +235,8 @@ public class DataManager : MonoBehaviour
     }
     public void SlotClick(int slotNum)
     {
-        Item CurItem = CurItemList[slotNum];
-        Item UsingItem = CurItemList.Find(x => x.isUsing == true);
+        Item2 CurItem = CurItemList[slotNum];
+        Item2 UsingItem = CurItemList.Find(x => x.isUsing == true);
         #region 
         /*   if (currentType == "Item")
            {
@@ -486,7 +486,7 @@ public class DataManager : MonoBehaviour
     void Load()
     {
         string jdata = File.ReadAllText(Application.dataPath + "/Resources/MyItemText.txt");
-        MyItemList = JsonConvert.DeserializeObject<List<Item>>(jdata);
+        MyItemList = JsonConvert.DeserializeObject<List<Item2>>(jdata);
 
         TapItemClik(currentType);
     }

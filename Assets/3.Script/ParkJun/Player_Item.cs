@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player_Item : MonoBehaviour
 {
 
-    private void OnTriggerEnter(Collider other)
+/*    private void OnTriggerEnter(Collider other)
     {
         if (other.tag=="Item")
         {
@@ -30,7 +30,7 @@ public class Player_Item : MonoBehaviour
             DataManager.instance.PlayerSaveData();
         }
 
-    }
+    }*/
   
 
 }
