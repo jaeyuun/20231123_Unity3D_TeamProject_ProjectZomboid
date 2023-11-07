@@ -6,19 +6,33 @@ public class VehicleController : MonoBehaviour
 {
     public WheelCollider frontLeftWheel, frontRightWheel; // 앞 바퀴 두 개
     public WheelCollider rearLeftWheel, rearRightWheel; // 뒷 바퀴 두 개
-    
+    public Car_Sound car_Sound;
 
     public float motorForce = 50f; // 모터 힘
     public float steeringAngle = 30f; // 스티어링 각도
+    private bool isStart_up=false;
 
-
+    private void Start()
+    {
+        car_Sound = GetComponent<Car_Sound>();
+    }
 
     private void FixedUpdate()
     {
         var motorInput = Input.GetAxis("Vertical") * motorForce; // 수직 입력(키보드의 W와 S 또는 위쪽 화살표와 아래쪽 화살표 키)
         var steeringInput = Input.GetAxis("Horizontal") * steeringAngle; // 수평 입력(키보드의 A와 D 또는 왼쪽 화살표와 오른쪽 화살표 키)
 
-        ApplyInput(motorInput, steeringInput); // 입력값 적용 
+        if (!isStart_up)
+        {
+            car_Sound.Start_up();
+            isStart_up = true;
+        }
+        else if(motorInput!=0&&isStart_up)
+        {
+            car_Sound.Drive();
+            ApplyInput(motorInput, steeringInput);            
+        }
+        
     }
 
     private void ApplyInput(float motorInput, float steeringInput)
