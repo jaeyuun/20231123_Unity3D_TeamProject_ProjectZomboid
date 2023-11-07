@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Camera_Controller : MonoBehaviour
+public class Camera_Controller_Car : MonoBehaviour
 {
     public Transform follow;  // 플레이어의 Transform
     private bool isCar;
@@ -23,7 +23,7 @@ public class Camera_Controller : MonoBehaviour
     {
         float scrollData = Input.GetAxis("Mouse ScrollWheel");  // 스크롤 데이터
 
-        float nextOffset = offset - scrollData * (zoomSpeed*10);  // 다음 프레임에서의 offset 계산
+        float nextOffset = offset - scrollData * (zoomSpeed * 10);  // 다음 프레임에서의 offset 계산
         nextOffset = Mathf.Clamp(nextOffset, minZoom, maxZoom);  // 줌 제한
 
         // offset이 minZoom과 maxZoom 사이일 때만 xOffset, zOffset, offset 업데이트

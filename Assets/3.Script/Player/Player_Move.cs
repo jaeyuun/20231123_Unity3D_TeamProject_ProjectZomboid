@@ -161,4 +161,13 @@ public class Player_Move : MonoBehaviour
         Instantiate(hit, Hit_pos.transform.position, Hit_pos.transform.rotation);
     }
 
+  /*  private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("Zombie_Attack"))
+        {
+            
+            Hit();
+            Debug.Log("À¸¾Ç ¾ÆÇÁ´Ù");
+        }
+    }*/
 }
