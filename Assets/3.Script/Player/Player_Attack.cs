@@ -9,6 +9,7 @@ public class Player_Attack : MonoBehaviour
     public AudioClip BatSwing;
     private AudioSource audioSource;
     [SerializeField] private Gun_Shot gun_Shot;
+    public GameObject Sound_Gun;
 
     //등에 있는 배트
     [SerializeField] private GameObject Bat_Spine;
@@ -70,6 +71,7 @@ public class Player_Attack : MonoBehaviour
 
                     gun_Shot.ShotEvent();
                     anim.SetTrigger("isFiring");
+                    Sound_Gun.SetActive(false);
                 }
             }
    
