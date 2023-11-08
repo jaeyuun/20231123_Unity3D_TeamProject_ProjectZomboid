@@ -8,7 +8,7 @@ public class ZombieSpawner : MonoBehaviour
     public ZombieController zombieController;
     [SerializeField] private Transform[] spawnPoint;
     private List<ZombieController> zombieList = new List<ZombieController>();
-    private int zombieCount = 100;
+    private int zombieCount = 50;
 
     private void Awake()
     {
