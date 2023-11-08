@@ -5,12 +5,9 @@ using UnityEngine;
 public class Player_Move : MonoBehaviour
 {
     [Header("걷기속도 (달리기는*2임)")]
-    public float speed = 4f;
+    public float speed = 3f;
     Animator animator;
-    [Header("게임오브젝트")]
-    public GameObject Sound_Walk;
-    public GameObject Sound_Run;
-    public GameObject Push;
+
     [Header("메인카메라")]
     [SerializeField] private Camera followCamera;
 
@@ -26,10 +23,16 @@ public class Player_Move : MonoBehaviour
     public GameObject hit;//피오브젝트선언
     private Plane plane;//바닦선언
 
+    [Header("사운드 게임오브젝트")]
+    public SphereCollider Sound;//게임오브젝트
+
+    public CapsuleCollider Man;
     private void Start()
     {
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
+        Sound = FindObjectOfType<SphereCollider>();
+        Man = FindObjectOfType<CapsuleCollider>();
     }
 
     private void FixedUpdate()
@@ -38,38 +41,17 @@ public class Player_Move : MonoBehaviour
         float moveVertical = Input.GetAxisRaw("Vertical");
 
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+
         if(Input.GetButtonDown("Jump"))//스페이스 누를시에 상대방을 민다.
         {
             //animator.SetTrigger("isKickig");//애니메이션 재생
-            Push.SetActive(true);
+            //Push.SetActive(true);
         }
 
-
-        if (moveHorizontal != 0 || moveVertical != 0)
-        {
-
-            if (Input.GetKey(KeyCode.LeftShift) && !Input.GetMouseButton(1))
-            {
-                Sound_Walk.SetActive(false);
-                Sound_Run.SetActive(true);
-                animator.SetBool("isRun", true);
-                transform.position += movement * speed * 2f * Time.deltaTime;
-                StartCoroutine(run_Sound());
-                ;
-            }
-            else if (!Input.GetKey(KeyCode.LeftShift) || Input.GetMouseButton(1))
-            {
-                Sound_Walk.SetActive(false);
-                Sound_Walk.SetActive(true);
-                animator.SetBool("isRun", false);
-                animator.SetBool("isWalk", true);
-                transform.position += movement * speed * Time.deltaTime;
-                StartCoroutine(walking_Sound());
-            }
-        }
+        //캐릭터 회전
         if (Input.GetMouseButton(1))//마우스 우클릭
         {
-            Rotate(); 
+            Rotate();
         }
         else if (movement != Vector3.zero) // 마우스를 바라보지 않는 상황에서 이동 중이라면
         {
@@ -77,10 +59,34 @@ public class Player_Move : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, speed * Time.deltaTime);
         }
 
+
+
+        if (moveHorizontal != 0 || moveVertical != 0)
+        {
+
+            if (Input.GetKey(KeyCode.LeftShift) && !Input.GetMouseButton(1))
+            {
+
+                animator.SetBool("isRun", true);
+                Sound.radius = 15f;
+                transform.position += movement * speed * 2f * Time.deltaTime;
+                StartCoroutine(run_Sound());
+                ;
+            }
+            else if (!Input.GetKey(KeyCode.LeftShift) || Input.GetMouseButton(1))
+            {
+  
+                animator.SetBool("isRun", false);
+                animator.SetBool("isWalk", true);
+                Sound.radius = 10f;
+                transform.position += movement * speed * Time.deltaTime;
+                StartCoroutine(walking_Sound());
+            }
+        }
+
         if (moveHorizontal == 0 && moveVertical == 0) // 플레이어 속도가 0이 되었을때
         {
-            Sound_Run.SetActive(false);
-            Sound_Walk.SetActive(false);
+            Sound.radius = 5f;
             animator.SetBool("isRun", false);
             animator.SetBool("isWalk", false);
         }
@@ -161,13 +167,15 @@ public class Player_Move : MonoBehaviour
         Instantiate(hit, Hit_pos.transform.position, Hit_pos.transform.rotation);
     }
 
-  /*  private void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.CompareTag("Zombie_Attack"))
+    /*    private void OnTriggerEnter(Collider other)
         {
-            
-            Hit();
-            Debug.Log("으악 아프다");
-        }
-    }*/
+            Debug.Log(other.transform.position);
+            if (other.gameObject.CompareTag("ZombieAttack")&& other.gameObject.CompareTag("ZombieAttack"))
+            {
+                Hit();
+                Debug.Log("으악 아프다");
+            }
+        }*/
+
+
 }

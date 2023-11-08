@@ -20,7 +20,7 @@ public class Gun_Shot : MonoBehaviour
     {
         Instantiate(projectile, tip.transform.position, tip.transform.rotation);
         audioSource.PlayOneShot(gunShot);
-        Sound_Gun.SetActive(true);
+        //Sound_Gun.SetActive(true);
     }
 
 }
