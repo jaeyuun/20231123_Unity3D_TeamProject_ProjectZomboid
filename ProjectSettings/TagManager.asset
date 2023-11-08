@@ -17,7 +17,6 @@ TagManager:
   - Except
   - Car
   - ZombieAttack
-
   layers:
   - Default
   - TransparentFX
@@ -25,9 +24,12 @@ TagManager:
   - 
   - Water
   - UI
-  - Player
-  - Transparent
+  - 
   - Item
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 
