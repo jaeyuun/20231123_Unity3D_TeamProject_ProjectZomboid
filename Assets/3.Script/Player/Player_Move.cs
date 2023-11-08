@@ -25,11 +25,14 @@ public class Player_Move : MonoBehaviour
 
     [Header("사운드 게임오브젝트")]
     public SphereCollider Sound;//게임오브젝트
+
+    public CapsuleCollider Man;
     private void Start()
     {
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         Sound = FindObjectOfType<SphereCollider>();
+        Man = FindObjectOfType<CapsuleCollider>();
     }
 
     private void FixedUpdate()
@@ -164,15 +167,15 @@ public class Player_Move : MonoBehaviour
         Instantiate(hit, Hit_pos.transform.position, Hit_pos.transform.rotation);
     }
 
-    /*  private void OnTriggerEnter(Collider other)
-      {
-          if(other.gameObject.CompareTag("Zombie_Attack"))
-          {
-
-              Hit();
-              Debug.Log("으악 아프다");
-          }
-      }*/
+    /*    private void OnTriggerEnter(Collider other)
+        {
+            Debug.Log(other.transform.position);
+            if (other.gameObject.CompareTag("ZombieAttack")&& other.gameObject.CompareTag("ZombieAttack"))
+            {
+                Hit();
+                Debug.Log("으악 아프다");
+            }
+        }*/
 
 
 }

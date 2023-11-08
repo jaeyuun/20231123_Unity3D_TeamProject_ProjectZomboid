@@ -60,11 +60,12 @@ public class Player_Attack : MonoBehaviour
 
         if (Input.GetMouseButton(1))//우클릭시
         {
-
+            
             anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
             if (Melee_weapon)//근접무기를 들고 있다면
             {
                 anim.SetBool("isWeapon", true);//근접무기 대기자세를 재생하고
+                
                 if (Input.GetMouseButtonDown(0) && !IsMovement)//좌클릭을 하면
                 {
                     anim.SetTrigger("isSwing");//스윙공격을 한다
@@ -78,6 +79,7 @@ public class Player_Attack : MonoBehaviour
             else if (Range_weapon)
             {
                 anim.SetBool("isAiming", true);
+                anim.SetBool("isRight_click", true);
                 if (Input.GetMouseButton(0) && !IsMovement)//총쏘기
                 {
 
@@ -107,6 +109,8 @@ public class Player_Attack : MonoBehaviour
         {
             anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
             anim.SetBool("isGun", true);
+            anim.SetBool("isRight_click", true);
+
         }
     }
 

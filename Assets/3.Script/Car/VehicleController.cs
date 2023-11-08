@@ -60,7 +60,7 @@ public class VehicleController : MonoBehaviour
         {
             car_Sound.Drive();
             ApplyInput(motorInput, steeringInput);
-            Wheel_spin(steeringInput);
+            //Wheel_spin(steeringInput);
             
         }
 
@@ -81,15 +81,22 @@ public class VehicleController : MonoBehaviour
     }
 
 
+
+
+
+
+
     private void Wheel_spin(float steeringInput)//¹ÙÄû ¾ÕÀ¸·Î ±¼¸®±â
     {
         Rot += 0.1f;
 
         Quaternion rotation = Quaternion.Euler(Rot, Rot_Y, 0);
+        rotation = Quaternion.Euler(rotation.eulerAngles.x, rotation.eulerAngles.y, 0);
         frontLeftWheel_Ain.transform.rotation = rotation;
         frontRightWheel_Ain.transform.rotation = rotation;
 
         rotation = Quaternion.Euler(Rot, 0, 0);
+        rotation = Quaternion.Euler(rotation.eulerAngles.x, rotation.eulerAngles.y, 0);
         rearLeftWheel_Ain.transform.rotation = rotation;
         rearRightWheel_Ain.transform.rotation = rotation;
 
@@ -97,10 +104,11 @@ public class VehicleController : MonoBehaviour
         {
             if (Rot_Y < 30)
             {
-                Rot_Y += 0.05f;
+                Rot_Y += 0.1f;
             }
 
             rotation = Quaternion.Euler(Rot, Rot_Y, 0);
+            rotation = Quaternion.Euler(rotation.eulerAngles.x, rotation.eulerAngles.y, 0);
             frontLeftWheel_Ain.transform.rotation = rotation;
             frontRightWheel_Ain.transform.rotation = rotation;
         }
@@ -108,10 +116,11 @@ public class VehicleController : MonoBehaviour
         {
             if (Rot_Y > -30)
             {
-                Rot_Y -= 0.05f;
+                Rot_Y -= 0.1f;
             }
 
             rotation = Quaternion.Euler(Rot, Rot_Y, 0);
+            rotation = Quaternion.Euler(rotation.eulerAngles.x, rotation.eulerAngles.y, 0);
             frontLeftWheel_Ain.transform.rotation = rotation;
             frontRightWheel_Ain.transform.rotation = rotation;
         }
