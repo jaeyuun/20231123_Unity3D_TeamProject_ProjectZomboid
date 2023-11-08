@@ -18,6 +18,7 @@ public class ZombieController : MonoBehaviour, IState
     public Vector3 targetPos;
     private Vector3 randomPos; // 플레이어 감지하지 않았을 때 위치
     private Vector3 playerPos; // 플레이어의 위치
+    private bool isTarget = false;
 
     // RandomTarget NavMesh
     [SerializeField] private float range = 10f;
@@ -33,27 +34,33 @@ public class ZombieController : MonoBehaviour, IState
     // ZombieData
     private SkinnedMeshRenderer skinned;
 
+    // ZombieAttack Collider
+    [SerializeField] private Collider[] zombieAttackCol;
+
     private void Awake()
     {
         TryGetComponent(out nav);
         TryGetComponent(out zombieAnim);
         TryGetComponent(out zombieAudio);
-        if (GameObject.FindGameObjectWithTag("Player") != null)
+        /*if (GameObject.FindGameObjectWithTag("Player") != null)
         {
             playerPos = GameObject.FindGameObjectWithTag("Player").transform.position;
-        }
+        }*/
         skinned = transform.GetChild(0).GetComponent<SkinnedMeshRenderer>();
     }
 
     private void Start()
     {
+        for (int i = 0; i < zombieAttackCol.Length; i++)
+        {
+            zombieAttackCol[i].enabled = false;
+        }
         StartCoroutine(RandomTargetPos_Co());
     }
 
     private void FixedUpdate()
     {
         ZombieTransToPlayer();
-        ZombieWalkAnim();
     }
 
     public void SetUp(ZombieData data)
@@ -67,11 +74,6 @@ public class ZombieController : MonoBehaviour, IState
     {
         // target에 따른 네비 적용
         nav.SetDestination(targetPos);
-    }
-
-    private void ZombieWalkAnim()
-    {
-        Idle();
     }
 
     private IEnumerator RandomTargetPos_Co()
@@ -91,7 +93,8 @@ public class ZombieController : MonoBehaviour, IState
         if (NavMesh.SamplePosition(randomDir, out hit, 20f, NavMesh.AllAreas))
         {
             return hit.position; // navmesh 위의 랜덤 위치 반환
-        } else
+        }
+        else
         {
             return transform.position;
         }
@@ -101,6 +104,7 @@ public class ZombieController : MonoBehaviour, IState
     {
         if (other.CompareTag("Sound"))
         {
+            playerPos = other.transform.position;
             targetPos = playerPos;
             zombieAnim.SetBool("isPlayerFind", true);
             if (isScreamZombie)
@@ -120,12 +124,18 @@ public class ZombieController : MonoBehaviour, IState
     {
         if (other.CompareTag("Sound"))
         {
+            playerPos = other.transform.position; // Update the player position
+            isTarget = true;
             targetPos = playerPos;
-            if (isScreamZombie)
+            Debug.Log("소리들음");
+            if (Vector3.Distance(targetPos, transform.position) <= 3f)
             {
+                Debug.Log("접근");
                 StartCoroutine(ZombieAttack_Co());
             }
-        } else
+            Debug.Log("소리듣기만함");
+        }
+        else
         {
             if (other.CompareTag("Scream") && !isScreamZombie)
             {
@@ -138,6 +148,7 @@ public class ZombieController : MonoBehaviour, IState
     {
         if (other.CompareTag("Sound"))
         {
+            isTarget = false;
             zombieAnim.SetBool("isPlayerFind", false);
         }
     }
@@ -147,10 +158,19 @@ public class ZombieController : MonoBehaviour, IState
         nav.isStopped = true;
         nav.velocity = Vector3.zero;
         zombieAnim.SetBool("isAttack", true);
+        for (int i = 0; i < zombieAttackCol.Length; i++)
+        {
+            // Attack할 때만 Collider enable True
+            zombieAttackCol[i].enabled = true;
+        }
         // Damage 넣어주기... todo
         yield return new WaitForSeconds(1.5f);
         nav.isStopped = false;
         zombieAnim.SetBool("isAttack", false);
+        for (int i = 0; i < zombieAttackCol.Length; i++)
+        {
+            zombieAttackCol[i].enabled = false;
+        }
     }
 
     private IEnumerator ZombieScream_Co()
@@ -169,12 +189,13 @@ public class ZombieController : MonoBehaviour, IState
 
     public void Idle()
     {
-        if (Vector3.Distance(targetPos, transform.position) <= 0.5f)
+        if (!isTarget && Vector3.Distance(targetPos, transform.position) <= 0.5f)
         {
             nav.isStopped = true;
             nav.velocity = Vector3.zero;
             zombieAnim.SetBool("isIdle", true);
-        } else
+        }
+        else
         {
             nav.isStopped = false;
             zombieAnim.SetBool("isIdle", false);
