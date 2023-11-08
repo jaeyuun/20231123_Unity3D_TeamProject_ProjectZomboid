@@ -10,7 +10,10 @@ public class Inventory : MonoBehaviour
     [SerializeField]
     private GameObject go_inventoryBase;
     [SerializeField]
+    private GameObject go_Base;
+    [SerializeField]
     private GameObject go_SlotsParent;
+
 
     private Slot[] slots;
 
@@ -37,13 +40,15 @@ public class Inventory : MonoBehaviour
             }
         }
     }
-    private void OpenInventory()
+    public void OpenInventory()
     {
         go_inventoryBase.SetActive(true);
     }
     private void CloseInventory()
     {
+
         go_inventoryBase.SetActive(false);
+        go_Base.SetActive(false); // 기존 CloseInventory에 추가하기
     }
     public void ToggleinventoryBase()
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class Slot : MonoBehaviour ,IPointerClickHandler,IBeginDragHandler,IDragHandler,IEndDragHandler,IDropHandler
+public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPointerClickHandler,IBeginDragHandler,IDragHandler,IEndDragHandler,IDropHandler
 {
     public Item item;
     public string itemName;
@@ -19,6 +19,13 @@ public class Slot : MonoBehaviour ,IPointerClickHandler,IBeginDragHandler,IDragH
     private GameObject go_NameImage;
     [SerializeField]
     private GameObject go_CountImage;
+
+    private ItemEffectDataBase theitemEffectDataBase; 
+   
+    private void Start()
+    {
+        theitemEffectDataBase = FindObjectOfType<ItemEffectDataBase>();
+    }
 
     //이미지의 투명도 조절 
     private void SetColor(float _alpha)
@@ -37,9 +44,10 @@ public class Slot : MonoBehaviour ,IPointerClickHandler,IBeginDragHandler,IDragH
 
         if (item.itemType !=Item.ItemType.Equipment)
         {
-           // go_NameImage.SetActive(true);
+           
             go_CountImage.SetActive(true);
             text_Count.text = itemCount.ToString();
+            go_NameImage.SetActive(true);
             text_Name.text = itemName;
 
         }
@@ -47,6 +55,8 @@ public class Slot : MonoBehaviour ,IPointerClickHandler,IBeginDragHandler,IDragH
         {
             text_Count.text = "0";
             go_CountImage.SetActive(false);
+            go_NameImage.SetActive(true);
+            text_Name.text = itemName;
         }
        
 
@@ -63,13 +73,16 @@ public class Slot : MonoBehaviour ,IPointerClickHandler,IBeginDragHandler,IDragH
         }
     }
     //슬롯 초기화
-    private void ClearSlot()
+    public void ClearSlot()
     {
         item = null;
         itemCount = 0;
         itemImage.sprite = null;
+        itemName = null;
         SetColor(0);
 
+        go_NameImage.SetActive(false);
+        
 
         text_Count.text = "0";
         go_CountImage.SetActive(false);
@@ -87,6 +100,7 @@ public class Slot : MonoBehaviour ,IPointerClickHandler,IBeginDragHandler,IDragH
                 }
                 else
                 {
+                    theitemEffectDataBase.UseItem(item);
                     Debug.Log(item.itemName + " 을 사용했습니다.");
                     //소모 
                     SetSlotCount(-1);
@@ -102,6 +116,7 @@ public class Slot : MonoBehaviour ,IPointerClickHandler,IBeginDragHandler,IDragH
         {
             DragSlot.instance.dragSlot = this;
             DragSlot.instance.DragSetImage(itemImage);
+           
           
            
         }
@@ -121,6 +136,7 @@ public class Slot : MonoBehaviour ,IPointerClickHandler,IBeginDragHandler,IDragH
         Debug.Log("OnEndDrag 호출됨");
         DragSlot.instance.SetColor(0);
         DragSlot.instance.dragSlot = null;
+       
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -148,7 +164,23 @@ public class Slot : MonoBehaviour ,IPointerClickHandler,IBeginDragHandler,IDragH
         else
         {
             DragSlot.instance.dragSlot.ClearSlot();
+           
         }
 
+    }
+
+    //마우스가 슬롯에 들어갈 때 
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (item!=null) //예외처리 
+        {
+            theitemEffectDataBase.ShowToolTip(item,transform.position);
+        }
+        
+    }
+    //마우스가 슬롯에서 빠져나갈 때
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        theitemEffectDataBase.HideToolTip();
     }
 }

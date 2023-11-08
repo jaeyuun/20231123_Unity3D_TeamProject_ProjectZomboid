@@ -22,6 +22,8 @@ public class ActionController : MonoBehaviour
     [SerializeField]
     private Inventory theinventory;
 
+    private Slot slot;
+
     private void Update()
     {
         CheckItem();
@@ -30,6 +32,7 @@ public class ActionController : MonoBehaviour
     public void ToggleDropBase()
     {
         go_DropBase.SetActive(!go_DropBase.activeSelf);
+       
     }
 
     private void TryAction()
@@ -69,13 +72,20 @@ public class ActionController : MonoBehaviour
                 pickupActivated = true;
                 actionText.gameObject.SetActive(true);
                 go_DropBase.gameObject.SetActive(true);
+                theinventory.OpenInventory();
+                if (pickupActivated)
+                {
+                    PickupItem();
+                }
                 hitCollider = col;
-                actionText.text = "획득" + "<color=yellow>" + "(마우스 오른쪽 버튼)" + "</color>";
+                // actionText.text = "<color=red>"+col.transform.name+ "</color>"+ "획득" + "<color=yellow>" + "(마우스 오른쪽 버튼)" + "</color>";
+                actionText.text = "<color=red>" + col.transform.name + "</color>" + "획득";
                 return; // 첫 번째 아이템만 처리하고 나머지는 무시
             }
         }
 
         infoDisAppear();
+        //OffDropBase();
     }
    
 
@@ -84,6 +94,10 @@ public class ActionController : MonoBehaviour
         pickupActivated = false;
         actionText.gameObject.SetActive(false);
        
+    }
+    public void OffDropBase()
+    {
+        go_DropBase.gameObject.SetActive(false);
     }
    
 }
