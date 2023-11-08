@@ -7,21 +7,20 @@ public enum ZombieAudio
 {
     Hit = 0,
     Dead,
+    Idle,
     Walk,
 }
 
-public class ZombieController : MonoBehaviour
+public class ZombieController : MonoBehaviour, IState
 {
     // Zombie NavMesh
     private NavMeshAgent nav;
-    public Transform targetPos;
-    private Transform randomTarget; // 플레이어 감지하지 않았을 때 위치
-    private Transform player; // 플레이어의 위치
+    public Vector3 targetPos;
+    private Vector3 randomPos; // 플레이어 감지하지 않았을 때 위치
+    private Vector3 playerPos; // 플레이어의 위치
 
     // RandomTarget NavMesh
-    private float range = 10f;
-    private Vector3 point;
-    public bool isNonTarget = true; // player가 target이 아닐 때
+    [SerializeField] private float range = 10f;
 
     private Animator zombieAnim;
     [SerializeField] private GameObject screamRange;
@@ -41,9 +40,8 @@ public class ZombieController : MonoBehaviour
         TryGetComponent(out zombieAudio);
         if (GameObject.FindGameObjectWithTag("Player") != null)
         {
-            player = GameObject.FindGameObjectWithTag("Player").transform;
+            playerPos = GameObject.FindGameObjectWithTag("Player").transform.position;
         }
-        randomTarget = GameObject.FindGameObjectWithTag("RandomTarget").transform;
         skinned = transform.GetChild(0).GetComponent<SkinnedMeshRenderer>();
     }
 
@@ -55,6 +53,7 @@ public class ZombieController : MonoBehaviour
     private void FixedUpdate()
     {
         ZombieTransToPlayer();
+        ZombieWalkAnim();
     }
 
     public void SetUp(ZombieData data)
@@ -67,57 +66,44 @@ public class ZombieController : MonoBehaviour
     private void ZombieTransToPlayer()
     {
         // target에 따른 네비 적용
-        nav.SetDestination(targetPos.position);
+        nav.SetDestination(targetPos);
+    }
+
+    private void ZombieWalkAnim()
+    {
+        Idle();
     }
 
     private IEnumerator RandomTargetPos_Co()
     {
-        // random target position select
-        if (isNonTarget)
-        {
-            if (RandomPoint(randomTarget.position, range, out point))
-            {
-                randomTarget.position = point;
-            }
-            targetPos = randomTarget;
-            if (Vector3.Distance(randomTarget.position, transform.position) <= nav.stoppingDistance + 1.0f)
-            {
-                zombieAnim.SetBool("isIdle", true);
-            }
-            else
-            {
-                zombieAnim.SetBool("isIdle", false);
-            }
-        }
+        randomPos = GetRandomPosOnNav();
+        targetPos = randomPos;
         yield return new WaitForSeconds(5f);
         StartCoroutine(RandomTargetPos_Co());
     }
 
-    private bool RandomPoint(Vector3 center, float range, out Vector3 result)
+    private Vector3 GetRandomPosOnNav()
     {
-        // 플레이어 범위 밖일 때 랜덤 타겟 위치 설정, object 아닌 position으로만 따라갈 수 있도록 설정... todo
-        for (int i = 0; i < 30; i++)
+        Vector3 randomDir = Random.insideUnitSphere * range;
+        randomDir += transform.position;
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(randomDir, out hit, 20f, NavMesh.AllAreas))
         {
-            Vector3 randomPoint = center + Random.insideUnitSphere * range;
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, NavMesh.AllAreas))
-            {
-                result = hit.position;
-                return true;
-            }
+            return hit.position; // navmesh 위의 랜덤 위치 반환
+        } else
+        {
+            return transform.position;
         }
-        result = Vector3.zero;
-        return false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Sound"))
         {
-            isNonTarget = false;
-            targetPos = player;
+            targetPos = playerPos;
             zombieAnim.SetBool("isPlayerFind", true);
-            if (isScreamZombie && Vector3.Distance(player.position, transform.position) > 1.5f)
+            if (isScreamZombie)
             {
                 StartCoroutine(ZombieScream_Co());
             }
@@ -134,8 +120,8 @@ public class ZombieController : MonoBehaviour
     {
         if (other.CompareTag("Sound"))
         {
-            targetPos = player;
-            if (Vector3.Distance(player.position, transform.position) <= 1.5f)
+            targetPos = playerPos;
+            if (isScreamZombie)
             {
                 StartCoroutine(ZombieAttack_Co());
             }
@@ -143,7 +129,7 @@ public class ZombieController : MonoBehaviour
         {
             if (other.CompareTag("Scream") && !isScreamZombie)
             {
-                targetPos = other.gameObject.transform;
+                targetPos = other.gameObject.transform.position; // screamZombie position
             }
         }
     }
@@ -153,26 +139,45 @@ public class ZombieController : MonoBehaviour
         if (other.CompareTag("Sound"))
         {
             zombieAnim.SetBool("isPlayerFind", false);
-            isNonTarget = true;
         }
     }
 
     private IEnumerator ZombieAttack_Co()
     {
+        nav.isStopped = true;
+        nav.velocity = Vector3.zero;
         zombieAnim.SetBool("isAttack", true);
         // Damage 넣어주기... todo
         yield return new WaitForSeconds(1.5f);
+        nav.isStopped = false;
         zombieAnim.SetBool("isAttack", false);
     }
 
     private IEnumerator ZombieScream_Co()
     {
         // Player Sound Range에 없고, Scream Range에 있는 Zombie 불러오기
+        nav.isStopped = true;
+        nav.velocity = Vector3.zero;
         zombieAnim.SetBool("isScream", true);
         screamRange.SetActive(true);
         yield return null;
+        nav.isStopped = false;
         zombieAnim.SetBool("isScream", false);
         yield return new WaitForSeconds(10f);
         screamRange.SetActive(false);
+    }
+
+    public void Idle()
+    {
+        if (Vector3.Distance(targetPos, transform.position) <= 0.5f)
+        {
+            nav.isStopped = true;
+            nav.velocity = Vector3.zero;
+            zombieAnim.SetBool("isIdle", true);
+        } else
+        {
+            nav.isStopped = false;
+            zombieAnim.SetBool("isIdle", false);
+        }
     }
 }
