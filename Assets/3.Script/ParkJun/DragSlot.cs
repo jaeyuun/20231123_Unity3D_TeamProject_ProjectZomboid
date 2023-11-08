@@ -10,6 +10,7 @@ public class DragSlot : MonoBehaviour
     public Slot dragSlot;
 
     [SerializeField] private Image imageItem;
+    ///[SerializeField] private Text textItem;
 
     private void Start()
     {
@@ -20,6 +21,10 @@ public class DragSlot : MonoBehaviour
         imageItem.sprite = _itemImage.sprite;
         SetColor(1);
     }
+/*    public void DragSetText(Text _itemText)
+    {
+        textItem.text = _itemText.text;
+    }*/
     public void SetColor(float _alpha)
     {
         Color color = imageItem.color;
