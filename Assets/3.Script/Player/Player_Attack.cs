@@ -52,17 +52,18 @@ public class Player_Attack : MonoBehaviour
         }
         if (Range_weapon)
         {
+            
             anim.SetBool("isGun", true);
+            anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
 
         }
         else if (!Range_weapon)
         {
+            
             anim.SetBool("isGun", false);
+            anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
 
         }
-
-
-
 
 
         if (Input.GetButtonDown("Jump") && !IsMovement)//동작하길 바란다...Todo 필요없다면 삭제 하길...
@@ -120,17 +121,6 @@ public class Player_Attack : MonoBehaviour
             anim.SetBool("isRight_click", false);
             anim.SetBool("isAiming", false);
             anim.SetLayerWeight(1, 0);
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        if (Range_weapon == true)
-        {
-            anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
-            anim.SetBool("isGun", true);
-            anim.SetBool("isRight_click", true);
-
         }
     }
 
