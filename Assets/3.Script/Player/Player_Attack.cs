@@ -42,6 +42,29 @@ public class Player_Attack : MonoBehaviour
 
     private void Update()
     {
+        if(Melee_weapon)
+        {
+            anim.SetBool("isWeapon",true);
+        }
+        else if(!Melee_weapon)
+        {
+            anim.SetBool("isWeapon", false);
+        }
+        if(Range_weapon)
+        {
+            anim.SetBool("isGun", true);
+
+        }
+        else if(!Range_weapon)
+        {
+            anim.SetBool("isGun", false);
+
+        }
+
+
+
+
+
         if (Input.GetButtonDown("Jump")&&!IsMovement)//동작하길 바란다...Todo 필요없다면 삭제 하길...
         {
             anim.SetLayerWeight(1, 0);
@@ -62,9 +85,9 @@ public class Player_Attack : MonoBehaviour
         {
             
             anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
+            anim.SetBool("isRight_click", true);
             if (Melee_weapon)//근접무기를 들고 있다면
             {
-                anim.SetBool("isWeapon", true);//근접무기 대기자세를 재생하고
                 
                 if (Input.GetMouseButtonDown(0) && !IsMovement)//좌클릭을 하면
                 {
@@ -97,7 +120,7 @@ public class Player_Attack : MonoBehaviour
         }
         else if(Input.GetMouseButtonUp(1))
         {
-            anim.SetBool("isWeapon", false);
+            anim.SetBool("isRight_click", false);
             anim.SetBool("isAiming", false);
             anim.SetLayerWeight(1, 0);
         }
