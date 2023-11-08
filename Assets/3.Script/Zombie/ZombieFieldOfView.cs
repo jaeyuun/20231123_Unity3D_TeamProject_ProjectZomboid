@@ -19,8 +19,7 @@ public class ZombieFieldOfView : MonoBehaviour
 
     private void PlayerFind(Vector3 targetPos)
     {
-        zombieController.isNonTarget = false;
-        zombieController.targetPos.position = targetPos;
+        zombieController.targetPos = targetPos;
     }
 
     private void OnDrawGizmos()
@@ -40,11 +39,7 @@ public class ZombieFieldOfView : MonoBehaviour
         hitTargetList.Clear();
         Collider[] targets = Physics.OverlapSphere(myPos, ViewRadius, TargetMask);
 
-        if (targets.Length == 0)
-        {
-            zombieController.isNonTarget = true;
-            return;
-        }
+        if (targets.Length == 0) return;
 
         foreach (Collider playerColli in targets)
         { // target list
