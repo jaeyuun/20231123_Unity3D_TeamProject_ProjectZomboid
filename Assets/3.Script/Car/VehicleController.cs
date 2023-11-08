@@ -8,10 +8,15 @@ public class VehicleController : MonoBehaviour
     public WheelCollider rearLeftWheel, rearRightWheel; // 뒷 바퀴 두 개
     public Car_Sound car_Sound;
 
-    public float motorForce = 50f; // 모터 힘
-    public float steeringAngle = 30f; // 스티어링 각도
-    private bool isStart_up=false;
+    [Header("라이트")]
+    [SerializeField] private GameObject Light_R;
+    [SerializeField] private GameObject Light_L;
+    private bool Light=false;
 
+    public float motorForce = 1000; // 모터 힘
+    public float steeringAngle = 50f; // 스티어링 각도
+    private bool isStart_up=false;
+    private float Rot = 0f;
     private void Start()
     {
         car_Sound = GetComponent<Car_Sound>();
@@ -22,6 +27,22 @@ public class VehicleController : MonoBehaviour
         var motorInput = Input.GetAxis("Vertical") * motorForce; // 수직 입력(키보드의 W와 S 또는 위쪽 화살표와 아래쪽 화살표 키)
         var steeringInput = Input.GetAxis("Horizontal") * steeringAngle; // 수평 입력(키보드의 A와 D 또는 왼쪽 화살표와 오른쪽 화살표 키)
 
+        if(Input.GetKeyDown(KeyCode.F))//라이트 켜고 끄기
+        {
+            if(!Light)
+            {
+                Light_R.SetActive(true);
+                Light_L.SetActive(true);
+                Light = true;
+            }
+            else
+            {
+                Light_R.SetActive(false);
+                Light_L.SetActive(false);
+                Light = false;
+            }         
+        }
+
         if (!isStart_up)
         {
             car_Sound.Start_up();
@@ -30,7 +51,8 @@ public class VehicleController : MonoBehaviour
         else if(motorInput!=0&&isStart_up)
         {
             car_Sound.Drive();
-            ApplyInput(motorInput, steeringInput);            
+            ApplyInput(motorInput, steeringInput);
+            Wheel_spin();
         }
         
     }
@@ -44,7 +66,19 @@ public class VehicleController : MonoBehaviour
         rearRightWheel.motorTorque = motorInput;
 
         // 스티어링 각도 적용
+        steeringInput = Mathf.Clamp(steeringInput, -steeringAngle, steeringAngle);
         frontLeftWheel.steerAngle = steeringInput;
         frontRightWheel.steerAngle = steeringInput;
+      
+      
+    }
+
+    private void Wheel_spin()//바퀴 앞으로 굴리기
+    {
+        Rot += 0.1f;
+        frontLeftWheel.transform.Rotate(Rot, 0, 0);
+        frontRightWheel.transform.Rotate(Rot, 0, 0);
+        rearLeftWheel.transform.Rotate(Rot, 0, 0);
+        rearRightWheel.transform.Rotate(Rot, 0, 0);
     }
 }

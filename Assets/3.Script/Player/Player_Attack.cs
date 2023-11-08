@@ -13,8 +13,8 @@ public class Player_Attack : MonoBehaviour
     private AudioSource audioSource;
     [Header("플레이어오브젝트")]
     [SerializeField] private Gun_Shot gun_Shot;
-    [Header("건사운드오브젝트")]
-    public GameObject Sound_Gun;
+    [Header("사운드 게임오브젝트")]
+    public GameObject Sound_Gun;//게임오브젝트
     private bool IsMovement=false;
 
 
@@ -37,7 +37,7 @@ public class Player_Attack : MonoBehaviour
         anim = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         gun_Shot = GetComponent<Gun_Shot>();
-
+        
     }
 
     private void Update()
@@ -83,10 +83,13 @@ public class Player_Attack : MonoBehaviour
 
                     gun_Shot.ShotEvent();
                     anim.SetTrigger("isFiring");
-                    Sound_Gun.SetActive(false);
+                    Sound_Gun.SetActive(true);
                     IsMovement = true;
                     Invoke("isMovement", 0.3f);
+                    StartCoroutine(Sound_Gun_false_co());
                 }
+                
+
             }
    
         }
@@ -140,7 +143,11 @@ public class Player_Attack : MonoBehaviour
         Bat_In = newBatIn;
         Bat_Out = newBatOut;
     }
-
+    private IEnumerator Sound_Gun_false_co()
+    {
+        yield return new WaitForSeconds(1f);
+        Sound_Gun.SetActive(false);
+    }
     private void isMovement()//행동가능여부
     {
         IsMovement = false;
