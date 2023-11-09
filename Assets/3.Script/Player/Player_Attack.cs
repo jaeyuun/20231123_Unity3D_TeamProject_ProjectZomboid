@@ -15,13 +15,13 @@ public class Player_Attack : MonoBehaviour
     [SerializeField] private Gun_Shot gun_Shot;
     [Header("사운드 게임오브젝트")]
     public GameObject Sound_Gun;//게임오브젝트
-    private bool IsMovement=false;
+    private bool IsMovement = false;
 
 
     [Header("엑티브할 베트들")]
     //등에 있는 배트
     [SerializeField] private GameObject Bat_Spine;
-    private bool Bat_In=true;    
+    private bool Bat_In = true;
     //손에 있는 배트
     [SerializeField] private GameObject Bat_Hand;
     private bool Bat_Out;
@@ -37,12 +37,36 @@ public class Player_Attack : MonoBehaviour
         anim = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         gun_Shot = GetComponent<Gun_Shot>();
-        
+
     }
 
     private void Update()
     {
-        if (Input.GetButtonDown("Jump")&&!IsMovement)//동작하길 바란다...Todo 필요없다면 삭제 하길...
+        if (Melee_weapon)
+        {
+            anim.SetBool("isWeapon", true);
+        }
+        else if (!Melee_weapon)
+        {
+            anim.SetBool("isWeapon", false);
+        }
+        if (Range_weapon)
+        {
+            
+            anim.SetBool("isGun", true);
+            anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
+
+        }
+        else if (!Range_weapon)
+        {
+            
+            anim.SetBool("isGun", false);
+            anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
+
+        }
+
+
+        if (Input.GetButtonDown("Jump") && !IsMovement)//동작하길 바란다...Todo 필요없다면 삭제 하길...
         {
             anim.SetLayerWeight(1, 0);
             anim.SetTrigger("isKickig");
@@ -60,12 +84,12 @@ public class Player_Attack : MonoBehaviour
 
         if (Input.GetMouseButton(1))//우클릭시
         {
-            
+
             anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
-            if (Melee_weapon)//근접무기를 들고 있다면
+            anim.SetBool("isRight_click", true);
+
+            if (Melee_weapon ||(!Melee_weapon&& !Range_weapon))//밀리가 있던가 둘다 없던가
             {
-                anim.SetBool("isWeapon", true);//근접무기 대기자세를 재생하고
-                
                 if (Input.GetMouseButtonDown(0) && !IsMovement)//좌클릭을 하면
                 {
                     anim.SetTrigger("isSwing");//스윙공격을 한다
@@ -74,12 +98,10 @@ public class Player_Attack : MonoBehaviour
                     IsMovement = true;
                     Invoke("isMovement", 1f);
                 }
-                
             }
             else if (Range_weapon)
             {
-                anim.SetBool("isAiming", true);
-                anim.SetBool("isRight_click", true);
+                anim.SetBool("isAiming", true);//총조준
                 if (Input.GetMouseButton(0) && !IsMovement)//총쏘기
                 {
 
@@ -90,27 +112,15 @@ public class Player_Attack : MonoBehaviour
                     Invoke("isMovement", 0.3f);
                     StartCoroutine(Sound_Gun_false_co());
                 }
-                
 
             }
-   
+
         }
-        else if(Input.GetMouseButtonUp(1))
+        else if (Input.GetMouseButtonUp(1))
         {
-            anim.SetBool("isWeapon", false);
+            anim.SetBool("isRight_click", false);
             anim.SetBool("isAiming", false);
             anim.SetLayerWeight(1, 0);
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        if (Range_weapon==true)
-        {
-            anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
-            anim.SetBool("isGun", true);
-            anim.SetBool("isRight_click", true);
-
         }
     }
 
