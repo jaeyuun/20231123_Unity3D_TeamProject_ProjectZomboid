@@ -71,6 +71,7 @@ public class VehicleController : MonoBehaviour
         {
             // 쉬프트 키가 눌려진 경우, 브레이크를 동작시킵니다.
             ApplyBrake();
+            car_Sound.Brake();
         }
         else
         {

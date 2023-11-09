@@ -15,10 +15,15 @@ public class HitColl : MonoBehaviour
     [Header("플레이어 넣어주세요")]
     public Player_Attack player;
 
+    public HP hp;
+    private float Player_HP;
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
         player = GetComponentInParent<Player_Attack>();
+        hp = GetComponentInParent<HP>();
+        Player_HP=hp.Start_HP(Player_HP);
+        Debug.Log(Player_HP);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -28,7 +33,12 @@ public class HitColl : MonoBehaviour
             player.anim.SetTrigger("isHit");
             audioSource.PlayOneShot(Hit_Sound);
             StartCoroutine(Hit_co());
-            Debug.Log("으악 아프다");
+            Player_HP= hp.Damage(30f, Player_HP);
+            Debug.Log(Player_HP);
+        }
+        if(Player_HP<=0)
+        {
+            Debug.Log("끄아아아아아아아앜!");
         }
     }
 
