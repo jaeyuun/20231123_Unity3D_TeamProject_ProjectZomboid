@@ -4,5 +4,10 @@ using UnityEngine;
 
 public class ZombieWindow : MonoBehaviour
 {
-    
+
+
+    private void WindowClimb()
+    {
+
+    }
 }
