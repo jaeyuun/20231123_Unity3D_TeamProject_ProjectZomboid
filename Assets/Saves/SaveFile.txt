@@ -1,0 +1,1 @@
+{"playerPos":{"x":1.3799996376037598,"y":0.03966689109802246,"z":1.9799995422363282},"playerRot":{"x":0.0,"y":261.1276550292969,"z":0.0},"invenArrayNumber":[0,1],"invenItemName":["총","물"],"invenItemNumber":[1,3]}

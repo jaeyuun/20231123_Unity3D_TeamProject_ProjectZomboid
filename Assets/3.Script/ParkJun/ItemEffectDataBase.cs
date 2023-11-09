@@ -75,5 +75,9 @@ public class ItemEffectDataBase : MonoBehaviour
             }
             Debug.Log("일치하는 itemName이 없습니다 ");
         }
+        if (_item.itemType == Item.ItemType.ETC)
+        {
+
+        }
     }
 }

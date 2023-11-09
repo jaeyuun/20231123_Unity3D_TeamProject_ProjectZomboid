@@ -5,10 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/1.Scene/TestIntro.unity
-    guid: b4600dc1fc88156489747ac3c47e3b0b
+    guid: f01eabd2649618149961ab346d049817
   - enabled: 1
-    path: Assets/1.Scene/PJunYeong.unity
-    guid: d5d3aad2950cae443ab43967c81b027d
+    path: Assets/1.Scene/PJunYeong2.unity
+    guid: 9e5367653a429ef4aa3916664031f380
   m_configObjects: {}
