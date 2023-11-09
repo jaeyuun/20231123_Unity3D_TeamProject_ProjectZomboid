@@ -92,21 +92,6 @@ public class Player_Move : MonoBehaviour
         }
     }
 
-    /*    private void Rotate()//회전 메서드
-        {
-
-            //마우스 회전
-            Ray ray = followCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit rayhit;
-            if (Physics.Raycast(ray, out rayhit, 100))
-            {
-                Vector3 nextVec = rayhit.point - transform.position;
-                // nextVec.x = 0;
-                nextVec.y = 0;
-                // nextVec.z = 0;
-                transform.LookAt(transform.position + nextVec);
-            }
-        }*/
 
 
     private void Rotate()//오차범위 조준테스트
@@ -162,20 +147,8 @@ public class Player_Move : MonoBehaviour
         audioSource.PlayOneShot(Death);
     }
 
-    public void Hit()//피뿜는 메서드
-    {
-        Instantiate(hit, Hit_pos.transform.position, Hit_pos.transform.rotation);
-    }
 
-    /*    private void OnTriggerEnter(Collider other)
-        {
-            Debug.Log(other.transform.position);
-            if (other.gameObject.CompareTag("ZombieAttack")&& other.gameObject.CompareTag("ZombieAttack"))
-            {
-                Hit();
-                Debug.Log("으악 아프다");
-            }
-        }*/
+
 
 
 }

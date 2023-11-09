@@ -24,10 +24,12 @@ public class VehicleController : MonoBehaviour
     public float steeringAngle = 45f; // 스티어링 각도
     private bool isStart_up = false;
     private float Rot = 0f;
+   /* private float defaultStiffness;  // 기본 타이어 마찰력을 저장할 변수*/
 
     private void Start()
     {
         car_Sound = GetComponent<Car_Sound>();
+
     }
 
     private void FixedUpdate()
@@ -64,9 +66,20 @@ public class VehicleController : MonoBehaviour
 
         }
 
-        /*        frontLeftWheel.steerAngle = Input.GetAxis("Horizontal") * steeringAngle;
-                frontRightWheel.steerAngle = Input.GetAxis("Horizontal") * steeringAngle;*/
-
+        //브레이크
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            // 쉬프트 키가 눌려진 경우, 브레이크를 동작시킵니다.
+            ApplyBrake();
+        }
+        else
+        {
+            // 쉬프트 키가 눌려지지 않은 경우, 브레이크 토크를 0으로 설정하여 브레이크를 해제합니다.
+            frontLeftWheel.brakeTorque = 0;
+            frontRightWheel.brakeTorque = 0;
+            rearLeftWheel.brakeTorque = 0;
+            rearRightWheel.brakeTorque = 0;
+        }
     }
 
     private void ApplyInput(float motorInput, float steeringInput)
@@ -92,7 +105,14 @@ public class VehicleController : MonoBehaviour
         rearRightWheel_Ain.transform.Rotate(Rot, 0, 0);
     }
 
-
+    private void ApplyBrake()
+    {
+        float brakeForce = motorForce;  // 브레이크 힘은 일반적으로 모터 힘과 동일하게 설정합니다.
+        frontLeftWheel.brakeTorque = brakeForce;
+        frontRightWheel.brakeTorque = brakeForce;
+        rearLeftWheel.brakeTorque = brakeForce;
+        rearRightWheel.brakeTorque = brakeForce;
+    }
 
 
 
