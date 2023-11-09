@@ -38,7 +38,11 @@ public class HitColl : MonoBehaviour
         }
         if(Player_HP<=0)
         {
+            player.anim.SetTrigger("isDie");
             Debug.Log("끄아아아아아아아앜!");
+            player.GetComponent<Player_Move>().enabled = false;
+            player.GetComponent<Player_Attack>().enabled = false;
+            
         }
     }
 
