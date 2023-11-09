@@ -21,10 +21,10 @@ public class VehicleController : MonoBehaviour
     private bool Light = false;
 
     public float motorForce = 1000; // 모터 힘
-    public float steeringAngle = 40f; // 스티어링 각도
+    public float steeringAngle = 45f; // 스티어링 각도
     private bool isStart_up = false;
     private float Rot = 0f;
-    private float Rot_Y = 0f;
+
     private void Start()
     {
         car_Sound = GetComponent<Car_Sound>();
@@ -61,8 +61,11 @@ public class VehicleController : MonoBehaviour
             car_Sound.Drive();
             ApplyInput(motorInput, steeringInput);
             //Wheel_spin(steeringInput);
-            
+
         }
+
+        /*        frontLeftWheel.steerAngle = Input.GetAxis("Horizontal") * steeringAngle;
+                frontRightWheel.steerAngle = Input.GetAxis("Horizontal") * steeringAngle;*/
 
     }
 
@@ -75,9 +78,18 @@ public class VehicleController : MonoBehaviour
         rearRightWheel.motorTorque = motorInput;
 
         // 스티어링 각도 적용
-        frontLeftWheel.steerAngle = steeringInput;
-        frontRightWheel.steerAngle = steeringInput;
+        float a = frontLeftWheel.steerAngle = steeringInput;
+        float b = frontRightWheel.steerAngle = steeringInput;
 
+        Rot += 5f;
+        Quaternion rotation_L = Quaternion.Euler(Rot, a - 80f, 0);
+        Quaternion rotation_R = Quaternion.Euler(Rot, b + 80f, 0);
+        
+
+        frontLeftWheel_Ain.transform.rotation = rotation_L;
+        frontRightWheel_Ain.transform.rotation = rotation_R;
+        rearLeftWheel_Ain.transform.Rotate(Rot,0,0);
+        rearRightWheel_Ain.transform.Rotate(Rot, 0, 0);
     }
 
 
@@ -86,44 +98,6 @@ public class VehicleController : MonoBehaviour
 
 
 
-    private void Wheel_spin(float steeringInput)//바퀴 앞으로 굴리기
-    {
-        Rot += 0.1f;
 
-        Quaternion rotation = Quaternion.Euler(Rot, Rot_Y, 0);
-        rotation = Quaternion.Euler(rotation.eulerAngles.x, rotation.eulerAngles.y, 0);
-        frontLeftWheel_Ain.transform.rotation = rotation;
-        frontRightWheel_Ain.transform.rotation = rotation;
-
-        rotation = Quaternion.Euler(Rot, 0, 0);
-        rotation = Quaternion.Euler(rotation.eulerAngles.x, rotation.eulerAngles.y, 0);
-        rearLeftWheel_Ain.transform.rotation = rotation;
-        rearRightWheel_Ain.transform.rotation = rotation;
-
-        if (steeringInput > 0)
-        {
-            if (Rot_Y < 30)
-            {
-                Rot_Y += 0.1f;
-            }
-
-            rotation = Quaternion.Euler(Rot, Rot_Y, 0);
-            rotation = Quaternion.Euler(rotation.eulerAngles.x, rotation.eulerAngles.y, 0);
-            frontLeftWheel_Ain.transform.rotation = rotation;
-            frontRightWheel_Ain.transform.rotation = rotation;
-        }
-        else if (steeringInput < 0)
-        {
-            if (Rot_Y > -30)
-            {
-                Rot_Y -= 0.1f;
-            }
-
-            rotation = Quaternion.Euler(Rot, Rot_Y, 0);
-            rotation = Quaternion.Euler(rotation.eulerAngles.x, rotation.eulerAngles.y, 0);
-            frontLeftWheel_Ain.transform.rotation = rotation;
-            frontRightWheel_Ain.transform.rotation = rotation;
-        }
-    }
 
 }
