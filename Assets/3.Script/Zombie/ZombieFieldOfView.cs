@@ -12,6 +12,10 @@ public class ZombieFieldOfView : MonoBehaviour
     [SerializeField] private LayerMask ObstacleMask;
     private List<Collider> hitTargetList = new List<Collider>(); // 감지한 타겟 리스트
 
+    public Vector3 myPos;
+    public float lookingAngle;
+    public Vector3 lookDir;
+
     private void Awake()
     {
         TryGetComponent(out zombieController);
@@ -24,17 +28,17 @@ public class ZombieFieldOfView : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Vector3 myPos = transform.position + Vector3.up * 1.5f; // 캐릭터 포지션
+        myPos = transform.position + Vector3.up * 1.5f; // 캐릭터 포지션
         Gizmos.DrawWireSphere(myPos, ViewRadius);
 
-        float lookingAngle = transform.eulerAngles.y; //캐릭터가 바라보는 방향의 각도
+        lookingAngle = transform.eulerAngles.y; //캐릭터가 바라보는 방향의 각도
+        lookDir = AngleToDir(lookingAngle);
         Vector3 rightDir = AngleToDir(transform.eulerAngles.y + viewAngle * 0.5f);
         Vector3 leftDir = AngleToDir(transform.eulerAngles.y - viewAngle * 0.5f);
-        Vector3 lookDir = AngleToDir(lookingAngle);
 
         Debug.DrawRay(myPos, rightDir * ViewRadius, Color.blue);
         Debug.DrawRay(myPos, leftDir * ViewRadius, Color.blue);
-        Debug.DrawRay(myPos, lookDir * ViewRadius, Color.cyan);
+        // Debug.DrawRay(myPos, lookDir * ViewRadius, Color.cyan);
 
         hitTargetList.Clear();
         Collider[] targets = Physics.OverlapSphere(myPos, ViewRadius, TargetMask);
@@ -55,7 +59,7 @@ public class ZombieFieldOfView : MonoBehaviour
         }
     }
 
-    private Vector3 AngleToDir(float angle)
+    public Vector3 AngleToDir(float angle)
     {
         float radian = angle * Mathf.Deg2Rad;
         return new Vector3(Mathf.Sin(radian), 0f, Mathf.Cos(radian));

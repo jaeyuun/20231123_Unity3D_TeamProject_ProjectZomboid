@@ -218,7 +218,7 @@ public class ZombieController : MonoBehaviour, IState
 
     private void NavmeshResume()
     {
-        // stop
+        // stop after
         nav.isStopped = false;
         nav.updatePosition = true;
         nav.updateRotation = true;
