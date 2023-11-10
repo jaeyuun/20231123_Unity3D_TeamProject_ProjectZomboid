@@ -31,7 +31,7 @@ public class WindowLock : MonoBehaviour
         {
             if (Physics.Raycast(ray, out hit, distance))
             {
-                if (hit.collider.gameObject.CompareTag("Window"))
+                if (hit.collider.gameObject.CompareTag("WindowHit"))
                 {
                     window(hit);
                 }

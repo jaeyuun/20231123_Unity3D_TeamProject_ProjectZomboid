@@ -5,13 +5,13 @@ using UnityEngine.AI;
 
 public enum ZombieAudio
 {
-    Hit = 0,
-    Dead,
+    Dead = 0,
+    Hit,
     Idle,
     Walk,
 }
 
-public class ZombieController : MonoBehaviour, IState
+public class ZombieController : HP, IState
 {
     // Zombie NavMesh
     private NavMeshAgent nav;
@@ -34,11 +34,10 @@ public class ZombieController : MonoBehaviour, IState
     private AudioSource zombieAudio;
     [SerializeField] private AudioClip[] audioClip;
 
-
-    [Header("HP스크립트")]
-    public HP hp;
-    private float Zomdie_HP;
+    // Zombie Hit
+    private float zombieHp;
     private bool isDie = false;
+
     // ZombieData
     private SkinnedMeshRenderer skinned;
 
@@ -50,10 +49,9 @@ public class ZombieController : MonoBehaviour, IState
         TryGetComponent(out nav);
         TryGetComponent(out zombieAnim);
         TryGetComponent(out zombieAudio);
-        hp.GetComponent<HP>();
 
         skinned = transform.GetChild(0).GetComponent<SkinnedMeshRenderer>();
-        Zomdie_HP =hp.Start_HP(Zomdie_HP);
+        zombieHp = hP;
     }
 
     private void Start()
@@ -67,8 +65,11 @@ public class ZombieController : MonoBehaviour, IState
 
     private void FixedUpdate()
     {
-        ZombieTransToPlayer();
-        Idle();
+        if (!isDie)
+        {
+            ZombieTransToPlayer();
+            Idle();
+        }
     }
 
     public void SetUp(ZombieData data)
@@ -83,16 +84,19 @@ public class ZombieController : MonoBehaviour, IState
         // target에 따른 네비 적용
         nav.SetDestination(targetPos);
     }
-
+    #region Nav Random Target
     private IEnumerator RandomTargetPos_Co()
     {
-        randomPos = GetRandomPosOnNav();
-        if (nonTarget)
+        if (!isDie)
         {
-            targetPos = randomPos;
+            randomPos = GetRandomPosOnNav();
+            if (nonTarget)
+            {
+                targetPos = randomPos;
+            }
+            yield return new WaitForSeconds(5f);
+            StartCoroutine(RandomTargetPos_Co());
         }
-        yield return new WaitForSeconds(5f);
-        StartCoroutine(RandomTargetPos_Co());
     }
 
     private Vector3 GetRandomPosOnNav()
@@ -110,7 +114,8 @@ public class ZombieController : MonoBehaviour, IState
             return transform.position;
         }
     }
-
+    #endregion
+    #region Collider conflict
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Sound"))
@@ -122,12 +127,6 @@ public class ZombieController : MonoBehaviour, IState
                 StartCoroutine(ZombieScream_Co());
             }
         }
-/*        if (other.CompareTag("Attack"))
-        {
-            // zombie Hit method... todo
-            zombieAnim.SetTrigger("isDamage");
-            //zombieAudio.PlayOneShot(audioClip[(int)ZombieAudio.Hit]);
-        }*/
     }
 
     private void OnTriggerStay(Collider other)
@@ -161,29 +160,22 @@ public class ZombieController : MonoBehaviour, IState
             nonTarget = true;
         }
     }
-    //Todo
+
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.CompareTag("Attack")&& !isDie)
+        if(collision.gameObject.CompareTag("Attack") && !isDie)
         {
-            Debug.Log("아야야야ㅑ");
-            zombieAnim.SetTrigger("isDamage");//애니메이션
-            Zomdie_HP = hp.Damage(25f, Zomdie_HP);
+            zombieAnim.SetTrigger("isDamage");
+            zombieHp = Damage(25f, zombieHp);
 
-            if (Zomdie_HP <= 0 && !isDie)
+            if (zombieHp <= 0)
             {
-                NavmeshStop();
-                zombieAudio.PlayOneShot(audioClip[0]);//머리터지는소리
-
-                zombieAnim.SetTrigger("isDie");
-                isDie = true;
-                Destroy(gameObject, 5f);
+                Die();
             }
         }
-        //죽으세요
-   
     }
-
+    #endregion
+    #region Coroutine Attack and Scream
     private IEnumerator ZombieAttack_Co()
     {
         zombieAnim.SetBool("isAttack", true);
@@ -215,13 +207,16 @@ public class ZombieController : MonoBehaviour, IState
         screamRange.SetActive(true);
         NavmeshStop();
         yield return null;
+
         zombieAnim.SetBool("isScream", false);
         yield return new WaitForSeconds(10f);
+
         screamRange.SetActive(false);
         NavmeshResume();
         nonScreamZombie = true;
     }
-
+    #endregion
+    #region IState
     public void Idle()
     {
         if (nonTarget && Vector3.Distance(targetPos, transform.position) <= 0.7f)
@@ -236,6 +231,30 @@ public class ZombieController : MonoBehaviour, IState
         }
     }
 
+    public void Die()
+    {
+        zombieAnim.SetBool("isDie", true);
+        zombieAnim.SetTrigger("isD");
+        transform.position = new Vector3(transform.position.x, 0, transform.position.z); // 죽을 때 y축이 바뀌면 땅에 묻혀서 y축 고정
+
+        TryGetComponent(out CapsuleCollider collider);
+        TryGetComponent(out Rigidbody rigid);
+        isDie = true;
+        NavmeshStop();
+        zombieAudio.PlayOneShot(audioClip[(int)ZombieAudio.Dead]);
+
+        rigid.isKinematic = true;
+        collider.enabled = false;
+
+        Destroy(gameObject, 10f);
+    }
+
+    public void Jump()
+    {
+
+    }
+    #endregion
+    #region Nav Stop And Resume
     private void NavmeshStop()
     {
         // don't slide
@@ -252,4 +271,5 @@ public class ZombieController : MonoBehaviour, IState
         nav.updatePosition = true;
         nav.updateRotation = true;
     }
+    #endregion
 }

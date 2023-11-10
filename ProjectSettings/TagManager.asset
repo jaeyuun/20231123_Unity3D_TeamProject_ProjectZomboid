@@ -21,6 +21,8 @@ TagManager:
   - FxTemporaire
   - Fence
   - Rock
+  - WindowHit
+  
   layers:
   - Default
   - TransparentFX
@@ -29,8 +31,8 @@ TagManager:
   - Water
   - UI
   - Player
-  - Item
-  - 
+  - Transparent
+  - Zombie
   - 
   - 
   - 

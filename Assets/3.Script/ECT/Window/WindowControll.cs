@@ -7,9 +7,10 @@ public class WindowControll : MonoBehaviour
     //private GameObject[] objects;
     private float distance = 10f;
     GameObject window;
+    private float hitCount;
 
 
-    private AudioSource audio;
+    //private AudioSource audio;
     [SerializeField]private AudioClip bottlesmash;
 
     /* private void Start()
@@ -57,9 +58,34 @@ public class WindowControll : MonoBehaviour
                     // Debug.Log("hit");
                     window.SetActive(false);
                 }
+
+                if (hit.collider.gameObject.CompareTag("WindowHit"))
+                {
+
+                    if (hitCount >= 3)
+                    {
+                        hitCoun();
+                        WIndow_bool window = hit.collider.GetComponent<WIndow_bool>();
+                        if (window != null)
+                        {
+                            window.isOpen = !window.isOpen;
+                        }
+                        /*window = hit.collider.gameObject.transform.GetChild(0).gameObject;
+                        // Debug.Log("hit");
+                        window.SetActive(false);*/
+                    }
+                  
+                }
+
             }
         }
 
+    }
+
+    private void hitCoun()
+    {
+
+        hitCount++;
     }
 
 }

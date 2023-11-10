@@ -15,7 +15,7 @@ public class ZombieSpawner : MonoBehaviour
         SetUpSpawnPoint();
     }
 
-    private void SetUpSpawnPoint()
+    private IEnumerator SetUpSpawnPoint()
     {
         spawnPoint = new Transform[transform.childCount]; // transform.childCount: 자식의 개수
 
@@ -23,6 +23,8 @@ public class ZombieSpawner : MonoBehaviour
         {
             spawnPoint[i] = transform.GetChild(i).transform;
         }
+
+        yield return new WaitForSeconds(300f); // 나중에 Day Time으로 바꿔주기
     }
 
     private void Update()
