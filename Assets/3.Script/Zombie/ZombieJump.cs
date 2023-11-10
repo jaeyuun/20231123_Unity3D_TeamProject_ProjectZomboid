@@ -35,7 +35,7 @@ public class ZombieJump : MonoBehaviour
     {
         // IState로 옮길수도 있습니다.
         RaycastHit hit;
-        Debug.DrawRay(myPos, lookDir * 5f, Color.yellow);
+        Debug.DrawRay(transform.position, Vector3.forward * 5f, Color.yellow);
 
         if (Physics.Raycast(myPos, lookDir * 2f, out hit))
         {
