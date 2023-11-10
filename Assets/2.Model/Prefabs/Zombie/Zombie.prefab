@@ -994,12 +994,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5925bf1189dbc834e890052e005b7342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hP: 100
   targetPos: {x: 0, y: 0, z: 0}
   nonTarget: 1
   screamRange: {fileID: 5583730538914202763}
   audioClip:
   - {fileID: 8300000, guid: 5c1cb01d77c81a7488141af51df7092c, type: 3}
-  hp: {fileID: -4050042993533478935}
   zombieAttackCol:
   - {fileID: 4723343940286160768}
   - {fileID: 4723427881852518390}
@@ -1025,19 +1025,6 @@ MonoBehaviour:
   myPos: {x: 19.5, y: 1.5, z: 0}
   lookingAngle: 0
   lookDir: {x: 0, y: 0, z: 1}
---- !u!114 &-4050042993533478935
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4723507247448933035}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc3c8a83dd8ed374fa34872bb5fb95b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hP: 100
 --- !u!1 &4723510272031542353
 GameObject:
   m_ObjectHideFlags: 0

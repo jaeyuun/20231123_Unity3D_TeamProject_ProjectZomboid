@@ -5,4 +5,6 @@ using UnityEngine;
 public interface IState
 {
     void Idle();
+    void Die();
+    void Jump();
 }
