@@ -31,8 +31,7 @@ public class Player_Move : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
-        Sound = FindObjectOfType<SphereCollider>();
-        Man = FindObjectOfType<CapsuleCollider>();
+        Sound =GetComponentInChildren<SphereCollider>();
     }
 
     private void FixedUpdate()

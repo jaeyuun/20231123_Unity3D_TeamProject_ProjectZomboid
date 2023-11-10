@@ -24,6 +24,7 @@ public class SeletionManager : MonoBehaviour
 
         if(Physics.Raycast(ray, out hit))
         {
+            // Debug.DrawRay(transform.position + new Vector3(0, 1.2f, 0), transform.forward * 10f, Color.red);
             var selection = hit.transform;
             if(selection.CompareTag(selectable))
             {

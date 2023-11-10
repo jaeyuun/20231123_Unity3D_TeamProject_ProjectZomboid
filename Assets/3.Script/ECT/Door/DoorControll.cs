@@ -16,10 +16,10 @@ public class DoorControll : MonoBehaviour
 
     private void DoorHit()
     {
-        Ray ray = new Ray(transform.position, transform.forward);
+        Ray ray = new Ray(transform.position + new Vector3(0, 1.2f, 0), transform.forward);
         RaycastHit hit;
 
-        Debug.DrawRay(transform.position, transform.forward * 5f, Color.white);
+        Debug.DrawRay(transform.position + new Vector3(0, 1.2f, 0), transform.forward * 5f, Color.white);
 
         if (Input.GetKeyDown(KeyCode.E))
         {

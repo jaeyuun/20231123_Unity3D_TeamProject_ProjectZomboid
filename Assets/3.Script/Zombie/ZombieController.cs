@@ -34,6 +34,11 @@ public class ZombieController : MonoBehaviour, IState
     private AudioSource zombieAudio;
     [SerializeField] private AudioClip[] audioClip;
 
+
+    [Header("HP스크립트")]
+    public HP hp;
+    private float Zomdie_HP;
+    private bool isDie = false;
     // ZombieData
     private SkinnedMeshRenderer skinned;
 
@@ -45,8 +50,10 @@ public class ZombieController : MonoBehaviour, IState
         TryGetComponent(out nav);
         TryGetComponent(out zombieAnim);
         TryGetComponent(out zombieAudio);
+        hp.GetComponent<HP>();
 
         skinned = transform.GetChild(0).GetComponent<SkinnedMeshRenderer>();
+        Zomdie_HP =hp.Start_HP(Zomdie_HP);
     }
 
     private void Start()
@@ -115,12 +122,12 @@ public class ZombieController : MonoBehaviour, IState
                 StartCoroutine(ZombieScream_Co());
             }
         }
-        if (other.CompareTag("Attack"))
+/*        if (other.CompareTag("Attack"))
         {
             // zombie Hit method... todo
             zombieAnim.SetTrigger("isDamage");
-            zombieAudio.PlayOneShot(audioClip[(int)ZombieAudio.Hit]);
-        }
+            //zombieAudio.PlayOneShot(audioClip[(int)ZombieAudio.Hit]);
+        }*/
     }
 
     private void OnTriggerStay(Collider other)
@@ -153,6 +160,28 @@ public class ZombieController : MonoBehaviour, IState
             zombieAnim.SetBool("isPlayerFind", false);
             nonTarget = true;
         }
+    }
+    //Todo
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Attack")&& !isDie)
+        {
+            Debug.Log("아야야야ㅑ");
+            zombieAnim.SetTrigger("isDamage");//애니메이션
+            Zomdie_HP = hp.Damage(25f, Zomdie_HP);
+
+            if (Zomdie_HP <= 0 && !isDie)
+            {
+                NavmeshStop();
+                zombieAudio.PlayOneShot(audioClip[0]);//머리터지는소리
+
+                zombieAnim.SetTrigger("isDie");
+                isDie = true;
+                Destroy(gameObject, 5f);
+            }
+        }
+        //죽으세요
+   
     }
 
     private IEnumerator ZombieAttack_Co()

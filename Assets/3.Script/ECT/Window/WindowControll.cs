@@ -43,9 +43,9 @@ public class WindowControll : MonoBehaviour
 
     private void WindowHit()
     {
-        Ray ray = new Ray(transform.position, transform.forward);
+        Ray ray = new Ray(transform.position + new Vector3(0, 1.2f, 0), transform.forward);
         RaycastHit hit;
-        //Debug.DrawRay(transform.position + new Vector3(0, 2f, 0), transform.forward, Color.white, Distance);
+        Debug.DrawRay(transform.position + new Vector3(0, 1.2f, 0), transform.forward * 10f, Color.red);
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (Physics.Raycast(ray, out hit, distance))

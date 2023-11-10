@@ -17,6 +17,7 @@ public class HitColl : MonoBehaviour
 
     public HP hp;
     private float Player_HP;
+    private bool isDie = false;
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -28,22 +29,25 @@ public class HitColl : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("ZombieAttack"))
+        if (other.gameObject.CompareTag("ZombieAttack") && !isDie)
         {
             player.anim.SetTrigger("isHit");
             audioSource.PlayOneShot(Hit_Sound);
             StartCoroutine(Hit_co());
             Player_HP= hp.Damage(30f, Player_HP);
             Debug.Log(Player_HP);
+
+            if (Player_HP <= 0 && !isDie)
+            {
+                isDie = true;
+                player.anim.SetTrigger("isDie");
+                Debug.Log("끄아아아아아아아앜!");
+                player.GetComponent<Player_Move>().enabled = false;
+                player.GetComponent<Player_Attack>().enabled = false;
+
+            }
         }
-        if(Player_HP<=0)
-        {
-            player.anim.SetTrigger("isDie");
-            Debug.Log("끄아아아아아아아앜!");
-            player.GetComponent<Player_Move>().enabled = false;
-            player.GetComponent<Player_Attack>().enabled = false;
-            
-        }
+       
     }
 
     public IEnumerator Hit_co()
