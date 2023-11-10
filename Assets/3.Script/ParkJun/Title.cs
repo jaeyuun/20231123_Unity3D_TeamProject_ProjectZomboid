@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Title : MonoBehaviour
 {
-    public string sceneName = "PJunYeong2";
+    public string sceneName = "PJunYeong";
 
     public static Title instance;
 
