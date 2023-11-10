@@ -18,6 +18,8 @@ TagManager:
   - Car
   - ZombieAttack
   - Door
+  - FxTemporaire
+  - Fence
   layers:
   - Default
   - TransparentFX
