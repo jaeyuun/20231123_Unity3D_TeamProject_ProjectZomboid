@@ -20,10 +20,13 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
     [SerializeField]
     private GameObject go_CountImage;
 
+    private Rect baseRect;  // Inventory_Base ¿ÃπÃ¡ˆ¿« Rect ¡§∫∏ πﬁæ∆ ø».
+
     private ItemEffectDataBase theitemEffectDataBase; 
    
     private void Start()
     {
+        baseRect = transform.parent.parent.GetComponent<RectTransform>().rect;
         theitemEffectDataBase = FindObjectOfType<ItemEffectDataBase>();
     }
 
@@ -35,7 +38,7 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
         itemImage.color = color;
     }
     //æ∆¿Ã≈€ »πµÊ
-    public void AddItem(Item _item,string _name,int _count=1)
+    public void AddItem(Item _item,string _name,int _count=1 )
     {
         item = _item;
         itemCount = _count;
@@ -96,7 +99,7 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
             {
                 if (item.itemType==Item.ItemType.Equipment)
                 {
-                    //¿Â¬¯
+                    //¿Â∫Ò ¿Â¬¯
                 }
                 else
                 {
@@ -133,7 +136,19 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("OnEndDrag »£√‚µ ");
+        if (DragSlot.instance.transform.localPosition.x < baseRect.xMin
+            || DragSlot.instance.transform.localPosition.x > baseRect.xMax
+            || DragSlot.instance.transform.localPosition.y < baseRect.yMin
+            || DragSlot.instance.transform.localPosition.y > baseRect.yMax)
+        {
+
+            DragSlot.instance.dragSlot.ClearSlot();
+        }
+
+
+
+
+            Debug.Log("OnEndDrag »£√‚µ ");
         DragSlot.instance.SetColor(0);
         DragSlot.instance.dragSlot = null;
        
@@ -183,4 +198,5 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
     {
         theitemEffectDataBase.HideToolTip();
     }
+
 }

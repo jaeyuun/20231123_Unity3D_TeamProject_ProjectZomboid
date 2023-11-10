@@ -20,19 +20,25 @@ public class ActionController : MonoBehaviour
     [SerializeField]
     private GameObject go_DropBase;
     [SerializeField]
-    private Inventory theinventory;
+    private Drop theDrop;
+    [SerializeField]
+    private Inventory theInventory;
+ 
 
-    private Slot slot;
+  
 
     private void Update()
     {
         CheckItem();
         TryAction();
     }
+  
     public void ToggleDropBase()
     {
         go_DropBase.SetActive(!go_DropBase.activeSelf);
-       
+
+        // µÂ∑”∫£¿ÃΩ∫∞° ¥›»˙ ∂ß æ∆¿Ã≈€ ΩΩ∑‘ √ ±‚»≠ ∞°¥…«œµµ∑œ º≥¡§
+        //opClear.SetCanClearSlots(go_DropBase.activeSelf);
     }
 
     private void TryAction()
@@ -54,7 +60,7 @@ public class ActionController : MonoBehaviour
             if (itemPickup != null)
             {
                 Debug.Log(itemPickup.item.itemName + "»πµÊ");
-                theinventory.AcquireItem(itemPickup.item);
+                theDrop.AcquireItem(itemPickup.item);
                 Destroy(hitCollider.gameObject);
                 infoDisAppear();
             }
@@ -72,7 +78,8 @@ public class ActionController : MonoBehaviour
                 pickupActivated = true;
                 actionText.gameObject.SetActive(true);
                 go_DropBase.gameObject.SetActive(true);
-                theinventory.OpenInventory();
+
+                theInventory.OpenInventory();
                 if (pickupActivated)
                 {
                     PickupItem();
