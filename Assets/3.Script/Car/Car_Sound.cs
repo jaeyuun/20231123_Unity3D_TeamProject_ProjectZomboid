@@ -32,7 +32,7 @@ public class Car_Sound : MonoBehaviour
 
         isDriveSoundPlaying = true;
         audioSource.PlayOneShot(drive);
-        yield return new WaitForSeconds(1.3f);
+        yield return new WaitForSeconds(0.9f);
 
         isDriveSoundPlaying = false;
     }
@@ -58,8 +58,8 @@ public class Car_Sound : MonoBehaviour
         }
 
         isBrakeSoundPlaying = true;
-        audioSource.PlayOneShot(drive);
-        yield return new WaitForSeconds(1.3f);
+        audioSource.PlayOneShot(brake);
+        yield return new WaitForSeconds(1.5f);
 
         isBrakeSoundPlaying = false;
     }

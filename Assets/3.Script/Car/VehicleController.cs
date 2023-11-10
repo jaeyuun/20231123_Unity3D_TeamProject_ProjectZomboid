@@ -21,13 +21,15 @@ public class VehicleController : MonoBehaviour
     private bool Light = false;
 
     public float motorForce = 1000; // 모터 힘
-    public float steeringAngle = 40f; // 스티어링 각도
+    public float steeringAngle = 45f; // 스티어링 각도
     private bool isStart_up = false;
     private float Rot = 0f;
-    private float Rot_Y = 0f;
+   /* private float defaultStiffness;  // 기본 타이어 마찰력을 저장할 변수*/
+
     private void Start()
     {
         car_Sound = GetComponent<Car_Sound>();
+
     }
 
     private void FixedUpdate()
@@ -61,9 +63,24 @@ public class VehicleController : MonoBehaviour
             car_Sound.Drive();
             ApplyInput(motorInput, steeringInput);
             //Wheel_spin(steeringInput);
-            
+
         }
 
+        //브레이크
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            // 쉬프트 키가 눌려진 경우, 브레이크를 동작시킵니다.
+            ApplyBrake();
+            car_Sound.Brake();
+        }
+        else
+        {
+            // 쉬프트 키가 눌려지지 않은 경우, 브레이크 토크를 0으로 설정하여 브레이크를 해제합니다.
+            frontLeftWheel.brakeTorque = 0;
+            frontRightWheel.brakeTorque = 0;
+            rearLeftWheel.brakeTorque = 0;
+            rearRightWheel.brakeTorque = 0;
+        }
     }
 
     private void ApplyInput(float motorInput, float steeringInput)
@@ -75,55 +92,33 @@ public class VehicleController : MonoBehaviour
         rearRightWheel.motorTorque = motorInput;
 
         // 스티어링 각도 적용
-        frontLeftWheel.steerAngle = steeringInput;
-        frontRightWheel.steerAngle = steeringInput;
+        float a = frontLeftWheel.steerAngle = steeringInput;
+        float b = frontRightWheel.steerAngle = steeringInput;
 
+        Rot += 5f;
+        Quaternion rotation_L = Quaternion.Euler(Rot, a - 80f, 0);
+        Quaternion rotation_R = Quaternion.Euler(Rot, b + 80f, 0);
+        
+
+        frontLeftWheel_Ain.transform.rotation = rotation_L;
+        frontRightWheel_Ain.transform.rotation = rotation_R;
+        rearLeftWheel_Ain.transform.Rotate(Rot,0,0);
+        rearRightWheel_Ain.transform.Rotate(Rot, 0, 0);
     }
 
-
-
-
-
-
-
-    private void Wheel_spin(float steeringInput)//바퀴 앞으로 굴리기
+    private void ApplyBrake()
     {
-        Rot += 0.1f;
-
-        Quaternion rotation = Quaternion.Euler(Rot, Rot_Y, 0);
-        rotation = Quaternion.Euler(rotation.eulerAngles.x, rotation.eulerAngles.y, 0);
-        frontLeftWheel_Ain.transform.rotation = rotation;
-        frontRightWheel_Ain.transform.rotation = rotation;
-
-        rotation = Quaternion.Euler(Rot, 0, 0);
-        rotation = Quaternion.Euler(rotation.eulerAngles.x, rotation.eulerAngles.y, 0);
-        rearLeftWheel_Ain.transform.rotation = rotation;
-        rearRightWheel_Ain.transform.rotation = rotation;
-
-        if (steeringInput > 0)
-        {
-            if (Rot_Y < 30)
-            {
-                Rot_Y += 0.1f;
-            }
-
-            rotation = Quaternion.Euler(Rot, Rot_Y, 0);
-            rotation = Quaternion.Euler(rotation.eulerAngles.x, rotation.eulerAngles.y, 0);
-            frontLeftWheel_Ain.transform.rotation = rotation;
-            frontRightWheel_Ain.transform.rotation = rotation;
-        }
-        else if (steeringInput < 0)
-        {
-            if (Rot_Y > -30)
-            {
-                Rot_Y -= 0.1f;
-            }
-
-            rotation = Quaternion.Euler(Rot, Rot_Y, 0);
-            rotation = Quaternion.Euler(rotation.eulerAngles.x, rotation.eulerAngles.y, 0);
-            frontLeftWheel_Ain.transform.rotation = rotation;
-            frontRightWheel_Ain.transform.rotation = rotation;
-        }
+        float brakeForce = motorForce;  // 브레이크 힘은 일반적으로 모터 힘과 동일하게 설정합니다.
+        frontLeftWheel.brakeTorque = brakeForce;
+        frontRightWheel.brakeTorque = brakeForce;
+        rearLeftWheel.brakeTorque = brakeForce;
+        rearRightWheel.brakeTorque = brakeForce;
     }
+
+
+
+
+
+
 
 }

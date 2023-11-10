@@ -5,16 +5,16 @@ using UnityEngine;
 public class VehicleInteract : MonoBehaviour
 {
     public GameObject Player;
+    public Player_isCar player_isCar;
     public GameObject Vehicle;
     public GameObject Carmer;
     private bool inVehicle = false;
 
 
-
-
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && !inVehicle)
+        
+        if (Input.GetKeyDown(KeyCode.E) && !inVehicle && player_isCar.iscar)
         {
             EnterVehicle(); // 차량에 탑승
         }
@@ -23,6 +23,8 @@ public class VehicleInteract : MonoBehaviour
             ExitVehicle(); // 차량에서 내림
         }
     }
+
+
 
     void EnterVehicle()
     {
