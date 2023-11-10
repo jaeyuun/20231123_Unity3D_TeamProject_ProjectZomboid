@@ -790,7 +790,8 @@ GameObject:
   - component: {fileID: 4723507247448933034}
   - component: {fileID: 4723507247448933072}
   - component: {fileID: 4723507247448933032}
-  m_Layer: 0
+  - component: {fileID: -4050042993533478935}
+  m_Layer: 8
   m_Name: Zombie
   m_TagString: Zombie
   m_Icon: {fileID: 0}
@@ -1567,7 +1568,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4727189274395121633
 Transform:
   m_ObjectHideFlags: 0
