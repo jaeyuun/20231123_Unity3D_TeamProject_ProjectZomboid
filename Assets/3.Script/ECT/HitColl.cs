@@ -27,13 +27,15 @@ public class HitColl : MonoBehaviour
         Debug.Log(Player_HP);
     }
 
+
+  
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("ZombieAttack") && !isDie)
         {
             player.anim.SetTrigger("isHit");
             audioSource.PlayOneShot(Hit_Sound);
-            StartCoroutine(Hit_co());
+            StartCoroutine(Hit_co(Hit_pos));
             Player_HP= hp.Damage(30f, Player_HP);
             Debug.Log(Player_HP);
 
@@ -52,7 +54,16 @@ public class HitColl : MonoBehaviour
        
     }
 
-    public IEnumerator Hit_co()
+    //좀비용 피튀는거
+
+    public void Zombie_Hit(Transform Hit_pos)
+    {
+        StartCoroutine(Hit_co(Hit_pos));
+    }
+
+
+
+    public IEnumerator Hit_co(Transform Hit_pos)
     {
         Instantiate(hit, Hit_pos.transform.position, Hit_pos.transform.rotation);
         yield return new WaitForSeconds(0.3f);
