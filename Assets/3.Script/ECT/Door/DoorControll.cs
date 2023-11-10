@@ -8,26 +8,25 @@ public class DoorControll : MonoBehaviour
     private float InterectiveDistance = 10f;
     Door_bool door_Bool;
 
-/*    private void Start()
-    {
-        door_Bool = GetComponent<Door_bool>();
-    }
-*/
+
     private void Update()
     {
-        
+        DoorHit();
+    }
+
+    private void DoorHit()
+    {
         Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
 
         Debug.DrawRay(transform.position, transform.forward * 5f, Color.white);
-        
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log("E");
             if (Physics.Raycast(ray, out hit, InterectiveDistance))
             {
                 //Debug.Log(hit.collider.name);
-
                 if (hit.collider.gameObject.CompareTag("Door"))
                 {
                     Debug.Log("hit Door");
@@ -38,8 +37,6 @@ public class DoorControll : MonoBehaviour
                     {
                         door.isOpen = !door.isOpen;
                     }
-
-                    //hit.collider.GetComponent<Door_bool>().isOpen = true;
                 }
             }
         }
