@@ -84,7 +84,7 @@ public class ZombieController : HP, IState
         // target에 따른 네비 적용
         nav.SetDestination(targetPos);
     }
-
+    #region Nav Random Target
     private IEnumerator RandomTargetPos_Co()
     {
         if (!isDie)
@@ -114,7 +114,8 @@ public class ZombieController : HP, IState
             return transform.position;
         }
     }
-
+    #endregion
+    #region Collider conflict
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Sound"))
@@ -173,7 +174,8 @@ public class ZombieController : HP, IState
             }
         }
     }
-
+    #endregion
+    #region Coroutine Attack and Scream
     private IEnumerator ZombieAttack_Co()
     {
         zombieAnim.SetBool("isAttack", true);
@@ -213,7 +215,8 @@ public class ZombieController : HP, IState
         NavmeshResume();
         nonScreamZombie = true;
     }
-
+    #endregion
+    #region IState
     public void Idle()
     {
         if (nonTarget && Vector3.Distance(targetPos, transform.position) <= 0.7f)
@@ -250,7 +253,8 @@ public class ZombieController : HP, IState
     {
 
     }
-
+    #endregion
+    #region Nav Stop And Resume
     private void NavmeshStop()
     {
         // don't slide
@@ -267,4 +271,5 @@ public class ZombieController : HP, IState
         nav.updatePosition = true;
         nav.updateRotation = true;
     }
+    #endregion
 }
