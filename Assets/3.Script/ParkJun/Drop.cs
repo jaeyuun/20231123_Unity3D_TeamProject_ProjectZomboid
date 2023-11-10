@@ -39,7 +39,7 @@ public class Drop : MonoBehaviour
     }
     void Update()
     {
-        //TryOpenInventory();
+        TryOpenInventory();
     }
    private void TryOpenInventory()
     {
@@ -60,7 +60,7 @@ public class Drop : MonoBehaviour
     {
         go_dropBase.SetActive(true);
     }
-    private void CloseDrop()
+    public void CloseDrop()
     {
 
         go_dropBase.SetActive(false);

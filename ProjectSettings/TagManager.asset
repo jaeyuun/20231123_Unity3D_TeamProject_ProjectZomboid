@@ -20,7 +20,9 @@ TagManager:
   - Door
   - FxTemporaire
   - Fence
+  - Rock
   - WindowHit
+  
   layers:
   - Default
   - TransparentFX

@@ -64,7 +64,10 @@ public class ActionController : MonoBehaviour
                 Destroy(hitCollider.gameObject);
                 infoDisAppear();
             }
+         
+           
         }
+        
     }
 
     private void CheckItem()
@@ -92,6 +95,7 @@ public class ActionController : MonoBehaviour
         }
 
         infoDisAppear();
+        
         //OffDropBase();
     }
    

@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private GameObject go_BaseUI;
     [SerializeField] private SaveAndLoad theSaveAndLoad;
+    public string sceneName = "TestIntro";
 
     private void Update()
     {
@@ -27,7 +29,7 @@ public class PauseMenu : MonoBehaviour
         go_BaseUI.SetActive(true);
         Time.timeScale = 0f;
     }
-    private void CloseMenu()
+    public void CloseMenu()
     {
         GameManager.isPause = false;
         go_BaseUI.SetActive(false);
@@ -48,6 +50,13 @@ public class PauseMenu : MonoBehaviour
     {
         Debug.Log("종료 ");
         Application.Quit();
+    }
+    public void ClickIntroSave()
+    {
+        Debug.Log("세이브 ");
+        //theSaveAndLoad.SaveData();
+        SceneManager.LoadScene(sceneName);
+
     }
 }
 
