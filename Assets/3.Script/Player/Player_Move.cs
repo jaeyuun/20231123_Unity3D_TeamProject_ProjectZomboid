@@ -103,10 +103,10 @@ public class Player_Move : MonoBehaviour
         if (plane.Raycast(ray, out rayDistance))
         {
             Vector3 pointToLook = ray.GetPoint(rayDistance);
-            transform.LookAt(new Vector3(pointToLook.x, transform.position.y, pointToLook.z));
-
+            transform.LookAt(new Vector3(pointToLook.x, transform.position.y, pointToLook.z));      
            /* Quaternion toRotation = Quaternion.LookRotation(pointToLook, Vector3.up);
             transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, speed * Time.deltaTime);*/
+          
         }
     }
 

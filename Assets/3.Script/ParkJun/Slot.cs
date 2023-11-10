@@ -22,7 +22,8 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
 
     private Rect baseRect;  // Inventory_Base 이미지의 Rect 정보 받아 옴.
 
-    private ItemEffectDataBase theitemEffectDataBase; 
+    private ItemEffectDataBase theitemEffectDataBase;
+    private Drop theDrop;
    
     private void Start()
     {
@@ -132,6 +133,7 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
         {
             DragSlot.instance.transform.position = eventData.position;
         }
+        
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -143,6 +145,8 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
         {
 
             DragSlot.instance.dragSlot.ClearSlot();
+
+            
         }
 
 
@@ -160,6 +164,8 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
         {
             ChangeSlot();
         }
+        
+       
         Debug.Log("OnDrop 호출됨");
       
     }
