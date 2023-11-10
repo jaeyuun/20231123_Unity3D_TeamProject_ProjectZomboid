@@ -790,7 +790,6 @@ GameObject:
   - component: {fileID: 4723507247448933034}
   - component: {fileID: 4723507247448933072}
   - component: {fileID: 4723507247448933032}
-  - component: {fileID: -4050042993533478935}
   m_Layer: 8
   m_Name: Zombie
   m_TagString: Zombie
@@ -1015,14 +1014,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f30173aae80b7d4e8153df563fef6fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ViewRadius: 15
-  TargetMask:
-    serializedVersion: 2
-    m_Bits: 64
-  ObstacleMask:
+  viewRadius: 15
+  targetMask:
     serializedVersion: 2
     m_Bits: 0
-  myPos: {x: 19.5, y: 1.5, z: 0}
+  objectMask:
+    serializedVersion: 2
+    m_Bits: 0
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
+  zombiePos: {x: 19.5, y: 1.5, z: 0}
   lookingAngle: 0
   lookDir: {x: 0, y: 0, z: 1}
 --- !u!1 &4723510272031542353
