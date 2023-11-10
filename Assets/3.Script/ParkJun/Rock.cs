@@ -18,6 +18,11 @@ public class Rock : MonoBehaviour
     private GameObject go_debris; //±˙¡¯ πŸ¿ß 
     [SerializeField]
     private GameObject go_effect_Prefabs; //√§±º ¿Ã∆Â∆Æ 
+    [SerializeField]
+    private GameObject go_item_Prefabs;
+
+    [SerializeField]
+    private int count;
 
     [SerializeField]
     private AudioSource audioSource;
@@ -46,6 +51,15 @@ public class Rock : MonoBehaviour
         audioSource.Play();
 
         COL.enabled = false;
+        for (int i = 0; i < count; i++)
+        {
+            Instantiate(go_item_Prefabs, go_rock.transform.position, Quaternion.identity);
+        }
+      /*  Instantiate(go_item_Prefabs, go_rock.transform.position, Quaternion.identity);
+        Instantiate(go_item_Prefabs, go_rock.transform.position, Quaternion.identity);
+        Instantiate(go_item_Prefabs, go_rock.transform.position, Quaternion.identity);
+        Instantiate(go_item_Prefabs, go_rock.transform.position, Quaternion.identity);*/
+
         Destroy(go_rock);
 
         go_debris.SetActive(true);
