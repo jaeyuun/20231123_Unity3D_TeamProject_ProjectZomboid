@@ -251,7 +251,7 @@ public class ZombieController : HP, IState
 
     public void Jump()
     {
-
+        zombieAnim.SetTrigger("isClimb");
     }
     #endregion
     #region Nav Stop And Resume
