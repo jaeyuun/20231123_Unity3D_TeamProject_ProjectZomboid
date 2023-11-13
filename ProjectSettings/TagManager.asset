@@ -22,7 +22,6 @@ TagManager:
   - Fence
   - Rock
   - WindowHit
-  
   layers:
   - Default
   - TransparentFX
@@ -35,7 +34,7 @@ TagManager:
   - Zombie
   - 
   - 
-  - 
+  - Minmap
   - 
   - 
   - 
