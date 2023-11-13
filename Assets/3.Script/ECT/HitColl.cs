@@ -11,13 +11,15 @@ public class HitColl : MonoBehaviour
     [Header("피격(사운드클립)")]
     private AudioSource audioSource;
     public AudioClip Hit_Sound;
+    public AudioClip Die_Sound;
 
     [Header("플레이어 넣어주세요")]
     public Player_Attack player;
 
 
-    public Player_Fog player_Fog;
-   
+    public Player_Fog player_Fog;//좀비 다 보이게 하기
+    public GameObject Bleeding;
+    
 
     public HP hp;
     private float Player_HP;
@@ -33,7 +35,6 @@ public class HitColl : MonoBehaviour
 
     }
 
-
   
     private void OnTriggerEnter(Collider other)
     {
@@ -43,6 +44,7 @@ public class HitColl : MonoBehaviour
             audioSource.PlayOneShot(Hit_Sound);
             StartCoroutine(Hit_co(Hit_pos));
             Player_HP= hp.Damage(30f, Player_HP);
+            Bleeding.SetActive(true);
             Debug.Log(Player_HP);
 
             if (Player_HP <= 0 && !isDie)
@@ -53,7 +55,7 @@ public class HitColl : MonoBehaviour
                 player.anim.SetLayerWeight(1, 0);//상체 애니메이션 재생해제
                 player.anim.SetTrigger("isDie");
                 Debug.Log("끄아아아아아아아앜!");
-                
+                audioSource.PlayOneShot(Die_Sound);
                 player_Fog.viewAngle = 360f;
                 player_Fog.ViewRadius = 50f;
                 isDie = true;
