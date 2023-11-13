@@ -71,13 +71,18 @@ public class ZombieFieldOfView : MonoBehaviour
     {
         if (colli.CompareTag("Window") || colli.CompareTag("Fence"))
         {
+            Debug.Log(Vector3.Distance(colli.gameObject.transform.position, transform.position));
             if (Vector3.Distance(colli.gameObject.transform.position, transform.position) <= 1f)
             {
                 zombieController.Jump();
             }
         } else if (colli.CompareTag("Door"))
         {
-
+            Debug.Log(Vector3.Distance(colli.gameObject.transform.position, transform.position));
+            if (Vector3.Distance(colli.gameObject.transform.position, transform.position) <= 1f)
+            {
+                StartCoroutine(zombieController.ZombieAttack_Co());
+            }
         }
     }
 }
