@@ -6,6 +6,7 @@ public class Player_Die : MonoBehaviour
 {
     [SerializeField] private GameObject Player;
     [SerializeField] private GameObject Zombie;
+    public GameObject Zombie_icon;
     public GameObject Carmer;
     public HitColl hitColl;
     private bool a=false;
@@ -32,5 +33,6 @@ public class Player_Die : MonoBehaviour
         Carmer.GetComponent<Camera_Controller>().enabled = false;
         Zombie.SetActive(true);
         Carmer.GetComponent<Camera_Controller_Zomdie>().enabled = true;
+        Zombie_icon.SetActive(true);
     }
 }
