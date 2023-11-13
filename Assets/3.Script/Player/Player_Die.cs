@@ -8,24 +8,29 @@ public class Player_Die : MonoBehaviour
     [SerializeField] private GameObject Zombie;
     public GameObject Carmer;
     public HitColl hitColl;
+    private bool a=false;
 
     void Start()
     {
-        Player = GetComponentInChildren<GameObject>();
-        Zombie = GetComponentInChildren<GameObject>();
-        hitColl = GetComponent<HitColl>();
+       
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(hitColl.isDie)
+        
+        if (hitColl.isDie)
         {
             Zombie.transform.position = Player.transform.position;
-            Player.SetActive(false);
-            Zombie.SetActive(true);
-            Carmer.GetComponent<Camera_Controller>().enabled = false;
-            Carmer.GetComponent<Camera_Controller_Zomdie>().enabled = true;
+            StartCoroutine(Die_Zombie_co());
         }
+    }
+
+    private IEnumerator Die_Zombie_co()
+    {
+        yield return new WaitForSeconds(5f);
+        Player.SetActive(false);
+        Carmer.GetComponent<Camera_Controller>().enabled = false;
+        Zombie.SetActive(true);
+        Carmer.GetComponent<Camera_Controller_Zomdie>().enabled = true;
     }
 }

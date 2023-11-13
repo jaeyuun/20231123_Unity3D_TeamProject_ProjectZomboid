@@ -50,13 +50,14 @@ public class HitColl : MonoBehaviour
                 
                 player.GetComponent<Player_Move>().enabled = false;
                 player.GetComponent<Player_Attack>().enabled = false;
-                player.anim.SetLayerWeight(1, 0);//상체 애니메이션 재생
+                player.anim.SetLayerWeight(1, 0);//상체 애니메이션 재생해제
                 player.anim.SetTrigger("isDie");
                 Debug.Log("끄아아아아아아아앜!");
                 
                 player_Fog.viewAngle = 360f;
                 player_Fog.ViewRadius = 50f;
-                StartCoroutine(Die_Zombie_co());
+                isDie = true;
+                //StartCoroutine(Die_Zombie_co());
                
 
             }
@@ -71,12 +72,12 @@ public class HitColl : MonoBehaviour
         StartCoroutine(Hit_co(Hit_pos));
     }
 
-    private IEnumerator Die_Zombie_co()
+/*    private IEnumerator Die_Zombie_co()
     {
         yield return new WaitForSeconds(3f);
        
         isDie = true;
-    }
+    }*/
 
     public IEnumerator Hit_co(Transform Hit_pos)
     {
