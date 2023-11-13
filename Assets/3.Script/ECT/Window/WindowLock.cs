@@ -50,7 +50,26 @@ public class WindowLock : MonoBehaviour
         }
     }
 
+    /*  if (hit.collider.gameObject.CompareTag("WindowHit"))
+                {
 
+                    if (hitCount >= 3)
+                    {
+
+                        WIndow_bool window = hit.collider.GetComponent<WIndow_bool>();
+
+
+                        if (window != null)
+                        {
+                            hitCount++;
+                            Debug.Log(hitCount);
+                            window.isOpen = hit.collider.gameObject.transform.GetChild(0).gameObject;
+                            window.isOpen = !window.isOpen;
+                        }
+                    }
+                  
+                }
+*/
 
 
 }

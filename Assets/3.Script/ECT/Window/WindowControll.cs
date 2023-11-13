@@ -51,11 +51,13 @@ public class WindowControll : MonoBehaviour
         {
             if (Physics.Raycast(ray, out hit, distance))
             {
+                
                 //Debug.Log(hit.collider.gameObject.CompareTag("Window"));
                 if (hit.collider.gameObject.CompareTag("Window"))
                 {
+                    Debug.Log("hit");
                     window = hit.collider.gameObject.transform.GetChild(0).gameObject;
-                    // Debug.Log("hit");
+                    
                     window.SetActive(false);
                 }
 
@@ -64,28 +66,24 @@ public class WindowControll : MonoBehaviour
 
                     if (hitCount >= 3)
                     {
-                        hitCoun();
-                        WIndow_bool window = hit.collider.GetComponent<WIndow_bool>();
+
+                        WIndow_bool window = hit.collider.GetComponentInChildren<WIndow_bool>();
                         if (window != null)
                         {
+                            hitCount++;
+                            Debug.Log(hitCount);
                             window.isOpen = !window.isOpen;
                         }
-                        /*window = hit.collider.gameObject.transform.GetChild(0).gameObject;
-                        // Debug.Log("hit");
-                        window.SetActive(false);*/
                     }
-                  
+
                 }
 
+
             }
+
         }
 
     }
 
-    private void hitCoun()
-    {
-
-        hitCount++;
-    }
 
 }
