@@ -26,7 +26,7 @@ public class ZombieController : HP, IState
     // RandomTarget NavMesh
     private float range = 10f;
 
-    private Animator zombieAnim;
+    public Animator zombieAnim;
     [SerializeField] private GameObject screamRange;
     private bool isScreamZombie = false;
 

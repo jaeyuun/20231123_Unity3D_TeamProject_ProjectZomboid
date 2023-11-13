@@ -15,9 +15,13 @@ public class HitColl : MonoBehaviour
     [Header("플레이어 넣어주세요")]
     public Player_Attack player;
 
+
+    public Player_Fog player_Fog;
+   
+
     public HP hp;
     private float Player_HP;
-    private bool isDie = false;
+    public bool isDie = false;
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -25,6 +29,8 @@ public class HitColl : MonoBehaviour
         hp = GetComponentInParent<HP>();
         Player_HP=hp.Start_HP(Player_HP);
         Debug.Log(Player_HP);
+        player_Fog = GetComponentInParent<Player_Fog>();
+
     }
 
 
@@ -41,12 +47,16 @@ public class HitColl : MonoBehaviour
 
             if (Player_HP <= 0 && !isDie)
             {
-                isDie = true;
+                
                 player.GetComponent<Player_Move>().enabled = false;
                 player.GetComponent<Player_Attack>().enabled = false;
                 player.anim.SetLayerWeight(1, 0);//상체 애니메이션 재생
                 player.anim.SetTrigger("isDie");
                 Debug.Log("끄아아아아아아아앜!");
+                
+                player_Fog.viewAngle = 360f;
+                player_Fog.ViewRadius = 50f;
+                StartCoroutine(Die_Zombie_co());
                
 
             }
@@ -61,7 +71,12 @@ public class HitColl : MonoBehaviour
         StartCoroutine(Hit_co(Hit_pos));
     }
 
-
+    private IEnumerator Die_Zombie_co()
+    {
+        yield return new WaitForSeconds(3f);
+       
+        isDie = true;
+    }
 
     public IEnumerator Hit_co(Transform Hit_pos)
     {
