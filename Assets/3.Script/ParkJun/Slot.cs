@@ -20,6 +20,11 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
     [SerializeField]
     private GameObject go_CountImage;
 
+    [SerializeField]
+    private Slider slider;
+
+    private bool isUsingItem = false;
+
     private Rect baseRect;  // Inventory_Base 이미지의 Rect 정보 받아 옴.
 
     private ItemEffectDataBase theitemEffectDataBase;
@@ -69,6 +74,7 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
     //아이템 갯수 조정 
     public void SetSlotCount(int _count)
     {
+       
         itemCount += _count;
         text_Count.text = itemCount.ToString();
         if (itemCount<=0)
@@ -104,14 +110,35 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
                 }
                 else
                 {
-                    theitemEffectDataBase.UseItem(item);
-                    Debug.Log(item.itemName + " 을 사용했습니다.");
-                    //소모 
-                    SetSlotCount(-1);
-                   
+                    StartCoroutine(UseItemWithSlider(item, 2f));
                 }
             }
         }
+    }
+    private IEnumerator UseItemWithSlider(Item _item, float duration)
+    {
+        float timer = 0f;
+        slider.gameObject.SetActive(true); //슬라이더 활성화 
+
+        while (timer < duration)
+        {
+            timer += Time.deltaTime; //시간 흐를수록 타이머 제어
+
+            // 시간에 따라 슬라이더 갱신 
+            slider.value = timer / duration;
+
+            yield return null; // 다음 프레임까지 기다리고 
+        }
+
+        // 소모 시킨 후 
+        SetSlotCount(-1);
+
+        // 아이템 효과 적용 
+        theitemEffectDataBase.UseItem(_item);
+        Debug.Log(_item.itemName + " 을 사용했습니다.");
+
+        // 슬라이더 비활성화
+        slider.gameObject.SetActive(false);
     }
 
     public void OnBeginDrag(PointerEventData eventData)

@@ -66,6 +66,8 @@ MonoBehaviour:
   go_rock: {fileID: 5922470866891521035}
   go_debris: {fileID: 5922470865696336781}
   go_effect_Prefabs: {fileID: 6183553449411450992, guid: a91b564d764db784299ae8787d07c4d3, type: 3}
+  go_item_Prefabs: {fileID: 4294647195048149454, guid: 38b3d3f8496971946a46d22f52737600, type: 3}
+  count: 2
   audioSource: {fileID: 4339991232492021325}
   effectClip1: {fileID: 8300000, guid: 4c53975f3f8ce0b40b84cf56f0cbb1a5, type: 3}
   effectClip2: {fileID: 8300000, guid: 75a039f4dd5ea594dac1c8d35234f966, type: 3}
