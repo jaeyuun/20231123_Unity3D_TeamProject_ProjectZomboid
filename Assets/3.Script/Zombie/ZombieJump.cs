@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ZombieJump : MonoBehaviour
 {
+    // »ç¿ëX
     private ZombieController zombieController;
     private ZombieFieldOfView zombieFieldOfView;
     public Vector3 myPos;
@@ -29,7 +30,6 @@ public class ZombieJump : MonoBehaviour
 
     private void Update()
     {
-    }
 
-    
+    }
 }

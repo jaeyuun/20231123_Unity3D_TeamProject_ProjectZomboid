@@ -75,7 +75,7 @@ public class ZombieFieldOfView : MonoBehaviour
 
     private void JombieClimbing()
     {
-        // IState로 옮길수도 있습니다.
+        // IState로 옮길수도
         RaycastHit hit;
 
         if (Physics.Raycast(zombiePos, lookDir, out hit))
@@ -106,7 +106,6 @@ public class ZombieFieldOfView : MonoBehaviour
                     // attack coroutine
                     if (Vector3.Distance(targetPos, transform.position) <= 1.5f)
                     {
-                        // jump anim
                         Debug.Log("Door");
                     }
                 }
