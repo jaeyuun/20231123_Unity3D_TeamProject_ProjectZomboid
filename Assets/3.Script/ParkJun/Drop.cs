@@ -13,24 +13,16 @@ public class Drop : MonoBehaviour
     private GameObject go_Base;
     [SerializeField]
     private GameObject go_SlotsParent;
-
   
+
+
+
 
     private Slot[] slots;
     
-    //public Slot[] GetSlots() { return slots; }
+
 
     [SerializeField] private Item[] items;
- /*   public void LoadToInven(int _arrayNum,string _itemName, int _itemNum)
-    {
-        for (int i = 0; i < items.Length; i++)
-        {
-            if (items[i].itemName==_itemName)
-            {
-                slots[_arrayNum].AddItem(items[i],_itemName,_itemNum);
-            }
-        }
-    }  */
 
     private void Start()
     {
@@ -85,6 +77,8 @@ public class Drop : MonoBehaviour
                     if (slots[i].item.itemName == _item.itemName)
                     {
                         slots[i].SetSlotCount(_count);
+                        
+                     
                         return;
                     }
                 }
@@ -96,8 +90,10 @@ public class Drop : MonoBehaviour
             if (slots[i].item ==null)
             {
                 slots[i].AddItem(_item, _item.itemName,_count);
+            
                 return;
             }
         }
     }
+   
 }

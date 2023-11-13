@@ -9,6 +9,8 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
     public Item item;
     public string itemName;
     public int itemCount;
+    public string itemweight;
+    public float weight2;
     public Image itemImage;
 
     [SerializeField]
@@ -16,9 +18,13 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
     [SerializeField]
     private Text text_Count;
     [SerializeField]
+    private Text text_weight;
+    [SerializeField]
     private GameObject go_NameImage;
     [SerializeField]
     private GameObject go_CountImage;
+
+    private float totalWeight;  // 인벤토리의 총 무게
 
     [SerializeField]
     private Slider slider;
@@ -29,11 +35,13 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
 
     private ItemEffectDataBase theitemEffectDataBase;
     private Drop theDrop;
+    private Player_Move player_Move;
    
     private void Start()
     {
         baseRect = transform.parent.parent.GetComponent<RectTransform>().rect;
         theitemEffectDataBase = FindObjectOfType<ItemEffectDataBase>();
+        player_Move =GetComponent<Player_Move>();
     }
 
     //이미지의 투명도 조절 
@@ -48,8 +56,15 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
     {
         item = _item;
         itemCount = _count;
+        //itemweight = _weight;
         itemName = _name;
+        
         itemImage.sprite = item.itemImage;
+       /*  weight = _item.itemweight;
+         weight2 = weight;*/
+      /*   totalWeight += _item.itemweight * _count;
+        Debug.Log("무게 증가: " + totalWeight);*/
+
 
         if (item.itemType !=Item.ItemType.Equipment)
         {
@@ -66,6 +81,7 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
             go_CountImage.SetActive(false);
             go_NameImage.SetActive(true);
             text_Name.text = itemName;
+
         }
        
 
@@ -85,6 +101,9 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
     //슬롯 초기화
     public void ClearSlot()
     {
+     /*   totalWeight -= item.itemweight;
+        Debug.Log("무게 감소: " + totalWeight);
+*/
         item = null;
         itemCount = 0;
         itemImage.sprite = null;
@@ -108,9 +127,13 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
                 {
                     //장비 장착
                 }
-                else
+                else if (item.itemType == Item.ItemType.Used)
                 {
                     StartCoroutine(UseItemWithSlider(item, 2f));
+                }
+                else
+                {
+                    // 기타 타입에 대한 처리
                 }
             }
         }
@@ -119,6 +142,7 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
     {
         float timer = 0f;
         slider.gameObject.SetActive(true); //슬라이더 활성화 
+
 
         while (timer < duration)
         {

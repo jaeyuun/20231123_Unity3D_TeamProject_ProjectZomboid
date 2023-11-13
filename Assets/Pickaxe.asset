@@ -17,4 +17,6 @@ MonoBehaviour:
   itemDesc: "\uC7AC\uB8CC \uC544\uC774\uD15C\uC744 \n\uC5BB\uC744 \uC218 \uC788\uB2E4."
   itemImage: {fileID: 21300000, guid: 2b092ad8d1fa42646ba1854df9275ded, type: 3}
   itemPrefab: {fileID: 8748808892910096132, guid: 14d295938bb0b9846ab6c8c6dba2ba05, type: 3}
+  weight: 3
+  itemweight: 3
   weaponType: 

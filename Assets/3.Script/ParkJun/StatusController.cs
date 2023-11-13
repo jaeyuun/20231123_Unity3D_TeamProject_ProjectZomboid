@@ -24,6 +24,9 @@ public class StatusController : MonoBehaviour
     private int spRechargeTime;
     private int currentSpRechargeTime;
 
+    private bool isSP = false;
+    private Coroutine recoverStaminaCoroutine;
+
     // 스태미나 감소 여부
     private bool spUsed;
 
@@ -31,6 +34,11 @@ public class StatusController : MonoBehaviour
     [SerializeField]
     private int dp;  // 최대 방어력. 유니티 에디터 슬롯에서 지정할 것.
     private int currentDp;
+
+    //근력 
+    [SerializeField]
+    private int att;
+    private int currentAtt;
 
     // 배고픔
     [SerializeField]
@@ -58,28 +66,68 @@ public class StatusController : MonoBehaviour
     [SerializeField]
     private Image image_Gauge;
     [SerializeField]
+    private GameObject image_Thirsty;
+    [SerializeField]
+    private GameObject image_Hungry;
+    [SerializeField]
     private Text[] text_Update;
-    private const int  DP = 0, SP = 1, HUNGRY = 2, THIRSTY = 3;
+    private const int  DP = 0, SP = 1,ATT=2, HUNGRY = 3, THIRSTY = 4;
+
+
+    //제이슨 저장 불러오기용 스탯 
+    public int GetcurrentHP() { return currentHp; }
+    public int GetcurrentDP() { return currentDp; }
+    public int GetcurrentSP() { return currentSp; }
+    public int GetcurrentAtt() { return currentAtt; }
+    public int GetcurrentHungry() { return currentHungry;}
+    public int GetcurrentThirsty() { return currentThirsty; }
+    public void SetcurrentHP(int LoadHp)
+    {
+        currentHp = LoadHp;
+    }
+    public void SetcurrentDP(int LoadDp)
+    {
+        currentDp = LoadDp;
+    }
+    public void SetcurrentSP(int LoadSp)
+    {
+        currentSp = LoadSp;
+    }
+    public void SetcurrentAtt(int LoadAtt)
+    {
+        currentAtt = LoadAtt;
+    }
+    public void SetcurrentHungry(int LoadHungry)
+    {
+        currentHungry = LoadHungry;
+    }
+    public void SetcurrentThirsty(int LoadThirsty)
+    {
+        currentThirsty = LoadThirsty;
+    }
+
 
     private void Start()
     {
         currentHp = hp;
         currentDp = dp;
         currentSp = sp;
+        currentAtt = att;
         currentHungry = hungry;
         currentThirsty = thirsty;
+
+       // image_Thirsty.enabled = true;
     }
     private void Update()
     {
-   
             Hungry();
             Thirsty();
+            SPRechargeTime();
+            SPRecover();
             GagueUpdate();
             TextUdate();
-      
-     
     }
-  
+    
     public void increaseHP(int _count)
     {
         if (currentHp + _count < hp)
@@ -128,6 +176,53 @@ public class StatusController : MonoBehaviour
             Debug.Log("캐릭터의 dp가 0입니다.");
         }
     }
+  
+    //쉬기 
+    private void SPRecover()
+    {
+        //V를 누르면 쉬면서 스테미너가 채워진다.
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            if (!isSP)
+            {
+                recoverStaminaCoroutine = StartCoroutine(RecoverStamina());
+                isSP = true;
+            }
+            else
+            {
+                if (currentSp < sp)
+                {
+                    StopCoroutine(recoverStaminaCoroutine);
+                }
+                isSP = false;
+            }
+        }
+    }
+    IEnumerator RecoverStamina()
+    {
+        isSP = true;
+        while (currentSp < sp)
+        {
+            yield return new WaitForSeconds(0.1f);
+            currentSp += spIncreaseSpeed;
+        }
+        isSP = false;
+    }
+    private void SPRechargeTime()
+    {
+        if (spUsed)
+        {
+            if (currentSpRechargeTime<spRechargeTime)
+            {
+                currentSpRechargeTime++;
+            }
+            else
+            {
+                spUsed = false;
+            }
+        }
+    }
+
     public void increaseSP(int _count)
     {
         if (currentSp + _count < sp)
@@ -143,13 +238,30 @@ public class StatusController : MonoBehaviour
 
     public void DecreaseSP(int _count)
     {
-
-        currentSp -= _count;
-        if (currentSp <= 0)
+        spUsed = true;
+        currentSpRechargeTime = 0;
+        if (currentSp - _count>0)
         {
-            Debug.Log("캐릭터의 dp가 0입니다.");
+            currentSp -= _count;
+        }
+        else
+        {
+            currentSp = 0;
         }
     }
+    public void increaseATT(int _count)
+    {
+        if (currentAtt  + _count < att)
+        {
+            currentAtt += _count;
+        }
+        else
+        {
+            currentAtt = att;
+        }
+
+    }
+
 
 
     public void increaseHungry(int _count)
@@ -198,6 +310,7 @@ public class StatusController : MonoBehaviour
 
 
     }
+  
 
 
     private void Hungry()
@@ -213,6 +326,14 @@ public class StatusController : MonoBehaviour
                 currentHungry--;
                 currentHungryDecreaseTime = 0;
             }
+            if (currentHungry<30)
+            {
+                image_Hungry.gameObject.SetActive(true);
+            }
+            if (currentHungry>70)
+            {
+                image_Hungry.gameObject.SetActive(false);
+            }
         }
         else
             Debug.Log("배고픔 수치가 0이 되었습니다.");
@@ -227,8 +348,21 @@ public class StatusController : MonoBehaviour
             }
             else
             {
+
                 currentThirsty--;
                 currentThirstyDecreaseTime = 0;
+            }
+           
+            // currentThirsty가 30보다 작으면 이미지를 활성화
+            if (currentThirsty < 30)
+            {
+                image_Thirsty.gameObject.SetActive(true);
+                //image_Thirsty.enabled = false;
+            }
+            if (currentThirsty>70)
+            {
+                image_Thirsty.gameObject.SetActive(false);
+                //image_Thirsty.enabled = true;
             }
         }
         else
@@ -242,7 +376,8 @@ public class StatusController : MonoBehaviour
     {
 
         text_Update[DP].text = "방어력 " + currentDp + " / " + dp;
-        text_Update[SP].text = "스태미너: " + currentSp + " / " + sp;
+        text_Update[SP].text = "지구력: " + currentSp + " / " + sp;
+        text_Update[ATT].text = "근력:" + currentAtt +"  무기:" + att;
         text_Update[HUNGRY].text = "배고픔: " + currentHungry + " / " + hungry;
         text_Update[THIRSTY].text = "목마름: " + currentThirsty + " / " + thirsty;
         
