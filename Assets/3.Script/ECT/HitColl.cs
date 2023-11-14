@@ -16,6 +16,10 @@ public class HitColl : MonoBehaviour
     [Header("플레이어 넣어주세요")]
     public Player_Attack player;
 
+    [Header("데미지 부위")]
+    public GameObject[] BodyDmg;
+
+
 
     public Player_Fog player_Fog;//좀비 다 보이게 하기
     public GameObject Bleeding;
@@ -43,8 +47,8 @@ public class HitColl : MonoBehaviour
             player.anim.SetTrigger("isHit");
             audioSource.PlayOneShot(Hit_Sound);
             StartCoroutine(Hit_co(Hit_pos));
-            Player_HP= hp.Damage(30f, Player_HP);
-            Bleeding.SetActive(true);
+            Player_HP= hp.Damage(10f, Player_HP);
+            bodyDmg();
             Debug.Log(Player_HP);
 
             if (Player_HP <= 0 && !isDie)
@@ -85,5 +89,13 @@ public class HitColl : MonoBehaviour
     {
         Instantiate(hit, Hit_pos.transform.position, Hit_pos.transform.rotation);
         yield return new WaitForSeconds(0.3f);
+    }
+
+    //랜덤으로 상처를 켬
+    private void bodyDmg()
+    {
+        int a = Random.Range(0, BodyDmg.Length);
+        Bleeding.SetActive(true);
+        BodyDmg[a].SetActive(true);
     }
 }
