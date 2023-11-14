@@ -20,6 +20,7 @@ public class ZombieController : HP, IState
     private Vector3 playerPos; // 플레이어의 위치
     private Vector3 screamPos; // Scream한 좀비의 위치
 
+    public bool isWakeUp = false; // player가 죽었을 때 player에서 true 값으로 변경
     public bool nonTarget = true;
     private bool nonScreamZombie = true;
 
@@ -61,6 +62,7 @@ public class ZombieController : HP, IState
             zombieAttackCol[i].enabled = false;
         }
         StartCoroutine(RandomTargetPos_Co());
+        WakeUp();
     }
 
     private void FixedUpdate()
@@ -176,27 +178,30 @@ public class ZombieController : HP, IState
     }
     #endregion
     #region Coroutine Attack and Scream
-    private IEnumerator ZombieAttack_Co()
+    public IEnumerator ZombieAttack_Co()
     {
-        zombieAnim.SetBool("isAttack", true);
-        NavmeshStop();
-        yield return new WaitForSeconds(1.0f);
-        for (int i = 0; i < zombieAttackCol.Length; i++)
+        if (!nonTarget)
         {
-            // Attack할 때만 Collider enable True
-            zombieAttackCol[i].enabled = true;
-        }
-        // Damage 넣어주기... todo
-        yield return new WaitForSeconds(1.5f);
-        zombieAnim.SetBool("isAttack", false);
-        NavmeshResume();
-        for (int i = 0; i < zombieAttackCol.Length; i++)
-        {
-            zombieAttackCol[i].enabled = false;
-        }
-        if (Vector3.Distance(targetPos, transform.position) <= 2f)
-        {
-            StartCoroutine(ZombieAttack_Co());
+            zombieAnim.SetBool("isAttack", true);
+            NavmeshStop();
+            yield return new WaitForSeconds(1.0f);
+            for (int i = 0; i < zombieAttackCol.Length; i++)
+            {
+                // Attack할 때만 Collider enable True
+                zombieAttackCol[i].enabled = true;
+            }
+            // Damage 넣어주기... todo
+            yield return new WaitForSeconds(1.5f);
+            zombieAnim.SetBool("isAttack", false);
+            NavmeshResume();
+            for (int i = 0; i < zombieAttackCol.Length; i++)
+            {
+                zombieAttackCol[i].enabled = false;
+            }
+            if (Vector3.Distance(targetPos, transform.position) <= 2f)
+            {
+                StartCoroutine(ZombieAttack_Co());
+            }
         }
     }
 
@@ -252,6 +257,17 @@ public class ZombieController : HP, IState
     public void Jump()
     {
         zombieAnim.SetTrigger("isClimb");
+    }
+
+    public void WakeUp()
+    {
+        if (isWakeUp)
+        {
+            isWakeUp = false;
+            NavmeshStop();
+            zombieAnim.SetTrigger("isWakeUp");
+            NavmeshResume();
+        }
     }
     #endregion
     #region Nav Stop And Resume

@@ -7,4 +7,5 @@ public interface IState
     void Idle();
     void Die();
     void Jump();
+    void WakeUp();
 }
