@@ -26,7 +26,7 @@ public class VehicleController : MonoBehaviour
     private float Rot = 0f;
     /* private float defaultStiffness;  // 기본 타이어 마찰력을 저장할 변수*/
     private float Oil=24f; //기름
-
+    private float will = 0f;
 
     private void Start()
     {
@@ -99,14 +99,29 @@ public class VehicleController : MonoBehaviour
         float b = frontRightWheel.steerAngle = steeringInput;
 
         Rot += 5f;
-        Quaternion rotation_L = Quaternion.Euler(Rot, a - 80f, 0);
-        Quaternion rotation_R = Quaternion.Euler(Rot, b + 80f, 0);
-        
+        if (a!=0 && b!=0)
+        {
+            will += 0.001f;
+            Quaternion rotation_L = Quaternion.Euler(Rot, a - 80f, 0);
+            Quaternion rotation_R = Quaternion.Euler(Rot, b + 80f, 0);
 
-        frontLeftWheel_Ain.transform.rotation = rotation_L;
-        frontRightWheel_Ain.transform.rotation = rotation_R;
-        rearLeftWheel_Ain.transform.Rotate(Rot,0,0);
-        rearRightWheel_Ain.transform.Rotate(Rot, 0, 0);
+
+            frontLeftWheel_Ain.transform.rotation = rotation_L;
+            frontRightWheel_Ain.transform.rotation = rotation_R;
+            rearLeftWheel_Ain.transform.Rotate(Rot, 0, 0);
+            rearRightWheel_Ain.transform.Rotate(Rot, 0, 0);
+        }
+        else
+        {
+            Quaternion rotation_L = Quaternion.Euler(Rot, 0, 0);
+            Quaternion rotation_R = Quaternion.Euler(Rot, 0, 0);
+
+
+            frontLeftWheel_Ain.transform.rotation = rearLeftWheel_Ain.transform.rotation;
+            frontRightWheel_Ain.transform.rotation = rearRightWheel_Ain.transform.rotation;
+            rearLeftWheel_Ain.transform.Rotate(Rot, 0, 0);
+            rearRightWheel_Ain.transform.Rotate(Rot, 0, 0);
+        }
     }
 
     private void ApplyBrake()
