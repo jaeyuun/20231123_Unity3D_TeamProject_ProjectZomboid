@@ -44,6 +44,7 @@ public class ZombieController : HP, IState
 
     // ZombieAttack Collider
     [SerializeField] private Collider[] zombieAttackCol;
+    public float zombieNavDistance;
 
     private void Awake()
     {
@@ -85,6 +86,7 @@ public class ZombieController : HP, IState
     {
         // target에 따른 네비 적용
         nav.SetDestination(targetPos);
+        zombieNavDistance = nav.remainingDistance;
     }
     #region Nav Random Target
     private IEnumerator RandomTargetPos_Co()
@@ -176,6 +178,27 @@ public class ZombieController : HP, IState
             }
         }
     }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Fence") || collision.gameObject.CompareTag("Window"))
+        {
+            // 끼었을 때 탈출 필요해서 stay로 넣어둠
+            StartCoroutine(Jump());
+        }
+
+        if (collision.gameObject.CompareTag("Door"))
+        {
+            Door_bool doorBool;
+            if (collision.gameObject.TryGetComponent(out doorBool))
+            {
+                if (!doorBool.isOpen)
+                {
+                    StartCoroutine(ZombieAttack_Co());
+                }
+            }
+        }
+    }
     #endregion
     #region Coroutine Attack and Scream
     public IEnumerator ZombieAttack_Co()
@@ -254,9 +277,12 @@ public class ZombieController : HP, IState
         Destroy(gameObject, 10f);
     }
 
-    public void Jump()
+    public IEnumerator Jump()
     {
+        NavmeshStop();
         zombieAnim.SetTrigger("isClimb");
+        NavmeshResume();
+        yield return new WaitForSeconds(2f);
     }
 
     public void WakeUp()
