@@ -14,6 +14,7 @@ public class SaveData
     public int savedHp;
     public int savedSp;
     public int savedDp;
+    public int saveAtt;
     public int savedHungry;
     public int savedThirsty;
 
@@ -23,6 +24,7 @@ public class SaveData
     public List<int> invenArrayNumber = new List<int>();
     public List<string> invenItemName = new List<string>();
     public List<int> invenItemNumber = new List<int>();
+    public List<float> invenItemweight = new List<float>();
 
     //좀비 
     /*
@@ -73,6 +75,7 @@ public class SaveAndLoad : MonoBehaviour
         saveData.savedHp = theStatus.GetcurrentHP();
         saveData.savedDp = theStatus.GetcurrentDP();
         saveData.savedSp = theStatus.GetcurrentSP();
+        saveData.savedSp = theStatus.GetcurrentAtt();
         saveData.savedHungry = theStatus.GetcurrentHungry();
         saveData.savedThirsty = theStatus.GetcurrentThirsty();
 
@@ -84,6 +87,7 @@ public class SaveAndLoad : MonoBehaviour
             {
                 saveData.invenArrayNumber.Add(i);
                 saveData.invenItemName.Add(slots[i].item.itemName);
+                saveData.invenItemweight.Add(slots[i].itemweight);
                 saveData.invenItemNumber.Add(slots[i].itemCount);
             }
         }
@@ -116,13 +120,14 @@ public class SaveAndLoad : MonoBehaviour
             theStatus.SetcurrentHP(saveData.savedHp);
             theStatus.SetcurrentDP(saveData.savedDp);
             theStatus.SetcurrentSP(saveData.savedSp);
+            theStatus.SetcurrentAtt(saveData.saveAtt);
             theStatus.SetcurrentHungry(saveData.savedHungry);
             theStatus.SetcurrentThirsty(saveData.savedThirsty);
 
             //플레이어 아이템 (인벤토리)
             for (int i = 0; i < saveData.invenItemName.Count; i++)
             {
-                theInventory.LoadToDrop(saveData.invenArrayNumber[i], saveData.invenItemName[i], saveData.invenItemNumber[i]);
+                theInventory.LoadToDrop(saveData.invenArrayNumber[i], saveData.invenItemName[i],saveData.invenItemweight[i], saveData.invenItemNumber[i]);
             }
 
             Debug.Log("로드 완료");

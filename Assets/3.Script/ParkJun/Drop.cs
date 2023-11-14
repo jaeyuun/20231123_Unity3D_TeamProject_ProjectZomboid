@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Drop : MonoBehaviour
 {
@@ -13,7 +14,10 @@ public class Drop : MonoBehaviour
     private GameObject go_Base;
     [SerializeField]
     private GameObject go_SlotsParent;
-  
+
+    [SerializeField]
+    private Text text_weight;
+
 
 
 
@@ -66,7 +70,7 @@ public class Drop : MonoBehaviour
     }
 
    
-    public void AcquireItem(Item _item, int _count = 1)
+    public void AcquireItem(Item _item,float _weight,int _count = 1)
     {
         if (Item.ItemType.Equipment!=_item.itemType)
         {
@@ -77,8 +81,9 @@ public class Drop : MonoBehaviour
                     if (slots[i].item.itemName == _item.itemName)
                     {
                         slots[i].SetSlotCount(_count);
-                        
-                     
+                        UpdateTotalWeight();
+
+
                         return;
                     }
                 }
@@ -89,11 +94,27 @@ public class Drop : MonoBehaviour
         {
             if (slots[i].item ==null)
             {
-                slots[i].AddItem(_item, _item.itemName,_count);
-            
+                slots[i].AddItem(_item, _item.itemName,_weight,_count);
+                UpdateTotalWeight();
                 return;
             }
         }
     }
-   
+    public void UpdateTotalWeight()
+    {
+        float totalWeight = 0f;
+
+        // 모든 슬롯을 확인하며 아이템의 무게를 합산
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (slots[i].item != null)
+            {
+                totalWeight += slots[i].itemweight * slots[i].itemCount;
+            }
+        }
+
+        // 텍스트 업데이트 등의 추가 작업 수행
+        text_weight.text = $"{totalWeight.ToString()}/50";
+    }
+
 }

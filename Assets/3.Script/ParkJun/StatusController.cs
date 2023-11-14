@@ -176,7 +176,20 @@ public class StatusController : MonoBehaviour
             Debug.Log("캐릭터의 dp가 0입니다.");
         }
     }
-  
+
+    public void increaseATT(int _count)
+    {
+        if (currentAtt + _count > att)
+        {
+            currentAtt += _count;
+        }
+        else
+        {
+            currentAtt = att;
+        }
+
+    }
+
     //쉬기 
     private void SPRecover()
     {
@@ -249,18 +262,7 @@ public class StatusController : MonoBehaviour
             currentSp = 0;
         }
     }
-    public void increaseATT(int _count)
-    {
-        if (currentAtt  + _count < att)
-        {
-            currentAtt += _count;
-        }
-        else
-        {
-            currentAtt = att;
-        }
-
-    }
+  
 
 
 

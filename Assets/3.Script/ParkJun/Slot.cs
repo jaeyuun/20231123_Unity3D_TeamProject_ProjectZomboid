@@ -9,22 +9,20 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
     public Item item;
     public string itemName;
     public int itemCount;
-    public string itemweight;
-    public float weight2;
+    public float itemweight;
     public Image itemImage;
 
     [SerializeField]
     private Text text_Name;
     [SerializeField]
     private Text text_Count;
-    [SerializeField]
-    private Text text_weight;
+
     [SerializeField]
     private GameObject go_NameImage;
     [SerializeField]
     private GameObject go_CountImage;
 
-    private float totalWeight;  // 인벤토리의 총 무게
+
 
     [SerializeField]
     private Slider slider;
@@ -33,15 +31,25 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
 
     private Rect baseRect;  // Inventory_Base 이미지의 Rect 정보 받아 옴.
 
+    [SerializeField]
     private ItemEffectDataBase theitemEffectDataBase;
-    private Drop theDrop;
-    private Player_Move player_Move;
-   
+ /*   [SerializeField]
+    private  Player_Move player_Move;*/
+    [SerializeField]
+    private  Drop drop;
+    [SerializeField]
+    private Inventory inventory;
+
+    private InputNumber theInputNumber;
+
     private void Start()
     {
         baseRect = transform.parent.parent.GetComponent<RectTransform>().rect;
         theitemEffectDataBase = FindObjectOfType<ItemEffectDataBase>();
-        player_Move =GetComponent<Player_Move>();
+       // player_Move =GetComponent<Player_Move>();
+        drop = FindObjectOfType<Drop>();
+        inventory = FindObjectOfType<Inventory>();
+        theInputNumber = FindObjectOfType<InputNumber>();
     }
 
     //이미지의 투명도 조절 
@@ -52,18 +60,19 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
         itemImage.color = color;
     }
     //아이템 획득
-    public void AddItem(Item _item,string _name,int _count=1 )
+    public void AddItem(Item _item,string _name,float _itemWeight, int _count=1 )
     {
         item = _item;
         itemCount = _count;
-        //itemweight = _weight;
         itemName = _name;
-        
         itemImage.sprite = item.itemImage;
-       /*  weight = _item.itemweight;
-         weight2 = weight;*/
-      /*   totalWeight += _item.itemweight * _count;
-        Debug.Log("무게 증가: " + totalWeight);*/
+
+        itemweight = _itemWeight;
+        /*  weight = _item.itemweight;
+          weight2 = weight;*/
+        /*   totalWeight += _item.itemweight * _count;
+          Debug.Log("무게 증가: " + totalWeight);*/
+
 
 
         if (item.itemType !=Item.ItemType.Equipment)
@@ -73,26 +82,30 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
             text_Count.text = itemCount.ToString();
             go_NameImage.SetActive(true);
             text_Name.text = itemName;
+           
 
         }
         else
         {
+
             text_Count.text = "0";
             go_CountImage.SetActive(false);
             go_NameImage.SetActive(true);
             text_Name.text = itemName;
-
+            
         }
-       
+
+      
 
         SetColor(1);
     }
     //아이템 갯수 조정 
     public void SetSlotCount(int _count)
     {
-       
+      
         itemCount += _count;
         text_Count.text = itemCount.ToString();
+       
         if (itemCount<=0)
         {
             ClearSlot();
@@ -101,9 +114,11 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
     //슬롯 초기화
     public void ClearSlot()
     {
-     /*   totalWeight -= item.itemweight;
-        Debug.Log("무게 감소: " + totalWeight);
-*/
+            itemweight -= item.itemweight * itemCount; // 들어온 무게 빼기
+            Debug.Log("무게 감소: " + itemweight);
+        
+     
+
         item = null;
         itemCount = 0;
         itemImage.sprite = null;
@@ -130,6 +145,10 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
                 else if (item.itemType == Item.ItemType.Used)
                 {
                     StartCoroutine(UseItemWithSlider(item, 2f));
+                }
+                else if (item.itemType==Item.ItemType.objectUsed)
+                {
+                    StartCoroutine(UseObjectWithSlider(item, 8f));
                 }
                 else
                 {
@@ -163,6 +182,41 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
 
         // 슬라이더 비활성화
         slider.gameObject.SetActive(false);
+
+        //currentWeight -= _item.itemweight;
+        drop.UpdateTotalWeight();
+        inventory.UpdateTotalWeight2();
+
+    }
+    private IEnumerator UseObjectWithSlider(Item _item,float duration)
+    {
+        float timer = 0f;
+        slider.gameObject.SetActive(true); //슬라이더 활성화 
+
+
+        while (timer < duration)
+        {
+            timer += Time.deltaTime; //시간 흐를수록 타이머 제어
+
+            // 시간에 따라 슬라이더 갱신 
+            slider.value = timer / duration;
+
+            yield return null; // 다음 프레임까지 기다리고 
+        }
+
+        // 소모 시킨 후 
+        SetSlotCount(-1);
+
+        // 아이템 효과 적용 
+        theitemEffectDataBase.UseItem(_item);
+        Debug.Log(_item.itemName + " 을 사용했습니다.");
+
+        // 슬라이더 비활성화
+        slider.gameObject.SetActive(false);
+
+        //currentWeight -= _item.itemweight;
+        drop.UpdateTotalWeight();
+        inventory.UpdateTotalWeight2();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -195,30 +249,57 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
             || DragSlot.instance.transform.localPosition.y > baseRect.yMax)
         {
 
-            DragSlot.instance.dragSlot.ClearSlot();
+            
+                theInputNumber.Call();
+                drop.UpdateTotalWeight();
+                inventory.UpdateTotalWeight2();
 
             
+            // DragSlot.instance.dragSlot.ClearSlot();
+
+        }
+        else
+        {
+            Debug.Log("OnEndDrag 호출됨");
+            DragSlot.instance.SetColor(0);
+            DragSlot.instance.dragSlot = null;
         }
 
 
 
 
-            Debug.Log("OnEndDrag 호출됨");
-        DragSlot.instance.SetColor(0);
-        DragSlot.instance.dragSlot = null;
+        
        
     }
 
     public void OnDrop(PointerEventData eventData)
     {
-        if (DragSlot.instance.dragSlot!=null)
-        {
-            ChangeSlot();
-        }
-        
-       
-        Debug.Log("OnDrop 호출됨");
+        //드래그 중인 슬롯이 존재하는지 확인
+           if (DragSlot.instance.dragSlot != null)
+           {
+               //현재 슬롯과 드래그 중인 슬롯에 모두 아이템이 존재하는지 확인
+               if (item != null && DragSlot.instance.dragSlot.item != null &&
+                   item.itemName == DragSlot.instance.dragSlot.item.itemName) //현재 슬롯과 드래그 중인 슬롯의 아이템 이름이 같은지 확인합니다.
+               {
+                   // 같은 아이템이면 수량을 합친다
+                   SetSlotCount(DragSlot.instance.dragSlot.itemCount);
+                   DragSlot.instance.dragSlot.ClearSlot(); // 드래그한 슬롯 비우기
+               }
+               else
+               {
+                   ChangeSlot();
+               
+ 
+                drop.UpdateTotalWeight();
+                inventory.UpdateTotalWeight2();
+               }
+           }
+
+   
       
+        Debug.Log("OnDrop 호출됨");
+
+
     }
     private void ChangeSlot()
     {
@@ -226,17 +307,25 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
         int _tempItemCount = itemCount;
         string _tempItemName = itemName;
 
+       float _tempItemWeight = itemweight;
+
         //넣어주기 
-        AddItem(DragSlot.instance.dragSlot.item,DragSlot.instance.dragSlot.itemName, DragSlot.instance.dragSlot.itemCount);
+        AddItem(DragSlot.instance.dragSlot.item,DragSlot.instance.dragSlot.itemName, DragSlot.instance.dragSlot.itemweight,DragSlot.instance.dragSlot.itemCount);
 
         if (_tempItem !=null)
         {
-            DragSlot.instance.dragSlot.AddItem(_tempItem, _tempItemName, _tempItemCount);
+            DragSlot.instance.dragSlot.AddItem(_tempItem, _tempItemName, _tempItemWeight, _tempItemCount);
+
+            itemweight -= _tempItemWeight * _tempItemCount;
+            Debug.Log("무게 감소: " + itemweight);
+
+          
         }
         else
         {
             DragSlot.instance.dragSlot.ClearSlot();
-           
+            Debug.Log("ChangeSlot - Cleared Slot");
+
         }
 
     }

@@ -60,7 +60,7 @@ public class ActionController : MonoBehaviour
             if (itemPickup != null)
             {
                 Debug.Log(itemPickup.item.itemName + "È¹µæ");
-                theDrop.AcquireItem(itemPickup.item);
+                theDrop.AcquireItem(itemPickup.item,itemPickup.item.itemweight);
                 Destroy(hitCollider.gameObject);
                 infoDisAppear();
             }

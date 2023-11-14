@@ -20,6 +20,7 @@ public class Item : ScriptableObject
     {
         Equipment,
         Used,
+        objectUsed,
         Ingredient,
         ETC
     }
