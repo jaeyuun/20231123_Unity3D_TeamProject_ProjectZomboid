@@ -44,11 +44,9 @@ public class HitColl : MonoBehaviour
     {
         if (other.gameObject.CompareTag("ZombieAttack") && !isDie)
         {
-            player.anim.SetTrigger("isHit");
-            audioSource.PlayOneShot(Hit_Sound);
+           
             StartCoroutine(Hit_co(Hit_pos));
-            Player_HP= hp.Damage(10f, Player_HP);
-            bodyDmg();
+          
             Debug.Log(Player_HP);
 
             if (Player_HP <= 0 && !isDie)
@@ -88,7 +86,11 @@ public class HitColl : MonoBehaviour
     public IEnumerator Hit_co(Transform Hit_pos)
     {
         Instantiate(hit, Hit_pos.transform.position, Hit_pos.transform.rotation);
-        yield return new WaitForSeconds(0.3f);
+        player.anim.SetTrigger("isHit");
+        audioSource.PlayOneShot(Hit_Sound);
+        Player_HP = hp.Damage(10f, Player_HP);
+        bodyDmg();
+        yield return new WaitForSeconds(1f);
     }
 
     //·£´ýÀ¸·Î »óÃ³¸¦ ÄÔ
