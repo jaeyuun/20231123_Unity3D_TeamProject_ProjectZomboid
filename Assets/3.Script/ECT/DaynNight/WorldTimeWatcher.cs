@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
-using System.Linq; 
+using System.Linq;
 
 
 namespace WorldTime
 {
-    public class TimeWorldWatcher : MonoBehaviour
+    public class WorldTimeWatcher : MonoBehaviour
     {
         [SerializeField] private WorldTime _worldTime;
 
@@ -16,7 +16,7 @@ namespace WorldTime
 
         private void Start()
         {
-           _worldTime.WorldTimeChanged += CheckSchedule;
+            _worldTime.WorldTimeChanged += CheckSchedule;
         }
 
         private void OnDestroy()
@@ -26,14 +26,15 @@ namespace WorldTime
 
         private void CheckSchedule(object sender, TimeSpan newTime)
         {
-            var schedule =
-                _schedule.FirstOrDefault(sok=> sok.Hour ==
-                   sok.Hour == newTime.Hours &&
-                   schedule.Minute == newTime.Minute);
+            var schedule = _schedule.FirstOrDefault(s =>
+                            s.Hour == newTime.Hours &&
+                            s.Minute == newTime.Minutes);
 
             schedule?._action?.Invoke();
         }
-        [SerializeField] private class Schedule
+        [System.Serializable]
+        [SerializeField]
+        private class Schedule
         {
             public int Hour;
             public int Minute;
