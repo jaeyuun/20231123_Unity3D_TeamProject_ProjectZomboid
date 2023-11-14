@@ -5,26 +5,8 @@ using UnityEngine;
 public class Player_isCar : MonoBehaviour
 {
     public bool iscar = false;
-    [SerializeField] private GameObject CarInfo;
-/*    private void OnCollisionStay(Collision collision)
-    {
+    [SerializeField] private GameObject CarInfo;//차량상태창
 
-        if(collision.gameObject.CompareTag("Car"))
-        {
-                       
-            Debug.Log("iscar");
-        }
-   
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("CarDoor"))
-        {
-            iscar = false;
-            Debug.Log("iscar");
-        }
-    }*/
 
     private void OnTriggerStay(Collider other)
     {
