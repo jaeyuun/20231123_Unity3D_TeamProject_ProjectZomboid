@@ -9,6 +9,7 @@ public class VehicleInteract : MonoBehaviour
     public GameObject Vehicle;
     public GameObject Carmer;
     public Rigidbody rig;
+    
     private bool inVehicle = false;
 
 

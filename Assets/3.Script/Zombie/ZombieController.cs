@@ -16,7 +16,7 @@ public class ZombieController : HP, IState
     // Zombie NavMesh
     private NavMeshAgent nav;
     public Vector3 targetPos;
-    private Vector3 randomPos; // 플레이어 감지하지 않았을 때 위치
+    public Vector3 randomPos; // 플레이어 감지하지 않았을 때 위치
     private Vector3 playerPos; // 플레이어의 위치
     private Vector3 screamPos; // Scream한 좀비의 위치
 
@@ -83,6 +83,7 @@ public class ZombieController : HP, IState
     {
         // target에 따른 네비 적용
         nav.SetDestination(targetPos);
+        Debug.Log("네비들어왔나");
     }
     #region Nav Random Target
     private IEnumerator RandomTargetPos_Co()
