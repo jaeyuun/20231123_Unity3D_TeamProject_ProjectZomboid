@@ -12,6 +12,7 @@ public class Player_Die : MonoBehaviour
     public HitColl hitColl;
     private bool isDie=false;
     private bool Die = false;
+    //private bool NonTarget = false;
 
 
     void Update()
@@ -31,7 +32,7 @@ public class Player_Die : MonoBehaviour
         
         if(other.gameObject.CompareTag("Zombie")&& isDie)
         {
-            
+            Debug.Log("µé¾î¿È");
             other.gameObject.TryGetComponent(out ZombieController zombie);
             zombie.nonTarget = true;
         }
