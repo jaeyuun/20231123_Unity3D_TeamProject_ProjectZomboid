@@ -7,11 +7,12 @@ public class ZombieFieldOfView : MonoBehaviour
     private ZombieController zombieController;
     // [Range(0f, 360f)] [SerializeField]
     private float viewAngle = 130f; // 감지하는 범위 각도
-    [SerializeField] private float viewRadius = 15f; // 감지 범위
-    [SerializeField] private LayerMask targetMask; // 타겟 인식 레이어, Player, Object
+    [SerializeField] private float viewRadius = 10f; // 감지 범위
+    [SerializeField] private LayerMask targetMask; // 타겟 인식 레이어, Player, Object(Window, Door, Fence)
     [SerializeField] private LayerMask obstacleMask;
     private List<Collider> hitPlayerList = new List<Collider>(); // 감지한 플레이어 리스트
 
+    private Vector3 playerPos;
     public Vector3 zombiePos;
     public Vector3 lookDir;
     public float lookingAngle;
@@ -48,14 +49,13 @@ public class ZombieFieldOfView : MonoBehaviour
 
         foreach (Collider playerColli in targets)
         { // target list
-            ObjectTargeting(playerColli); // tag 확인 후 거리비교 method
-            Vector3 playerPos = playerColli.transform.position;
+            playerPos = playerColli.transform.position;
             Vector3 targetDir = (playerPos - zombiePos).normalized;
             float targetAngle = Mathf.Acos(Vector3.Dot(lookDir, targetDir)) * Mathf.Rad2Deg;
             if (targetAngle <= viewAngle * 0.5f && !Physics.Raycast(zombiePos, targetDir, viewRadius, obstacleMask))
             {
                 hitPlayerList.Add(playerColli);
-                ZombieTargeting(playerPos); // target 위치
+                ObjectTargeting(playerColli); // tag 확인 후 targeting method
                 Debug.DrawLine(zombiePos, playerPos, Color.red);
             }
         }
@@ -69,15 +69,26 @@ public class ZombieFieldOfView : MonoBehaviour
 
     private void ObjectTargeting(Collider colli)
     {
-        if (colli.CompareTag("Window") || colli.CompareTag("Fence"))
+        if (colli.CompareTag("Player"))
         {
-            if (Vector3.Distance(colli.gameObject.transform.position, transform.position) <= 1f)
+            ZombieTargeting(playerPos); // target 위치
+        }
+        else if (colli.CompareTag("Window") || colli.CompareTag("Fence"))
+        {
+            Debug.Log(Vector3.Distance(colli.gameObject.transform.position, transform.position));
+            if (Vector3.Distance(colli.gameObject.transform.position, transform.position) <= 2f)
             {
+                // Jump
                 zombieController.Jump();
             }
         } else if (colli.CompareTag("Door"))
         {
-
+            Debug.Log(Vector3.Distance(colli.gameObject.transform.position, transform.position));
+            if (Vector3.Distance(colli.gameObject.transform.position, transform.position) <= 2f)
+            {
+                // Attack
+                StartCoroutine(zombieController.ZombieAttack_Co());
+            }
         }
     }
 }

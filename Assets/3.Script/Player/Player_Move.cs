@@ -6,7 +6,7 @@ public class Player_Move : MonoBehaviour
 {
     [Header("걷기속도 (달리기는*2임)")]
     public float speed = 3f;
-    Animator animator;
+    public Animator animator;
 
     [Header("메인카메라")]
     [SerializeField] private Camera followCamera;
