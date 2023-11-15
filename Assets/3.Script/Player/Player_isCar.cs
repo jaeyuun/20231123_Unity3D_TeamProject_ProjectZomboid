@@ -5,22 +5,35 @@ using UnityEngine;
 public class Player_isCar : MonoBehaviour
 {
     public bool iscar = false;
-    private void OnCollisionStay(Collision collision)
+    [SerializeField] private GameObject CarInfo;//차량상태창
+
+
+    private void OnTriggerStay(Collider other)
     {
-        if(collision.gameObject.CompareTag("Car"))
+        if(other.gameObject.CompareTag("CarDoor"))
         {
             iscar = true;
-            Debug.Log("iscar");
+            Debug.Log("도어어어어");
         }
-   
+        if (other.gameObject.CompareTag("CarHood"))
+        {
+            if(Input.GetKeyDown(KeyCode.E))
+            {
+                CarInfo.SetActive(true);
+            }
+        }
     }
 
-    private void OnCollisionExit(Collision collision)
+    private void OnTriggerExit(Collider other)
     {
-        if (collision.gameObject.CompareTag("Car"))
+        if (other.gameObject.CompareTag("CarDoor"))
         {
             iscar = false;
-            Debug.Log("iscar");
+        }
+
+        if (other.gameObject.CompareTag("CarHood"))
+        {
+            CarInfo.SetActive(false);
         }
     }
 }

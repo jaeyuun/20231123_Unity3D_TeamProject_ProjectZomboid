@@ -22,8 +22,11 @@ TagManager:
   - Fence
   - Rock
   - WindowHit
+  - CarDoor
+  - CarHood
   - Curtain
   - CurtainDown
+
   layers:
   - Default
   - TransparentFX
