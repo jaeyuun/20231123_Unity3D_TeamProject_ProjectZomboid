@@ -12,7 +12,6 @@ public class ZombieFieldOfView : MonoBehaviour
     [SerializeField] private LayerMask obstacleMask;
     private List<Collider> hitPlayerList = new List<Collider>(); // 감지한 플레이어 리스트
 
-    private Vector3 playerPos;
     public Vector3 zombiePos;
     public Vector3 lookDir;
     public float lookingAngle;
@@ -49,13 +48,13 @@ public class ZombieFieldOfView : MonoBehaviour
 
         foreach (Collider playerColli in targets)
         { // target list
-            playerPos = playerColli.transform.position;
+            Vector3 playerPos = playerColli.transform.position;
             Vector3 targetDir = (playerPos - zombiePos).normalized;
             float targetAngle = Mathf.Acos(Vector3.Dot(lookDir, targetDir)) * Mathf.Rad2Deg;
             if (targetAngle <= viewAngle * 0.5f && !Physics.Raycast(zombiePos, targetDir, viewRadius, obstacleMask))
             {
                 hitPlayerList.Add(playerColli);
-                ObjectTargeting(playerColli); // tag 확인 후 targeting method
+                ZombieTargeting(playerPos);
                 Debug.DrawLine(zombiePos, playerPos, Color.red);
             }
         }
@@ -65,30 +64,5 @@ public class ZombieFieldOfView : MonoBehaviour
     {
         float radian = angle * Mathf.Deg2Rad;
         return new Vector3(Mathf.Sin(radian), 0f, Mathf.Cos(radian));
-    }
-
-    private void ObjectTargeting(Collider colli)
-    {
-        if (colli.CompareTag("Player"))
-        {
-            ZombieTargeting(playerPos); // target 위치
-        }
-        else if (colli.CompareTag("Window") || colli.CompareTag("Fence"))
-        {
-            Debug.Log(Vector3.Distance(colli.gameObject.transform.position, transform.position));
-            if (Vector3.Distance(colli.gameObject.transform.position, transform.position) <= 2f)
-            {
-                // Jump
-                zombieController.Jump();
-            }
-        } else if (colli.CompareTag("Door"))
-        {
-            Debug.Log(Vector3.Distance(colli.gameObject.transform.position, transform.position));
-            if (Vector3.Distance(colli.gameObject.transform.position, transform.position) <= 2f)
-            {
-                // Attack
-                StartCoroutine(zombieController.ZombieAttack_Co());
-            }
-        }
     }
 }

@@ -30,6 +30,7 @@ public class Player_Window_Jump : MonoBehaviour
                 {
                     player.transform.position = other.transform.position + new Vector3(-0.5f, 0, -0.5f);
                     Debug.Log("SπÊ«‚");
+                    Debug.Log(player.transform.rotation.y);
                 }
                 
 

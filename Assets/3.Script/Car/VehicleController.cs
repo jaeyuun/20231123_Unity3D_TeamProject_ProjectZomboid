@@ -24,7 +24,9 @@ public class VehicleController : MonoBehaviour
     public float steeringAngle = 45f; // 스티어링 각도
     private bool isStart_up = false;
     private float Rot = 0f;
-   /* private float defaultStiffness;  // 기본 타이어 마찰력을 저장할 변수*/
+    /* private float defaultStiffness;  // 기본 타이어 마찰력을 저장할 변수*/
+    private float Oil=24f; //기름
+
 
     private void Start()
     {
@@ -58,12 +60,13 @@ public class VehicleController : MonoBehaviour
             car_Sound.Start_up();
             isStart_up = true;
         }
-        else if (motorInput != 0 && isStart_up)
+        else if (motorInput != 0 && isStart_up && Oil>0)
         {
             car_Sound.Drive();
             ApplyInput(motorInput, steeringInput);
             //Wheel_spin(steeringInput);
-
+            Oil -= 0.1f*Time.deltaTime;//기름다는거
+            Debug.Log("기름쓰는중 : "+Oil);
         }
 
         //브레이크
