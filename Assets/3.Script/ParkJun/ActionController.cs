@@ -9,6 +9,7 @@ public class ActionController : MonoBehaviour
     private float range; // 습득 가능한 최대 거리
 
     private bool pickupActivated = false; // 습득 가능할 시 true
+    
 
     private Collider hitCollider; // 충돌한 콜라이더 정보 저장
 
@@ -23,19 +24,22 @@ public class ActionController : MonoBehaviour
     private Drop theDrop;
     [SerializeField]
     private Inventory theInventory;
- 
 
-  
+
+    private void Start()
+    {
+      
+    }
 
     private void Update()
     {
-        CheckItem();
-        TryAction();
+       // CheckItem();
+        //TryAction();
     }
   
     public void ToggleDropBase()
     {
-        go_DropBase.SetActive(!go_DropBase.activeSelf);
+        go_DropBase.SetActive(true);
 
         // 드롭베이스가 닫힐 때 아이템 슬롯 초기화 가능하도록 설정
         //opClear.SetCanClearSlots(go_DropBase.activeSelf);
@@ -47,64 +51,62 @@ public class ActionController : MonoBehaviour
         {
             if (pickupActivated)
             {
-                PickupItem();
+                //PickupItem();
             }
         }
     }
 
-    private void PickupItem()
+    private void OnTriggerEnter(Collider other)
     {
-        if (hitCollider != null)
+        if (other.CompareTag(itemTag))
         {
-            ItemPickup itemPickup = hitCollider.GetComponent<ItemPickup>();
-            if (itemPickup != null)
+            pickupActivated = true;
+            go_DropBase.gameObject.SetActive(true);
+            theInventory.OpenInventory();
+
+            ItemPickup itemPickup = other.GetComponent<ItemPickup>();
+            if (itemPickup != null && !itemPickup.hasBeenPickedUp)
             {
-                Debug.Log(itemPickup.item.itemName + "획득");
-                theDrop.AcquireItem(itemPickup.item,itemPickup.item.itemweight);
-                Destroy(hitCollider.gameObject);
-                infoDisAppear();
+                theDrop.AcquireItem(itemPickup.item, itemPickup.item.itemweight);
+                //PickupItem();
+                itemPickup.hasBeenPickedUp = true;
             }
-         
-           
         }
-        
     }
 
-    private void CheckItem()
+    private void OnTriggerExit(Collider other)
     {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, range);
-        
-        foreach (Collider col in hitColliders)
+        if (other.CompareTag(itemTag))
         {
-            if (col.CompareTag(itemTag))
-            {
-                pickupActivated = true;
-                actionText.gameObject.SetActive(true);
-                go_DropBase.gameObject.SetActive(true);
+            infoDisAppear();
 
-                theInventory.OpenInventory();
-                if (pickupActivated)
-                {
-                    PickupItem();
-                }
-                hitCollider = col;
-                // actionText.text = "<color=red>"+col.transform.name+ "</color>"+ "획득" + "<color=yellow>" + "(마우스 오른쪽 버튼)" + "</color>";
-                actionText.text = "<color=red>" + col.transform.name + "</color>" + "획득";
-                return; // 첫 번째 아이템만 처리하고 나머지는 무시
-            }
         }
-
-        infoDisAppear();
-        
-        //OffDropBase();
     }
-   
+
+
 
     private void infoDisAppear()
     {
+        
+        // actionText.gameObject.SetActive(false);
         pickupActivated = false;
-        actionText.gameObject.SetActive(false);
+       // theInventory.CloseInventory();
+        go_DropBase.gameObject.SetActive(false);
+        
+        for (int i = 0; i < 20; i++)
+        {
+            theDrop.RemoveItem(i);
+        }
+      
        
+
+    }
+    private void infoAppear()
+    {
+
+        //actionText.gameObject.SetActive(true);
+        go_DropBase.gameObject.SetActive(true);
+        theInventory.OpenInventory();
     }
     public void OffDropBase()
     {

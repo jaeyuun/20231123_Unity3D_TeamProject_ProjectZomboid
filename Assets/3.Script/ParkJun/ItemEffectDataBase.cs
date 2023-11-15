@@ -22,9 +22,11 @@ public class ItemEffectDataBase : MonoBehaviour
     [SerializeField]
     private StatusController thePlayerStatus;
     [SerializeField]
+    private Inventory theinven;
+    [SerializeField]
     private SlotToolTip theSlotToolTip;
 
-    private const string HP = "HP", SP = "SP", DP = "DP",ATT ="ATT", Hungry = "HUNGRY", THIRSTY = "THIRSTY";
+    private const string HP = "HP", SP = "SP", DP = "DP", ATT = "ATT", Hungry = "HUNGRY", THIRSTY = "THIRSTY", BAG = "BAG";
 
     public void ShowToolTip(Item _item,Vector3 _pos)
     {
@@ -81,6 +83,7 @@ public class ItemEffectDataBase : MonoBehaviour
             {
                 if (itemEffects[x].itemName == _item.itemName)
                 {
+                   
                     for (int y = 0; y < itemEffects[x].part.Length; y++)
                     {
                         switch (itemEffects[x].part[y])
@@ -88,6 +91,7 @@ public class ItemEffectDataBase : MonoBehaviour
                             case ATT:
                                 thePlayerStatus.increaseATT(itemEffects[x].num[y]);
                                 break;
+                           
                             default:
                                 Debug.Log("잘못된 Status 부위");
                                 break;

@@ -20,6 +20,13 @@ public class InputNumber : MonoBehaviour
     [SerializeField]
     private ActionController thePlayer;
 
+    private Drop drop;
+    private Inventory inventory;
+    private void Start()
+    {
+        drop = FindObjectOfType<Drop>();
+        inventory = FindObjectOfType<Inventory>();
+    }
     private void Update()
     {
         if (activated )
@@ -27,6 +34,8 @@ public class InputNumber : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Return))
             {
                 OK();
+               // drop.UpdateTotalWeight();
+                inventory.UpdateTotalWeight2();
             }
             else if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -75,7 +84,7 @@ public class InputNumber : MonoBehaviour
     {
         for (int i = 0; i < _num; i++)
         {
-            Instantiate(DragSlot.instance.dragSlot.item.itemPrefab,thePlayer.transform.position+ thePlayer.transform.forward,
+            Instantiate(DragSlot.instance.dragSlot.item.itemPrefab,thePlayer.transform.position+ thePlayer.transform.forward*1,
                 Quaternion.identity);
 
             DragSlot.instance.dragSlot.SetSlotCount(-1);

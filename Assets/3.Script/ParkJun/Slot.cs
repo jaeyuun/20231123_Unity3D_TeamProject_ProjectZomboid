@@ -22,7 +22,7 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
     [SerializeField]
     private GameObject go_CountImage;
 
-
+   
 
     [SerializeField]
     private Slider slider;
@@ -39,6 +39,7 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
     private  Drop drop;
     [SerializeField]
     private Inventory inventory;
+    private ActionController thePlayer;
 
     private InputNumber theInputNumber;
 
@@ -50,6 +51,7 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
         drop = FindObjectOfType<Drop>();
         inventory = FindObjectOfType<Inventory>();
         theInputNumber = FindObjectOfType<InputNumber>();
+        thePlayer = FindObjectOfType<ActionController>();
     }
 
     //이미지의 투명도 조절 
@@ -152,7 +154,8 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
                 }
                 else
                 {
-                    // 기타 타입에 대한 처리
+                    inventory.increaseBag(20);
+                    SetSlotCount(-1);
                 }
             }
         }
@@ -240,37 +243,36 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
         }
         
     }
-
+    
     public void OnEndDrag(PointerEventData eventData)
     {
+
+      
         if (DragSlot.instance.transform.localPosition.x < baseRect.xMin
             || DragSlot.instance.transform.localPosition.x > baseRect.xMax
             || DragSlot.instance.transform.localPosition.y < baseRect.yMin
             || DragSlot.instance.transform.localPosition.y > baseRect.yMax)
         {
 
-            
-                theInputNumber.Call();
-                drop.UpdateTotalWeight();
-                inventory.UpdateTotalWeight2();
 
-            
-            // DragSlot.instance.dragSlot.ClearSlot();
+            // theInputNumber.Call();
+
+          
+            DragSlot.instance.dragSlot.ClearSlot();
+             drop.UpdateTotalWeight();
+            inventory.UpdateTotalWeight2();
 
         }
         else
         {
+            //drop.UpdateTotalWeight();
+            inventory.UpdateTotalWeight2();
             Debug.Log("OnEndDrag 호출됨");
             DragSlot.instance.SetColor(0);
             DragSlot.instance.dragSlot = null;
         }
-
-
-
-
-        
-       
     }
+
 
     public void OnDrop(PointerEventData eventData)
     {
@@ -288,8 +290,7 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
                else
                {
                    ChangeSlot();
-               
- 
+
                 drop.UpdateTotalWeight();
                 inventory.UpdateTotalWeight2();
                }
@@ -303,6 +304,8 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
     }
     private void ChangeSlot()
     {
+       
+
         Item _tempItem = item;
         int _tempItemCount = itemCount;
         string _tempItemName = itemName;
@@ -317,12 +320,38 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
             DragSlot.instance.dragSlot.AddItem(_tempItem, _tempItemName, _tempItemWeight, _tempItemCount);
 
             itemweight -= _tempItemWeight * _tempItemCount;
+
+         
+
+
+
+
             Debug.Log("무게 감소: " + itemweight);
 
           
         }
         else
         {
+            // OverlapSphere에 사용할 반경 정의
+            float range = 1f;
+            // 플레이어 주변 지정된 반경 내의 모든 콜라이더 가져오기
+            Collider[] hitcoll = Physics.OverlapSphere(thePlayer.transform.position, range);
+
+            foreach (Collider coll in hitcoll)
+            {
+                // 콜라이더가 지정된 태그를 가지고 있는지 확인
+                if (coll.CompareTag("Item"))
+                {
+                    Item draggedItem = DragSlot.instance.dragSlot.item;
+
+                    // 슬롯에 옮겨진 아이템과 플레이어 주변 아이템을 비교
+                    if (draggedItem != null && draggedItem == coll.GetComponent<ItemPickup>().item)
+                    {
+                        Destroy(coll.gameObject);
+                        Debug.Log(draggedItem.itemName + " 아이템이 파괴되었습니다.");
+                    }
+                }
+            }
             DragSlot.instance.dragSlot.ClearSlot();
             Debug.Log("ChangeSlot - Cleared Slot");
 
@@ -330,6 +359,13 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
 
     }
 
+    
+   /* private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(thePlayer.transform.position, 1f);
+    }
+*/
     //마우스가 슬롯에 들어갈 때 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -345,4 +381,5 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
         theitemEffectDataBase.HideToolTip();
     }
 
+   
 }
