@@ -26,7 +26,6 @@ TagManager:
   - CarHood
   - Curtain
   - CurtainDown
-
   layers:
   - Default
   - TransparentFX
