@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Player_Fog : MonoBehaviour
 {
-    [Range(0f, 360f)] [SerializeField] private float viewAngle = 130f; // 감지하는 범위 각도
-    [SerializeField] private float ViewRadius = 2f; // 감지 범위
+    [Range(0f, 360f)] [SerializeField] public float viewAngle = 130f; // 감지하는 범위 각도
+    [SerializeField] public float ViewRadius = 2f; // 감지 범위
     [SerializeField] private LayerMask TargetMask; // 타겟 인식 레이어, Player
     [SerializeField] private LayerMask ObstacleMask;
     private List<Collider> hitTargetList = new List<Collider>(); // 감지한 타겟 리스트
