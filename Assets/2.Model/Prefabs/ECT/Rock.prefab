@@ -61,7 +61,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 5
-  destroyTime: 5
+  destroyTime: 3
   COL: {fileID: 6841458278278114726}
   go_rock: {fileID: 5922470866891521035}
   go_debris: {fileID: 5922470865696336781}

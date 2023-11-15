@@ -24,6 +24,9 @@ TagManager:
   - WindowHit
   - CarDoor
   - CarHood
+  - Curtain
+  - CurtainDown
+
   layers:
   - Default
   - TransparentFX

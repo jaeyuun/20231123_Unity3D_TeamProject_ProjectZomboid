@@ -24,7 +24,7 @@ public class ItemEffectDataBase : MonoBehaviour
     [SerializeField]
     private SlotToolTip theSlotToolTip;
 
-    private const string HP = "HP", SP = "SP", DP = "DP", Hungry = "HUNGRY", THIRSTY = "THIRSTY";
+    private const string HP = "HP", SP = "SP", DP = "DP",ATT ="ATT", Hungry = "HUNGRY", THIRSTY = "THIRSTY";
 
     public void ShowToolTip(Item _item,Vector3 _pos)
     {
@@ -75,9 +75,28 @@ public class ItemEffectDataBase : MonoBehaviour
             }
             Debug.Log("일치하는 itemName이 없습니다 ");
         }
-        if (_item.itemType == Item.ItemType.ETC)
+        if (_item.itemType == Item.ItemType.objectUsed)
         {
+            for (int x = 0; x < itemEffects.Length; x++)
+            {
+                if (itemEffects[x].itemName == _item.itemName)
+                {
+                    for (int y = 0; y < itemEffects[x].part.Length; y++)
+                    {
+                        switch (itemEffects[x].part[y])
+                        {
+                            case ATT:
+                                thePlayerStatus.increaseATT(itemEffects[x].num[y]);
+                                break;
+                            default:
+                                Debug.Log("잘못된 Status 부위");
+                                break;
 
+                        }
+                    }
+                    return; //for문이 만족할때까지 만족한게 없으면 끝내버리기
+                }
+            }
         }
     }
 }

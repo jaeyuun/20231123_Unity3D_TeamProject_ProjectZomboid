@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Title : MonoBehaviour
 {
-    public string sceneName = "PJunYeong";
+    public string NewName = "GameNew";
     public string loadName = "GameLoad";
 
 
@@ -14,7 +14,7 @@ public class Title : MonoBehaviour
     {
         Debug.Log("·Îµù ");
         
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadScene(NewName);
        
     }
     public void ClickLoad()
