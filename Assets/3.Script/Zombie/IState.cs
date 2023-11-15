@@ -6,5 +6,6 @@ public interface IState
 {
     void Idle();
     void Die();
-    void Jump();
+    IEnumerator Jump();
+    void WakeUp();
 }

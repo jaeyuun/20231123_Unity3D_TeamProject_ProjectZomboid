@@ -13,6 +13,8 @@ public class SlotToolTip : MonoBehaviour
     [SerializeField]
     private Text txt_ItemDesc;
     [SerializeField]
+    private Text txt_itemWeight;
+    [SerializeField]
     private Text txt_ItemHowtoUsed;
 
     public void ShowToolTip(Item _item,Vector3 _pos)
@@ -24,6 +26,7 @@ public class SlotToolTip : MonoBehaviour
 
         txt_ItemName.text = _item.itemName;
         txt_ItemDesc.text = _item.itemDesc;
+        txt_itemWeight.text = $"무게: {_item.weight}";
 
         if (_item.itemType==Item.ItemType.Equipment)
         {
@@ -36,7 +39,7 @@ public class SlotToolTip : MonoBehaviour
 ;        }
         else
         {
-            txt_ItemHowtoUsed.text = "";
+            txt_ItemHowtoUsed.text = "드래그 - 버리기";
         }
 
     }

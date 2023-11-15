@@ -8,6 +8,8 @@ public class VehicleInteract : MonoBehaviour
     public Player_isCar player_isCar;
     public GameObject Vehicle;
     public GameObject Carmer;
+    public Rigidbody rig;
+    
     private bool inVehicle = false;
 
 
@@ -17,10 +19,12 @@ public class VehicleInteract : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && !inVehicle && player_isCar.iscar)
         {
             EnterVehicle(); // 차량에 탑승
+            rig.isKinematic = false;//키네마틱을 비활성화 시켜 움직이게 함
         }
         else if (Input.GetKeyDown(KeyCode.E) && inVehicle)
         {
             ExitVehicle(); // 차량에서 내림
+            rig.isKinematic = true;//키네마틱을 활성화 시켜 움직이게 함
         }
     }
 

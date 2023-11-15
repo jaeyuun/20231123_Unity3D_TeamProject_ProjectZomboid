@@ -20,13 +20,14 @@ public class ZombieController : HP, IState
     private Vector3 playerPos; // 플레이어의 위치
     private Vector3 screamPos; // Scream한 좀비의 위치
 
+    public bool isWakeUp = false; // player가 죽었을 때 player에서 true 값으로 변경
     public bool nonTarget = true;
     private bool nonScreamZombie = true;
 
     // RandomTarget NavMesh
     private float range = 10f;
 
-    private Animator zombieAnim;
+    public Animator zombieAnim;
     [SerializeField] private GameObject screamRange;
     private bool isScreamZombie = false;
 
@@ -43,6 +44,7 @@ public class ZombieController : HP, IState
 
     // ZombieAttack Collider
     [SerializeField] private Collider[] zombieAttackCol;
+    public float zombieNavDistance;
 
     private void Awake()
     {
@@ -61,6 +63,7 @@ public class ZombieController : HP, IState
             zombieAttackCol[i].enabled = false;
         }
         StartCoroutine(RandomTargetPos_Co());
+        WakeUp();
     }
 
     private void FixedUpdate()
@@ -83,6 +86,7 @@ public class ZombieController : HP, IState
     {
         // target에 따른 네비 적용
         nav.SetDestination(targetPos);
+        zombieNavDistance = nav.remainingDistance;
     }
     #region Nav Random Target
     private IEnumerator RandomTargetPos_Co()
@@ -174,29 +178,53 @@ public class ZombieController : HP, IState
             }
         }
     }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Fence") || collision.gameObject.CompareTag("Window"))
+        {
+            // 끼었을 때 탈출 필요해서 stay로 넣어둠
+            StartCoroutine(Jump());
+        }
+
+        if (collision.gameObject.CompareTag("Door"))
+        {
+            Door_bool doorBool;
+            if (collision.gameObject.TryGetComponent(out doorBool))
+            {
+                if (!doorBool.isOpen)
+                {
+                    StartCoroutine(ZombieAttack_Co());
+                }
+            }
+        }
+    }
     #endregion
     #region Coroutine Attack and Scream
-    private IEnumerator ZombieAttack_Co()
+    public IEnumerator ZombieAttack_Co()
     {
-        zombieAnim.SetBool("isAttack", true);
-        NavmeshStop();
-        yield return new WaitForSeconds(1.0f);
-        for (int i = 0; i < zombieAttackCol.Length; i++)
+        if (!nonTarget)
         {
-            // Attack할 때만 Collider enable True
-            zombieAttackCol[i].enabled = true;
-        }
-        // Damage 넣어주기... todo
-        yield return new WaitForSeconds(1.5f);
-        zombieAnim.SetBool("isAttack", false);
-        NavmeshResume();
-        for (int i = 0; i < zombieAttackCol.Length; i++)
-        {
-            zombieAttackCol[i].enabled = false;
-        }
-        if (Vector3.Distance(targetPos, transform.position) <= 2f)
-        {
-            StartCoroutine(ZombieAttack_Co());
+            zombieAnim.SetBool("isAttack", true);
+            NavmeshStop();
+            yield return new WaitForSeconds(1.0f);
+            for (int i = 0; i < zombieAttackCol.Length; i++)
+            {
+                // Attack할 때만 Collider enable True
+                zombieAttackCol[i].enabled = true;
+            }
+            // Damage 넣어주기... todo
+            yield return new WaitForSeconds(1.5f);
+            zombieAnim.SetBool("isAttack", false);
+            NavmeshResume();
+            for (int i = 0; i < zombieAttackCol.Length; i++)
+            {
+                zombieAttackCol[i].enabled = false;
+            }
+            if (Vector3.Distance(targetPos, transform.position) <= 2f)
+            {
+                StartCoroutine(ZombieAttack_Co());
+            }
         }
     }
 
@@ -249,9 +277,23 @@ public class ZombieController : HP, IState
         Destroy(gameObject, 10f);
     }
 
-    public void Jump()
+    public IEnumerator Jump()
     {
+        NavmeshStop();
         zombieAnim.SetTrigger("isClimb");
+        NavmeshResume();
+        yield return new WaitForSeconds(2f);
+    }
+
+    public void WakeUp()
+    {
+        if (isWakeUp)
+        {
+            isWakeUp = false;
+            NavmeshStop();
+            zombieAnim.SetTrigger("isWakeUp");
+            NavmeshResume();
+        }
     }
     #endregion
     #region Nav Stop And Resume

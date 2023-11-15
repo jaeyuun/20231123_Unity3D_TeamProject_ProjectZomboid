@@ -27,7 +27,7 @@ public class FadeInOut : MonoBehaviour
 
     private IEnumerator TitleFadeInOut_Co()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(4f);
         titleImage.alpha = 0;
         yield return new WaitForSeconds(0.2f);
         titleImage.alpha = 1;

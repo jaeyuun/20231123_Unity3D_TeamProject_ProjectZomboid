@@ -11,6 +11,8 @@ public class Item : ScriptableObject
     public string itemDesc; //아이템 설명 
     public Sprite itemImage; //이미지
     public GameObject itemPrefab; //아이템 프리펩
+    public string weight; // 아이템의 무게
+    public float itemweight;
 
     public string weaponType; 
 
@@ -18,6 +20,7 @@ public class Item : ScriptableObject
     {
         Equipment,
         Used,
+        objectUsed,
         Ingredient,
         ETC
     }
