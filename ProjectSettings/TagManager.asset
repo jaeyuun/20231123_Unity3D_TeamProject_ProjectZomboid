@@ -22,6 +22,8 @@ TagManager:
   - Fence
   - Rock
   - WindowHit
+  - Curtain
+  - CurtainDown
   layers:
   - Default
   - TransparentFX
