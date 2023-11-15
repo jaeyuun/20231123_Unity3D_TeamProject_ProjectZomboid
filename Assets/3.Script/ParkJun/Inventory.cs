@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
@@ -13,25 +14,32 @@ public class Inventory : MonoBehaviour
     private GameObject go_Base;
     [SerializeField]
     private GameObject go_SlotsParent;
+    
+    public Text text_inventoryweight;
+
 
     private Slot[] slots;
+    [SerializeField]
+    private Drop drop;
 
     public Slot[] GetSlots() { return slots; }
 
     [SerializeField] private Item[] items;
-    public void LoadToDrop(int _arrayNum, string _itemName, int _itemNum)
+    public void LoadToDrop(int _arrayNum, string _itemName,float _itemweight, int _itemNum)
     {
         for (int i = 0; i < items.Length; i++)
         {
             if (items[i].itemName == _itemName)
             {
-                slots[_arrayNum].AddItem(items[i], _itemName, _itemNum);
+                slots[_arrayNum].AddItem(items[i], _itemName,_itemweight, _itemNum);
+                UpdateTotalWeight2();
             }
         }
     }
     private void Start()
     {
         slots = go_SlotsParent.GetComponentsInChildren<Slot>();
+        drop = FindObjectOfType<Drop>();
     }
     private void Update()
     {
@@ -68,7 +76,7 @@ public class Inventory : MonoBehaviour
         inventoryActiveated = !inventoryActiveated;
         go_inventotyBase.SetActive(inventoryActiveated);
     }
-    public void AcquireItem2(Item _item, int _count = 1)
+    public void AcquireItem2(Item _item, float _weight, int _count = 1)
     {
         if (Item.ItemType.Equipment != _item.itemType)
         {
@@ -79,6 +87,7 @@ public class Inventory : MonoBehaviour
                     if (slots[i].item.itemName == _item.itemName)
                     {
                         slots[i].SetSlotCount(_count);
+                        
                         return;
                     }
                 }
@@ -89,10 +98,28 @@ public class Inventory : MonoBehaviour
         {
             if (slots[i].item == null)
             {
-                slots[i].AddItem(_item, _item.itemName, _count);
+                slots[i].AddItem(_item, _item.itemName, _weight, _count);
+               
                 return;
             }
         }
+        UpdateTotalWeight2();
+    }
+    public void UpdateTotalWeight2()
+    {
+        float totalWeight2 = 0f;
+
+        // 모든 슬롯을 확인하며 아이템의 무게를 합산
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (slots[i].item != null)
+            {
+                totalWeight2 += slots[i].itemweight * slots[i].itemCount;
+            }
+        }
+
+        // 텍스트 업데이트
+        text_inventoryweight.text = $"{totalWeight2.ToString()}/50";
     }
 }
 

@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/1.Scene/TestIntro.unity
     guid: f01eabd2649618149961ab346d049817
   - enabled: 1
+    path: Assets/1.Scene/GameNew.unity
+    guid: f5d09c268489a95449ea5901c26e2836
+  - enabled: 1
     path: Assets/1.Scene/GameLoad.unity
     guid: de0fd7c549366494cba4b21a907bdf43
   - enabled: 1

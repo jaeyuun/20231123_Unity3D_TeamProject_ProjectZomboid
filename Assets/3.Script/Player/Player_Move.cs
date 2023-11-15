@@ -27,17 +27,30 @@ public class Player_Move : MonoBehaviour
     public SphereCollider Sound;//게임오브젝트
 
     public CapsuleCollider Man;
+
+    private StatusController statusController;
     private void Start()
     {
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         Sound =GetComponentInChildren<SphereCollider>();
+
+        GameObject statusControllerObject = GameObject.Find("Status_Base"); // 다른 게임 오브젝트의 이름을 사용
+
+        if (statusControllerObject != null)
+        {
+            statusController = statusControllerObject.GetComponent<StatusController>();
+        }
+
     }
+
 
     private void FixedUpdate()
     {
         float moveHorizontal = Input.GetAxisRaw("Horizontal");
         float moveVertical = Input.GetAxisRaw("Vertical");
+
+       
 
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
 
@@ -62,17 +75,18 @@ public class Player_Move : MonoBehaviour
 
         if (moveHorizontal != 0 || moveVertical != 0)
         {
-
-            if (Input.GetKey(KeyCode.LeftShift) && !Input.GetMouseButton(1))
+            
+            if (Input.GetKey(KeyCode.LeftShift) &&statusController.GetcurrentSP()>0&& !Input.GetMouseButton(1))
             {
-
+                statusController.DecreaseSP(1);
                 animator.SetBool("isRun", true);
                 Sound.radius = 15f;
                 transform.position += movement * speed * 2f * Time.deltaTime;
+               
                 StartCoroutine(run_Sound());
                 ;
             }
-            else if (!Input.GetKey(KeyCode.LeftShift) || Input.GetMouseButton(1))
+            else if (!Input.GetKey(KeyCode.LeftShift) ||statusController.GetcurrentSP()<=0|| Input.GetMouseButton(1))
             {
   
                 animator.SetBool("isRun", false);
