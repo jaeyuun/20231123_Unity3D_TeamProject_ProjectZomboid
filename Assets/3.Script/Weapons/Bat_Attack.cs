@@ -25,14 +25,14 @@ public class Bat_Attack : MonoBehaviour
             sound.SetActive(true);
 
             audioSource.PlayOneShot(BatHit);
-            ShotEvent();
+            AttackEvent();
         }
 
         player_Attack.isAttack = false;
         sound.SetActive(false);
     }
 
-    public void ShotEvent()
+    public void AttackEvent()
     {
         Instantiate(projectile, hitPoint.transform.position, hitPoint.transform.rotation);
     }

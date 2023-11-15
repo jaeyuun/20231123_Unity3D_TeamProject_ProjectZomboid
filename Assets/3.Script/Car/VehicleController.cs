@@ -28,6 +28,8 @@ public class VehicleController : MonoBehaviour
     private float Oil=24f; //기름
     private float will = 0f;
 
+    public bool aaa=false;
+
     private void Start()
     {
         car_Sound = GetComponent<Car_Sound>();
@@ -75,6 +77,7 @@ public class VehicleController : MonoBehaviour
             // 쉬프트 키가 눌려진 경우, 브레이크를 동작시킵니다.
             ApplyBrake();
             car_Sound.Brake();
+            aaa = true;
         }
         else
         {
@@ -83,6 +86,7 @@ public class VehicleController : MonoBehaviour
             frontRightWheel.brakeTorque = 0;
             rearLeftWheel.brakeTorque = 0;
             rearRightWheel.brakeTorque = 0;
+            aaa = false;
         }
     }
 
