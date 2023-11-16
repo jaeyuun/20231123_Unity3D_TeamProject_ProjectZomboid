@@ -18,6 +18,7 @@ public class HitColl : MonoBehaviour
 
     [Header("데미지 부위")]
     public GameObject[] BodyDmg;
+    public GameObject[] Bandage_Point;
 
 
 
@@ -99,5 +100,6 @@ public class HitColl : MonoBehaviour
         int a = Random.Range(0, BodyDmg.Length);
         Bleeding.SetActive(true);
         BodyDmg[a].SetActive(true);
+        Bandage_Point[a].SetActive(true);
     }
 }

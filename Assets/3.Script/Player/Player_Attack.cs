@@ -17,6 +17,8 @@ public class Player_Attack : MonoBehaviour
     public GameObject Sound_Gun;//게임오브젝트
     private bool IsMovement = false;
 
+    [Header("마우스 커서")]
+    public Game_Cursor game_Cursor; 
 
     [Header("엑티브할 베트들")]
     //등에 있는 배트
@@ -37,6 +39,7 @@ public class Player_Attack : MonoBehaviour
         anim = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         gun_Shot = GetComponent<Gun_Shot>();
+       
 
     }
 
@@ -84,7 +87,7 @@ public class Player_Attack : MonoBehaviour
 
         if (Input.GetMouseButton(1))//우클릭시
         {
-
+            game_Cursor.OnMouseOver();
             anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
             anim.SetBool("isRight_click", true);
 
@@ -118,6 +121,7 @@ public class Player_Attack : MonoBehaviour
         }
         else if (Input.GetMouseButtonUp(1))
         {
+            game_Cursor.OnMouseExit();
             anim.SetBool("isRight_click", false);
             anim.SetBool("isAiming", false);
             anim.SetLayerWeight(1, 0);
@@ -140,11 +144,13 @@ public class Player_Attack : MonoBehaviour
                 Debug.Log("등뒤에 있어");
                 anim.SetTrigger("isOver");
                 StartCoroutine(ActivateWithDelay(Bat_Spine, Bat_Hand, false, true));
+                Melee_weapon = true;
             }
             else if (Bat_Out)
             {
                 anim.SetTrigger("isOver");
                 StartCoroutine(ActivateWithDelay(Bat_Hand, Bat_Spine, true, false));
+                Melee_weapon = false;
             }
         }
     }
