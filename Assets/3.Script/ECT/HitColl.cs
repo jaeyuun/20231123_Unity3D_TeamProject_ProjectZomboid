@@ -21,6 +21,10 @@ public class HitColl : MonoBehaviour
     public GameObject[] Bandage_Point;
 
 
+    public StatusController statusController;
+    [Header("Player_Btn_On_Hpbar")]
+    
+
 
     public Player_Fog player_Fog;//좀비 다 보이게 하기
     public GameObject Bleeding;
@@ -29,6 +33,8 @@ public class HitColl : MonoBehaviour
     public HP hp;
     private float Player_HP;
     public bool isDie = false;
+    private bool health = false;
+    private float isHitTime = 0;
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -40,17 +46,23 @@ public class HitColl : MonoBehaviour
 
     }
 
-  
+    private void Update()
+    {
+        isHitTime += Time.deltaTime;
+    }
+
+
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("ZombieAttack") && !isDie)
+        if (other.gameObject.CompareTag("ZombieAttack") && !isDie && isHitTime>1)
         {
            
             StartCoroutine(Hit_co(Hit_pos));
           
             Debug.Log(Player_HP);
 
-            if (Player_HP <= 0 && !isDie)
+            if (health && !isDie)
             {
                 
                 player.GetComponent<Player_Move>().enabled = false;
@@ -66,6 +78,7 @@ public class HitColl : MonoBehaviour
                
 
             }
+            isHitTime = 0;
         }
        
     }
@@ -77,19 +90,14 @@ public class HitColl : MonoBehaviour
         StartCoroutine(Hit_co(Hit_pos));
     }
 
-/*    private IEnumerator Die_Zombie_co()
-    {
-        yield return new WaitForSeconds(3f);
-       
-        isDie = true;
-    }*/
 
     public IEnumerator Hit_co(Transform Hit_pos)
     {
         Instantiate(hit, Hit_pos.transform.position, Hit_pos.transform.rotation);
         player.anim.SetTrigger("isHit");
         audioSource.PlayOneShot(Hit_Sound);
-        Player_HP = hp.Damage(10f, Player_HP);
+        health = statusController.DecreaseHP(10);
+     
         bodyDmg();
         yield return new WaitForSeconds(1f);
     }

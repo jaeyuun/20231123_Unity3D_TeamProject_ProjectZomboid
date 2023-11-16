@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/1.Scene/TestIntro.unity
     guid: f01eabd2649618149961ab346d049817
   - enabled: 1
@@ -15,12 +15,6 @@ EditorBuildSettings:
     path: Assets/1.Scene/GameLoad.unity
     guid: de0fd7c549366494cba4b21a907bdf43
   - enabled: 1
-    path: Assets/1.Scene/PJunYeong.unity
-    guid: 34e68f1369f4b904f86d5b8febda461b
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
+    path: Assets/1.Scene/MainGame _Sujin.unity
+    guid: 6fc3a06d20fd27543a8597662beb9f24
   m_configObjects: {}

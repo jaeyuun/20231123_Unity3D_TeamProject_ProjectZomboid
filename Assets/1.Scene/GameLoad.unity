@@ -1395,7 +1395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36934fe8e35485e4a89dbe43309c6697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: PJunYeong
+  sceneName: MainGame _Sujin
   text1: {fileID: 590716930}
   text2: {fileID: 2069379631}
   continueButton: {fileID: 974829590}

@@ -60,8 +60,6 @@ public class StatusController : MonoBehaviour
     private int thirstyDecreaseTime;
     private int currentThirstyDecreaseTime;
 
-    [SerializeField]
-    private GameObject openStatus;
 
     [SerializeField]
     private Image image_Gauge;
@@ -69,8 +67,7 @@ public class StatusController : MonoBehaviour
     private GameObject image_Thirsty;
     [SerializeField]
     private GameObject image_Hungry;
-    [SerializeField]
-    private Text[] text_Update;
+
     private const int  DP = 0, SP = 1,ATT=2, HUNGRY = 3, THIRSTY = 4;
 
 
@@ -125,7 +122,7 @@ public class StatusController : MonoBehaviour
             SPRechargeTime();
             SPRecover();
             GagueUpdate();
-            TextUdate();
+            
     }
     
     public void increaseHP(int _count)
@@ -140,14 +137,15 @@ public class StatusController : MonoBehaviour
         }
 
     }
-    public void DecreaseHP(int _count)
+    public bool DecreaseHP(int _count)
     {
        
         currentHp -= _count;
         if (currentHp <= 0)
         {
-            Debug.Log("캐릭터의 hp가 0입니다.");
+            return true;
         }
+        return false;
     }
     public void increaseDP(int _count)
     {
@@ -369,22 +367,8 @@ public class StatusController : MonoBehaviour
     {
         image_Gauge.fillAmount=(float)currentHp / hp;
     }
-    private void TextUdate()
-    {
 
-        text_Update[DP].text = "방어력 " + currentDp + " / " + dp;
-        text_Update[SP].text = "지구력: " + currentSp + " / " + sp;
-        text_Update[ATT].text = "근력:" + currentAtt +"  무기:" + att;
-        text_Update[HUNGRY].text = "배고픔: " + currentHungry + " / " + hungry;
-        text_Update[THIRSTY].text = "목마름: " + currentThirsty + " / " + thirsty;
-        
-    }
-    public void ToggleStat()
-    {
 
-        openStatus.SetActive(!openStatus.activeSelf);
-
-    }
 
 
 
