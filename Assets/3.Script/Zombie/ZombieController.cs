@@ -43,7 +43,7 @@ public class ZombieController : HP, IState
     private SkinnedMeshRenderer skinned;
 
     // ZombieAttack Collider
-    [SerializeField] private Collider[] zombieAttackCol;
+    [SerializeField] private Collider zombieAttackCol;
     public float zombieNavDistance;
 
     private void Awake()
@@ -58,10 +58,6 @@ public class ZombieController : HP, IState
 
     private void Start()
     {
-        for (int i = 0; i < zombieAttackCol.Length; i++)
-        {
-            zombieAttackCol[i].enabled = false;
-        }
         StartCoroutine(RandomTargetPos_Co());
         WakeUp();
     }
@@ -207,20 +203,13 @@ public class ZombieController : HP, IState
         {
             zombieAnim.SetBool("isAttack", true);
             NavmeshStop();
-            yield return new WaitForSeconds(1.0f);
-            for (int i = 0; i < zombieAttackCol.Length; i++)
-            {
-                // Attack할 때만 Collider enable True
-                zombieAttackCol[i].enabled = true;
-            }
-            // Damage 넣어주기... todo
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(3.0f);
+            // Attack할 때만 Collider enable True
+            zombieAttackCol.enabled = true;
+            yield return new WaitForSeconds(0.5f);
+            zombieAttackCol.enabled = false;
             zombieAnim.SetBool("isAttack", false);
             NavmeshResume();
-            for (int i = 0; i < zombieAttackCol.Length; i++)
-            {
-                zombieAttackCol[i].enabled = false;
-            }
             if (Vector3.Distance(targetPos, transform.position) <= 2f)
             {
                 StartCoroutine(ZombieAttack_Co());
