@@ -144,11 +144,13 @@ public class Player_Attack : MonoBehaviour
                 Debug.Log("등뒤에 있어");
                 anim.SetTrigger("isOver");
                 StartCoroutine(ActivateWithDelay(Bat_Spine, Bat_Hand, false, true));
+                Melee_weapon = true;
             }
             else if (Bat_Out)
             {
                 anim.SetTrigger("isOver");
                 StartCoroutine(ActivateWithDelay(Bat_Hand, Bat_Spine, true, false));
+                Melee_weapon = false;
             }
         }
     }
