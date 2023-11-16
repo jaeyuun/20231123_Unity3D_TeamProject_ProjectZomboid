@@ -19,6 +19,8 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
     private int buttonCount = 0;
     private RightClickButton[] rightClickButtons;
     private Transform objectPos;
+    private GameObject hitObject;
+    private string[] objectList = { "Window", "Door", "Fence" }; // 상호 작용하는 오브젝트 종류
 
     private void Awake()
     {
@@ -59,12 +61,23 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
         Debug.DrawRay(ray.origin, ray.direction * 100f, Color.red);
         RaycastHit[] hit;
 
+        /*
+            상호 작용하는 것만 인식
+            CompareTag() 할 게 있다면 바로 상호작용할 hitObject = hit[i].collider... return
+            switch (hitObject) {
+                case "":
+                    break;
+                case "":
+                    break;
+            }
+        */
+
         hit = Physics.RaycastAll(ray);
         if (hit != null)
         {
             for (int i = 0; i < hit.Length; i++)
             { // 마우스 클릭 시 좌표와 태그가 있는 오브젝트 사이 간 거리가 제일 가까운 오브젝트와 상호작용 하기 위한 비교 과정
-                if (hit[i].collider.CompareTag("Untagged")) continue; // 상호작용 안되어야하는 오브젝트 추가 예정
+                // CompareTag()
                 if (hit.Length > 1)
                 {
                     objectPos = hit[i].collider.gameObject.transform.parent;
@@ -72,6 +85,7 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
                 {
                     objectPos = hit[i].collider.gameObject.transform;
                 }
+                
                 objectDistance = Vector2.Distance(Input.mousePosition, objectPos.position);
                 Debug.Log($"{hit[i].collider.gameObject.name}'s Hit Position: {hit[i].collider.gameObject.transform.position}");
                 if (minDistance == 0 || minDistance > objectDistance)
