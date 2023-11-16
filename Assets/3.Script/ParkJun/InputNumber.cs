@@ -18,7 +18,7 @@ public class InputNumber : MonoBehaviour
     private GameObject go_Base;
 
     [SerializeField]
-    private Player_Move  thePlayer;
+    private ActionController  thePlayer;
 
     void Update()
     {

@@ -16,8 +16,8 @@ public class ActionController : MonoBehaviour
     [SerializeField]
     private string itemTag = "Item"; // 아이템에 할당된 태그
 
-    [SerializeField]
-    private Text actionText;
+   /* [SerializeField]
+    private Text actionText;*/
     [SerializeField]
     private GameObject go_DropBase;
     [SerializeField]

@@ -116,7 +116,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     //슬롯 초기화
     public void ClearSlot()
     {
-        itemweight -= item.itemweight * itemCount; // 들어온 무게 빼기
+       // itemweight -= item.itemweight * itemCount; // 들어온 무게 빼기
         Debug.Log("무게 감소: " + itemweight);
 
 
@@ -258,21 +258,21 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
 
             // theInputNumber.Call();
-
-
             DragSlot.instance.dragSlot.ClearSlot();
-            drop.UpdateTotalWeight();
-            inventory.UpdateTotalWeight2();
+           
 
+           
         }
         else
         {
             //drop.UpdateTotalWeight();
-            inventory.UpdateTotalWeight2();
+           // inventory.UpdateTotalWeight2();
             Debug.Log("OnEndDrag 호출됨");
             DragSlot.instance.SetColor(0);
             DragSlot.instance.dragSlot = null;
         }
+        drop.UpdateTotalWeight();
+        inventory.UpdateTotalWeight2();
     }
 
 
@@ -294,20 +294,19 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             }
             else
                 ChangeSlot();
-            drop.UpdateTotalWeight();
-            inventory.UpdateTotalWeight2();
-            ItemDisObject();
+           
+               //ItemDisObject();
 
         }
         else
-            drop.UpdateTotalWeight();
-        inventory.UpdateTotalWeight2();
+       
         ItemDisObject();
 
 
 
 
-
+        drop.UpdateTotalWeight();
+        inventory.UpdateTotalWeight2();
 
         Debug.Log("OnDrop 호출됨");
 
