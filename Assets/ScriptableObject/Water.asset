@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 847e159dd81040640aa3e15f248a7d21, type: 3}
+  m_Name: Water
+  m_EditorClassIdentifier: 
+  itemType: 1
+  itemName: "\uBB3C"
+  itemDesc: "\uBAA9\uB9C8\uB984\uC744 \uD574\uACB0\uD558\uB294 \uBB3C"
+  itemImage: {fileID: 21300000, guid: defe933c56b10e94abe5d332532b9e97, type: 3}
+  itemPrefab: {fileID: 9080833379885977135, guid: 28237d7c28182bd46a840d5a1059a6bb, type: 3}
+  weight: 0.5
+  itemweight: 0.5
+  weaponType: 

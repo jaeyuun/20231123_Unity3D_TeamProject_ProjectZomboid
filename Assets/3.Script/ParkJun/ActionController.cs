@@ -70,6 +70,7 @@ public class ActionController : MonoBehaviour
                 theDrop.AcquireItem(itemPickup.item, itemPickup.item.itemweight);
                 //PickupItem();
                 itemPickup.hasBeenPickedUp = true;
+
             }
         }
     }
@@ -78,10 +79,14 @@ public class ActionController : MonoBehaviour
     {
         if (other.CompareTag(itemTag))
         {
+            ItemPickup itemPickup = other.GetComponent<ItemPickup>();
+            itemPickup.hasBeenPickedUp = false;
+
             infoDisAppear();
 
         }
     }
+    
 
 
 
@@ -92,14 +97,14 @@ public class ActionController : MonoBehaviour
         pickupActivated = false;
        // theInventory.CloseInventory();
         go_DropBase.gameObject.SetActive(false);
+        theInventory.CloseInventory();
+        
         
         for (int i = 0; i < 20; i++)
         {
             theDrop.RemoveItem(i);
         }
       
-       
-
     }
     private void infoAppear()
     {

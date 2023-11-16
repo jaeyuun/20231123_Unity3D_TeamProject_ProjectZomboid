@@ -44,7 +44,7 @@ public class Inventory : MonoBehaviour
     private void Start()
     {
         slots = go_SlotsParent.GetComponentsInChildren<Slot>();
-        drop = FindObjectOfType<Drop>();
+        //drop = FindObjectOfType<Drop>();
     }
     private void Update()
     {

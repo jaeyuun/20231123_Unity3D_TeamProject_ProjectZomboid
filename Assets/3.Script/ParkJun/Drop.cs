@@ -38,7 +38,7 @@ public class Drop : MonoBehaviour
     }
     void Update()
     {
-      
+        TryOpenInventory();
     }
    private void TryOpenInventory()
     {
@@ -63,7 +63,7 @@ public class Drop : MonoBehaviour
     {
 
         go_dropBase.SetActive(false);
-        go_Base.SetActive(false); // 기존 CloseInventory에 추가하기
+       // go_Base.SetActive(false); // 기존 CloseInventory에 추가하기
      
     }
     public void ToggleinventoryBase()

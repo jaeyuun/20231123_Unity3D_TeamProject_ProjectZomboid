@@ -33,12 +33,11 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
 
     [SerializeField]
     private ItemEffectDataBase theitemEffectDataBase;
- /*   [SerializeField]
-    private  Player_Move player_Move;*/
     [SerializeField]
     private  Drop drop;
     [SerializeField]
     private Inventory inventory;
+    [SerializeField]
     private ActionController thePlayer;
 
     private InputNumber theInputNumber;
@@ -46,12 +45,12 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
     private void Start()
     {
         baseRect = transform.parent.parent.GetComponent<RectTransform>().rect;
-        theitemEffectDataBase = FindObjectOfType<ItemEffectDataBase>();
-       // player_Move =GetComponent<Player_Move>();
-        drop = FindObjectOfType<Drop>();
-        inventory = FindObjectOfType<Inventory>();
-        theInputNumber = FindObjectOfType<InputNumber>();
-        thePlayer = FindObjectOfType<ActionController>();
+       // theitemEffectDataBase = get<ItemEffectDataBase>();
+       
+       // drop = FindObjectOfType<Drop>();
+       // inventory = FindObjectOfType<Inventory>();
+       // theInputNumber = FindObjectOfType<InputNumber>();
+      //  thePlayer = FindObjectOfType<ActionController>();
     }
 
     //이미지의 투명도 조절 
@@ -279,27 +278,35 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
         //드래그 중인 슬롯이 존재하는지 확인
            if (DragSlot.instance.dragSlot != null)
            {
-               //현재 슬롯과 드래그 중인 슬롯에 모두 아이템이 존재하는지 확인
-               if (item != null && DragSlot.instance.dragSlot.item != null &&
+            ItemDisObject();
+            //현재 슬롯과 드래그 중인 슬롯에 모두 아이템이 존재하는지 확인
+            if (item != null && DragSlot.instance.dragSlot.item != null &&
                    item.itemName == DragSlot.instance.dragSlot.item.itemName) //현재 슬롯과 드래그 중인 슬롯의 아이템 이름이 같은지 확인합니다.
                {
                    // 같은 아이템이면 수량을 합친다
                    SetSlotCount(DragSlot.instance.dragSlot.itemCount);
-                   DragSlot.instance.dragSlot.ClearSlot(); // 드래그한 슬롯 비우기
+               
+                    DragSlot.instance.dragSlot.ClearSlot(); // 드래그한 슬롯 비우기
+               
                }
                else
-               {
-                   ChangeSlot();
-
+                ChangeSlot();
                 drop.UpdateTotalWeight();
                 inventory.UpdateTotalWeight2();
-               }
+                ItemDisObject();
+
            }
+          else
+            drop.UpdateTotalWeight();
+            inventory.UpdateTotalWeight2();
+            ItemDisObject();
 
-   
-      
+
+
+
+
+
         Debug.Log("OnDrop 호출됨");
-
 
     }
     private void ChangeSlot()
@@ -321,51 +328,51 @@ public class Slot : MonoBehaviour ,IPointerEnterHandler ,IPointerExitHandler,IPo
 
             itemweight -= _tempItemWeight * _tempItemCount;
 
-         
-
-
-
-
             Debug.Log("무게 감소: " + itemweight);
 
-          
         }
         else
         {
-            // OverlapSphere에 사용할 반경 정의
-            float range = 1f;
-            // 플레이어 주변 지정된 반경 내의 모든 콜라이더 가져오기
-            Collider[] hitcoll = Physics.OverlapSphere(thePlayer.transform.position, range);
+            ItemDisObject();
 
-            foreach (Collider coll in hitcoll)
-            {
-                // 콜라이더가 지정된 태그를 가지고 있는지 확인
-                if (coll.CompareTag("Item"))
-                {
-                    Item draggedItem = DragSlot.instance.dragSlot.item;
-
-                    // 슬롯에 옮겨진 아이템과 플레이어 주변 아이템을 비교
-                    if (draggedItem != null && draggedItem == coll.GetComponent<ItemPickup>().item)
-                    {
-                        Destroy(coll.gameObject);
-                        Debug.Log(draggedItem.itemName + " 아이템이 파괴되었습니다.");
-                    }
-                }
-            }
             DragSlot.instance.dragSlot.ClearSlot();
             Debug.Log("ChangeSlot - Cleared Slot");
 
         }
 
     }
+    private void ItemDisObject()
+    {
+        // OverlapSphere에 사용할 반경 정의
+        float range = 1f;
+        // 플레이어 주변 지정된 반경 내의 모든 콜라이더 가져오기
+        Collider[] hitcoll = Physics.OverlapSphere(thePlayer.transform.position, range);
+
+        foreach (Collider coll in hitcoll)
+        {
+            // 콜라이더가 지정된 태그를 가지고 있는지 확인
+            if (coll.CompareTag("Item"))
+            {
+                Item draggedItem = DragSlot.instance.dragSlot.item;
+
+                // 슬롯에 옮겨진 아이템과 플레이어 주변 아이템을 비교
+                if (draggedItem != null && draggedItem == coll.GetComponent<ItemPickup>().item)
+                {
+                    Destroy(coll.gameObject);
+
+                    Debug.Log(draggedItem.itemName + " 아이템이 파괴되었습니다.");
+                }
+            }
+        }
+    }
 
     
-   /* private void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(thePlayer.transform.position, 1f);
+        Gizmos.DrawWireSphere(thePlayer.transform.position, 1.5f);
     }
-*/
+
     //마우스가 슬롯에 들어갈 때 
     public void OnPointerEnter(PointerEventData eventData)
     {

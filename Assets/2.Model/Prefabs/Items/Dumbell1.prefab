@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 2137880863151964722}
   - component: {fileID: 4201770596739561208}
   - component: {fileID: 1284607929855128697}
-  - component: {fileID: 2811366265853738}
   - component: {fileID: 4071257096731947095}
   m_Layer: 0
   m_Name: Dumbell1
@@ -97,22 +96,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.63678694, y: 0.24357699, z: 0.28125846}
   m_Center: {x: 0, y: 0.12155219, z: 0}
---- !u!54 &2811366265853738
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2400221138941122349}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &4071257096731947095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,4 +108,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ab5a968d3647da4fb67003b7682246f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hasBeenPickedUp: 0
   item: {fileID: 11400000, guid: c412e92d219e54c4a8d0871a5ac221ae, type: 2}
