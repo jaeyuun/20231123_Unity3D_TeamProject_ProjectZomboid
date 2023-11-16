@@ -246,7 +246,7 @@ public class EasyObjectsFade : MonoBehaviour
             c1.a = opacity;
             mat.color = c1;
 
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(0f);
         }
 
 
