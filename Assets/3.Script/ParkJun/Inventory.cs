@@ -14,7 +14,12 @@ public class Inventory : MonoBehaviour
     private GameObject go_Base;
     [SerializeField]
     private GameObject go_SlotsParent;
-    
+    [SerializeField]
+    private Slider slider; 
+
+    public  float invenmaxweight = 20f;
+
+
     public Text text_inventoryweight;
 
 
@@ -39,7 +44,7 @@ public class Inventory : MonoBehaviour
     private void Start()
     {
         slots = go_SlotsParent.GetComponentsInChildren<Slot>();
-        drop = FindObjectOfType<Drop>();
+        //drop = FindObjectOfType<Drop>();
     }
     private void Update()
     {
@@ -48,7 +53,7 @@ public class Inventory : MonoBehaviour
 
     private void TryOpenInventory()
     {
-        if (Input.GetKeyDown(KeyCode.I)) // 마우스 왼쪽 버튼 (1) 입력 확인
+        if (Input.GetKeyDown(KeyCode.I)) 
         {
             inventoryActiveated = !inventoryActiveated;
             if (inventoryActiveated)
@@ -63,9 +68,10 @@ public class Inventory : MonoBehaviour
     }
     public void OpenInventory()
     {
+       
         go_inventotyBase.SetActive(true);
     }
-    private void CloseInventory()
+    public void CloseInventory()
     {
 
         go_inventotyBase.SetActive(false);
@@ -74,7 +80,8 @@ public class Inventory : MonoBehaviour
     public void ToggleinventoryBase()
     {
         inventoryActiveated = !inventoryActiveated;
-        go_inventotyBase.SetActive(inventoryActiveated);
+         go_inventotyBase.SetActive(inventoryActiveated);
+        //go_inventotyBase.SetActive(!go_inventotyBase.activeSelf);
     }
     public void AcquireItem2(Item _item, float _weight, int _count = 1)
     {
@@ -105,6 +112,7 @@ public class Inventory : MonoBehaviour
         }
         UpdateTotalWeight2();
     }
+   
     public void UpdateTotalWeight2()
     {
         float totalWeight2 = 0f;
@@ -119,7 +127,40 @@ public class Inventory : MonoBehaviour
         }
 
         // 텍스트 업데이트
-        text_inventoryweight.text = $"{totalWeight2.ToString()}/50";
+        text_inventoryweight.text = $"{totalWeight2.ToString()}/{invenmaxweight}";
+
+        if (totalWeight2 >= invenmaxweight)
+        {
+            //넘으면 플레이어 무브 느리게 한다던지
+        }
     }
+    public void increaseBag(int _count)
+    {
+
+        invenmaxweight += _count;
+        StartCoroutine(UseObjectWithSlider(3f));
+        
+    }
+    private IEnumerator UseObjectWithSlider(float duration)
+    {
+        float timer = 0f;
+        slider.gameObject.SetActive(true); //슬라이더 활성화 
+
+
+        while (timer < duration)
+        {
+            timer += Time.deltaTime; //시간 흐를수록 타이머 제어
+
+            // 시간에 따라 슬라이더 갱신 
+            slider.value = timer / duration;
+
+            yield return null; // 다음 프레임까지 기다리고 
+        }
+
+        // 슬라이더 비활성화
+        slider.gameObject.SetActive(false);
+        UpdateTotalWeight2(); // 가방 무게 업데이트
+    }
+
 }
 

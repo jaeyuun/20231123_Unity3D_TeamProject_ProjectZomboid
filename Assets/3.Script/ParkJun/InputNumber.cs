@@ -18,22 +18,19 @@ public class InputNumber : MonoBehaviour
     private GameObject go_Base;
 
     [SerializeField]
-    private ActionController thePlayer;
+    private Player_Move  thePlayer;
 
-    private void Update()
+    void Update()
     {
-        if (activated )
+        if (activated)
         {
             if (Input.GetKeyDown(KeyCode.Return))
-            {
                 OK();
-            }
             else if (Input.GetKeyDown(KeyCode.Escape))
-            {
                 Cancel();
-            }
         }
     }
+
     public void Call()
     {
         go_Base.SetActive(true);
@@ -41,6 +38,7 @@ public class InputNumber : MonoBehaviour
         if_text.text = "";
         text_Preview.text = DragSlot.instance.dragSlot.itemCount.ToString();
     }
+
     public void Cancel()
     {
         activated = false;
@@ -48,6 +46,7 @@ public class InputNumber : MonoBehaviour
         go_Base.SetActive(false);
         DragSlot.instance.dragSlot = null;
     }
+
     public void OK()
     {
         DragSlot.instance.SetColor(0);
@@ -59,9 +58,7 @@ public class InputNumber : MonoBehaviour
             {
                 num = int.Parse(text_Input.text);
                 if (num > DragSlot.instance.dragSlot.itemCount)
-                {
                     num = DragSlot.instance.dragSlot.itemCount;
-                }
             }
             else
                 num = 1;
@@ -69,15 +66,16 @@ public class InputNumber : MonoBehaviour
         else
             num = int.Parse(text_Preview.text);
 
-        StartCoroutine(DropItemCor(num));
+        StartCoroutine(DropItemCorountine(num));
     }
-    IEnumerator DropItemCor(int _num)
+
+    IEnumerator DropItemCorountine(int _num)
     {
         for (int i = 0; i < _num; i++)
         {
-            Instantiate(DragSlot.instance.dragSlot.item.itemPrefab,thePlayer.transform.position+ thePlayer.transform.forward,
+            Instantiate(DragSlot.instance.dragSlot.item.itemPrefab,
+                thePlayer.transform.position + thePlayer.transform.forward*3,
                 Quaternion.identity);
-
             DragSlot.instance.dragSlot.SetSlotCount(-1);
             yield return new WaitForSeconds(0.05f);
         }
@@ -86,19 +84,18 @@ public class InputNumber : MonoBehaviour
         go_Base.SetActive(false);
         activated = false;
     }
-    private bool CheckNumber(string _argstring)
+
+    private bool CheckNumber(string _argString)
     {
-        char[] _tempCharArray = _argstring.ToCharArray();
+        char[] _tempCharArray = _argString.ToCharArray();
         bool isNumber = true;
 
-        for(int i=0; i< _tempCharArray.Length; i++)
+        for (int i = 0; i < _tempCharArray.Length; i++)
         {
-            if (_tempCharArray[i]>=48&&_tempCharArray[i]<=57)
+            if (_tempCharArray[i] >= 48 && _tempCharArray[i] <= 57)
                 continue;
             isNumber = false;
-            
         }
         return isNumber;
     }
-
 }

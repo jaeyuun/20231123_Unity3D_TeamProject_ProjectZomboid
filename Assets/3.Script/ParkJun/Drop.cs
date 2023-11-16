@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Drop : MonoBehaviour
 {
     public static bool dropActiveated = false;
+    private float range = 0.5f;
 
     //필요한 컴포넌트 
     [SerializeField]
@@ -17,6 +18,8 @@ public class Drop : MonoBehaviour
 
     [SerializeField]
     private Text text_weight;
+
+    public  float dropmaxweight = 20f;
 
 
 
@@ -60,7 +63,7 @@ public class Drop : MonoBehaviour
     {
 
         go_dropBase.SetActive(false);
-        go_Base.SetActive(false); // 기존 CloseInventory에 추가하기
+       // go_Base.SetActive(false); // 기존 CloseInventory에 추가하기
      
     }
     public void ToggleinventoryBase()
@@ -74,21 +77,23 @@ public class Drop : MonoBehaviour
     {
         if (Item.ItemType.Equipment!=_item.itemType)
         {
-            for (int i = 0; i < slots.Length; i++)
-            {
-                if (slots[i].item !=null)
+           
+                for (int i = 0; i < slots.Length; i++)
                 {
-                    if (slots[i].item.itemName == _item.itemName)
+                    if (slots[i].item != null)
                     {
-                        slots[i].SetSlotCount(_count);
-                        UpdateTotalWeight();
+                        if (slots[i].item.itemName == _item.itemName)
+                        {
+                            slots[i].SetSlotCount(_count);
+                            UpdateTotalWeight();
 
 
-                        return;
+                            return;
+                        }
                     }
+
                 }
-               
-            }
+           
         }  
         for (int i = 0; i < slots.Length; i++)
         {
@@ -98,11 +103,25 @@ public class Drop : MonoBehaviour
                 UpdateTotalWeight();
                 return;
             }
+           
+        }
+
+    }
+
+    public void RemoveItem(int slotIndex)
+    {
+        if (slotIndex >= 0 && slotIndex < slots.Length && slots[slotIndex].item != null)
+        {
+            float removedWeight = slots[slotIndex].itemweight * slots[slotIndex].itemCount;
+            slots[slotIndex].ClearSlot();  // 슬롯을 비웁니다.
+            UpdateTotalWeight();  // 무게 업데이트 (음수 값으로 전달하여 감소를 나타냄)
         }
     }
+
     public void UpdateTotalWeight()
     {
-        float totalWeight = 0f;
+        float totalWeight = 0;
+
 
         // 모든 슬롯을 확인하며 아이템의 무게를 합산
         for (int i = 0; i < slots.Length; i++)
@@ -114,7 +133,14 @@ public class Drop : MonoBehaviour
         }
 
         // 텍스트 업데이트 등의 추가 작업 수행
-        text_weight.text = $"{totalWeight.ToString()}/50";
+        text_weight.text = $"{totalWeight.ToString()}/{dropmaxweight}";
+
+        if (totalWeight >= dropmaxweight)
+        {
+            Debug.Log("넘었냐?");
+            // TODO: 처리할 내용 추가
+        }
     }
+  
 
 }

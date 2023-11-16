@@ -142,12 +142,7 @@ public class StatusController : MonoBehaviour
     }
     public void DecreaseHP(int _count)
     {
-        //방어력을 대신 먼저 깎임
-        if (currentDp > 0)
-        {
-            DecreaseDP(_count);
-            return;
-        }
+       
         currentHp -= _count;
         if (currentHp <= 0)
         {
