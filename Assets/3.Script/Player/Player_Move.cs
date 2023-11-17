@@ -52,7 +52,7 @@ public class Player_Move : MonoBehaviour
 
        
 
-        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        Vector3 movement = new Vector3(moveHorizontal+ moveVertical, 0.0f, moveVertical-moveHorizontal);
 
         if(Input.GetButtonDown("Jump"))//스페이스 누를시에 상대방을 민다.
         {
