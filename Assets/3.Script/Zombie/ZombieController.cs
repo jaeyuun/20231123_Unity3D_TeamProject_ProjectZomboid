@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,8 @@ public enum ZombieAudio
 
 public class ZombieController : HP, IState
 {
+    public event Action onDead;
+
     // Zombie NavMesh
     private NavMeshAgent nav;
     public Vector3 targetPos;
@@ -101,7 +104,7 @@ public class ZombieController : HP, IState
 
     private Vector3 GetRandomPosOnNav()
     {
-        Vector3 randomDir = Random.insideUnitSphere * range;
+        Vector3 randomDir = UnityEngine.Random.insideUnitSphere * range;
         randomDir += transform.position;
 
         NavMeshHit hit;
@@ -127,6 +130,11 @@ public class ZombieController : HP, IState
                 StartCoroutine(ZombieScream_Co());
             }
         }
+        if (other.CompareTag("Kick") && !isDie)
+        {
+            // zombie down
+            Stun();
+        }
     }
 
     private void OnTriggerStay(Collider other)
@@ -139,6 +147,10 @@ public class ZombieController : HP, IState
             {
                 StartCoroutine(ZombieAttack_Co());
             }
+        }
+        else if (other.CompareTag("Attack") || other.CompareTag("Stump") && !isDie)
+        {
+            StartCoroutine(ZombieDamage_Co());
         }
         else
         {
@@ -232,6 +244,16 @@ public class ZombieController : HP, IState
         NavmeshResume();
         nonScreamZombie = true;
     }
+
+    private IEnumerator ZombieDamage_Co()
+    {
+        yield return new WaitForSeconds(2f);
+        zombieHp = Damage(25f, zombieHp);
+        if (zombieHp <= 0)
+        {
+            Die();
+        }
+    }
     #endregion
     #region IState
     public void Idle()
@@ -263,7 +285,10 @@ public class ZombieController : HP, IState
         rigid.isKinematic = true;
         collider.enabled = false;
 
-        Destroy(gameObject, 10f);
+        if (onDead != null)
+        {
+            onDead();
+        }
     }
 
     public IEnumerator Jump()
@@ -283,6 +308,13 @@ public class ZombieController : HP, IState
             zombieAnim.SetTrigger("isWakeUp");
             NavmeshResume();
         }
+    }
+
+    public void Stun()
+    {
+        NavmeshStop();
+        zombieAnim.SetTrigger("isStun");
+        NavmeshResume();
     }
     #endregion
     #region Nav Stop And Resume
