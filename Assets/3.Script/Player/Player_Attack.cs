@@ -28,8 +28,9 @@ public class Player_Attack : MonoBehaviour
     [SerializeField] private GameObject Bat_Hand;
     private bool Bat_Out;
 
-    [Header("calf_l오브젝트 넣어주세요")]
+    [Header("calf오브젝트 넣어주세요")]
     [SerializeField] private GameObject calf_l;
+    [SerializeField] private GameObject calf_r;
 
     [Header("테스트를위한")]
     public bool Bat_Get;//배트를 가지고 있냐?    
@@ -94,7 +95,7 @@ public class Player_Attack : MonoBehaviour
             anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
             anim.SetBool("isRight_click", true);
 
-            if (Melee_weapon ||(!Melee_weapon&& !Range_weapon))//밀리가 있던가 둘다 없던가
+            if (Melee_weapon)//밀리가 있던가 둘다 없던가
             {
                 if (Input.GetMouseButtonDown(0) && !IsMovement)//좌클릭을 하면
                 {
@@ -105,6 +106,18 @@ public class Player_Attack : MonoBehaviour
                     Invoke("isMovement", 1f);
                 }
             }
+            if (!Melee_weapon && !Range_weapon)//둘다 없던가
+            {
+                if (Input.GetMouseButtonDown(0) && !IsMovement)//좌클릭을 하면
+                {
+                    anim.SetTrigger("isSwing");//밟는다.
+                    Invoke("isStomp", 0.5f);
+                    isAttack = true;
+                    IsMovement = true;
+                    Invoke("isMovement", 1.1f);
+                }
+            }
+
             else if (Range_weapon)
             {
                 anim.SetBool("isAiming", true);//총조준
@@ -134,7 +147,6 @@ public class Player_Attack : MonoBehaviour
     private void BatSWingClip()
     {
         audioSource.PlayOneShot(BatSwing);
-
     }
 
     private void Bat_take_out(bool Bat)// 배트를 뽑는 애니메이션
@@ -174,7 +186,15 @@ public class Player_Attack : MonoBehaviour
     private void isMovement()//행동가능여부
     {
         IsMovement = false;
-        calf_l.SetActive(false);
+        if(calf_l == true)
+        {
+            calf_l.SetActive(false);
+        }
+         if(calf_r == true)
+        {
+            calf_r.SetActive(false);
+        }
+        
     }
 
     private void isKick()
@@ -182,6 +202,9 @@ public class Player_Attack : MonoBehaviour
         calf_l.SetActive(true);
     }
 
-
+    private void isStomp()
+    {
+        calf_r.SetActive(true);
+    }
 
 }

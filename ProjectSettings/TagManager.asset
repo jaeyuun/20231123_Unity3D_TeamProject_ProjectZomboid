@@ -26,6 +26,8 @@ TagManager:
   - CarHood
   - Curtain
   - CurtainDown
+  - Kick
+  - Stomp
   layers:
   - Default
   - TransparentFX
