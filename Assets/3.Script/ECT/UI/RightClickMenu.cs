@@ -28,7 +28,7 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
         if (pointerEventData.button.Equals(PointerEventData.InputButton.Right))
         {
             ListClear();
-            rightClickMenu.transform.position = new Vector2(pointerEventData.position.x + 150f, pointerEventData.position.y - 50f);
+            rightClickMenu.transform.position = new Vector2(pointerEventData.position.x + 150f, pointerEventData.position.y - (buttonCount * 50f));
             rightClickMenu.SetActive(true);
             OnPointerObject();
         } else if (pointerEventData.button.Equals(PointerEventData.InputButton.Left))

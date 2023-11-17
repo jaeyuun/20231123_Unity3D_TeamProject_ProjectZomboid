@@ -8,4 +8,5 @@ public interface IState
     void Die();
     IEnumerator Jump();
     void WakeUp();
+    void Stun();
 }

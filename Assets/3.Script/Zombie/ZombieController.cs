@@ -130,11 +130,10 @@ public class ZombieController : HP, IState
                 StartCoroutine(ZombieScream_Co());
             }
         }
-
         if (other.CompareTag("Kick") && !isDie)
         {
             // zombie down
-            zombieAnim.SetTrigger("isStun");
+            Stun();
         }
     }
 
@@ -148,6 +147,10 @@ public class ZombieController : HP, IState
             {
                 StartCoroutine(ZombieAttack_Co());
             }
+        }
+        else if (other.CompareTag("Attack") || other.CompareTag("Stump") && !isDie)
+        {
+            StartCoroutine(ZombieDamage_Co());
         }
         else
         {
@@ -241,6 +244,16 @@ public class ZombieController : HP, IState
         NavmeshResume();
         nonScreamZombie = true;
     }
+
+    private IEnumerator ZombieDamage_Co()
+    {
+        yield return new WaitForSeconds(2f);
+        zombieHp = Damage(25f, zombieHp);
+        if (zombieHp <= 0)
+        {
+            Die();
+        }
+    }
     #endregion
     #region IState
     public void Idle()
@@ -295,6 +308,13 @@ public class ZombieController : HP, IState
             zombieAnim.SetTrigger("isWakeUp");
             NavmeshResume();
         }
+    }
+
+    public void Stun()
+    {
+        NavmeshStop();
+        zombieAnim.SetTrigger("isStun");
+        NavmeshResume();
     }
     #endregion
     #region Nav Stop And Resume
