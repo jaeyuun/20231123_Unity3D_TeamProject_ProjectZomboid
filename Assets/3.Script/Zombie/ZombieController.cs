@@ -148,7 +148,7 @@ public class ZombieController : HP, IState
                 StartCoroutine(ZombieAttack_Co());
             }
         }
-        else if (other.CompareTag("Attack") || other.CompareTag("Stump") && !isDie)
+        else if (other.CompareTag("Attack") || other.CompareTag("Stomp") && !isDie)
         {
             StartCoroutine(ZombieDamage_Co());
         }
