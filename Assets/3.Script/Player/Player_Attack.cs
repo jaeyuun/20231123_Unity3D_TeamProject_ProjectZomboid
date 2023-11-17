@@ -28,6 +28,8 @@ public class Player_Attack : MonoBehaviour
     [SerializeField] private GameObject Bat_Hand;
     private bool Bat_Out;
 
+    [Header("calf_l오브젝트 넣어주세요")]
+    [SerializeField] private GameObject calf_l;
 
     [Header("테스트를위한")]
     public bool Bat_Get;//배트를 가지고 있냐?    
@@ -74,6 +76,7 @@ public class Player_Attack : MonoBehaviour
             anim.SetLayerWeight(1, 0);
             anim.SetTrigger("isKickig");
             IsMovement = true;
+            Invoke("isKick",0.5f);
             Invoke("isMovement", 1.5f);
         }
 
@@ -171,7 +174,14 @@ public class Player_Attack : MonoBehaviour
     private void isMovement()//행동가능여부
     {
         IsMovement = false;
+        calf_l.SetActive(false);
     }
+
+    private void isKick()
+    {
+        calf_l.SetActive(true);
+    }
+
 
 
 }
