@@ -24,6 +24,10 @@ public class ActionController : MonoBehaviour
     private Drop theDrop;
     [SerializeField]
     private Inventory theInventory;
+    [SerializeField]
+    private Slider slider;
+    [SerializeField]
+    Player_Attack player_Attack;
 
 
  
@@ -79,6 +83,8 @@ public class ActionController : MonoBehaviour
             ItemPickup itemPickup = other.GetComponent<ItemPickup>();
             itemPickup.hasBeenPickedUp = false;
 
+            slider.gameObject.SetActive(false);
+            player_Attack.anim.SetBool("isDrinking", false);
             infoDisAppear();
 
         }

@@ -150,7 +150,16 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                 }
                 else if (item.itemType == Item.ItemType.Used)
                 {
-                    StartCoroutine(UseItemWithSlider(item, 2f));
+                    if (isFirstClick)
+                    {
+                        StartCoroutine(UseItemWithSlider(item, 2f));
+                        isFirstClick = false;
+                    }
+                    else
+                    {
+                        isFirstClick = true;
+                    }
+                    
                 }
                 else if (item.itemType == Item.ItemType.objectUsed)
                 {
@@ -181,7 +190,8 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         float timer = 0f;
         slider.gameObject.SetActive(true); //슬라이더 활성화 
         player_Attack.anim.SetBool("isDrinking", true);
-        
+        SetSlotCount(-1);
+
         while (timer < duration)
         {
             timer += Time.deltaTime; //시간 흐를수록 타이머 제어
@@ -193,8 +203,9 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         }
 
         // 소모 시킨 후 
-        SetSlotCount(-1);
-
+        ItemDis();
+        
+        
         // 아이템 효과 적용 
         theitemEffectDataBase.UseItem(_item);
         Debug.Log(_item.itemName + " 을 사용했습니다.");
@@ -271,9 +282,10 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         {
 
 
-            if (DragSlot.instance.dragSlot != null)
+            /*if (DragSlot.instance.dragSlot != null)
                 theInputNumber.OK();
-           
+           */
+            DragSlot.instance.dragSlot.ClearSlot();
 
 
         }
@@ -377,6 +389,29 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                     Destroy(coll.gameObject);
 
                     Debug.Log(draggedItem.itemName + " 아이템이 파괴되었습니다.");
+                }
+            }
+        }
+    }
+    private void ItemDis()
+    {
+        // OverlapSphere에 사용할 반경 정의
+        float range = 1.5f;
+        // 플레이어 주변 지정된 반경 내의 모든 콜라이더 가져오기
+        Collider[] hitcoll = Physics.OverlapSphere(thePlayer.transform.position, range);
+
+        foreach (Collider coll in hitcoll)
+        {
+            // 콜라이더가 지정된 태그를 가지고 있는지 확인
+            if (coll.CompareTag("Item"))
+            {
+              
+                // 슬롯에 옮겨진 아이템과 플레이어 주변 아이템을 비교
+                if (coll.GetComponent<ItemPickup>().item)
+                {
+                    Destroy(coll.gameObject);
+
+                    
                 }
             }
         }
