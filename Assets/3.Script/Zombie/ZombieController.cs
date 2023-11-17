@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,8 @@ public enum ZombieAudio
 
 public class ZombieController : HP, IState
 {
+    public event Action onDead;
+
     // Zombie NavMesh
     private NavMeshAgent nav;
     public Vector3 targetPos;
@@ -101,7 +104,7 @@ public class ZombieController : HP, IState
 
     private Vector3 GetRandomPosOnNav()
     {
-        Vector3 randomDir = Random.insideUnitSphere * range;
+        Vector3 randomDir = UnityEngine.Random.insideUnitSphere * range;
         randomDir += transform.position;
 
         NavMeshHit hit;
@@ -126,6 +129,12 @@ public class ZombieController : HP, IState
             {
                 StartCoroutine(ZombieScream_Co());
             }
+        }
+
+        if (other.CompareTag("Kick") && !isDie)
+        {
+            // zombie down
+            zombieAnim.SetTrigger("isStun");
         }
     }
 
@@ -263,7 +272,10 @@ public class ZombieController : HP, IState
         rigid.isKinematic = true;
         collider.enabled = false;
 
-        Destroy(gameObject, 10f);
+        if (onDead != null)
+        {
+            onDead();
+        }
     }
 
     public IEnumerator Jump()
