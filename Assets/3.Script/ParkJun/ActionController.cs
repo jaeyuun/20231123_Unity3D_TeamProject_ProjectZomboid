@@ -26,10 +26,7 @@ public class ActionController : MonoBehaviour
     private Inventory theInventory;
 
 
-    private void Start()
-    {
-      
-    }
+ 
 
     private void Update()
     {

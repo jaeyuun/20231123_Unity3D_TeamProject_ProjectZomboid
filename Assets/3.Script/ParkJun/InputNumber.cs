@@ -19,24 +19,26 @@ public class InputNumber : MonoBehaviour
 
     [SerializeField]
     private ActionController  thePlayer;
+    [SerializeField]
+    private Drop drop;
+    [SerializeField]
+    private Inventory inventory;
 
     void Update()
-    {
+    {    
         if (activated)
         {
-            if (Input.GetKeyDown(KeyCode.Return))
-                OK();
-            else if (Input.GetKeyDown(KeyCode.Escape))
-                Cancel();
+            OK();
         }
     }
 
     public void Call()
     {
-        go_Base.SetActive(true);
+        go_Base.SetActive(false);
         activated = true;
         if_text.text = "";
         text_Preview.text = DragSlot.instance.dragSlot.itemCount.ToString();
+     
     }
 
     public void Cancel()
@@ -74,12 +76,13 @@ public class InputNumber : MonoBehaviour
         for (int i = 0; i < _num; i++)
         {
             Instantiate(DragSlot.instance.dragSlot.item.itemPrefab,
-                thePlayer.transform.position + thePlayer.transform.forward*3,
+                thePlayer.transform.position + thePlayer.transform.forward*1.5f,
                 Quaternion.identity);
             DragSlot.instance.dragSlot.SetSlotCount(-1);
             yield return new WaitForSeconds(0.05f);
         }
-
+        drop.UpdateTotalWeight();
+        inventory.UpdateTotalWeight2();
         DragSlot.instance.dragSlot = null;
         go_Base.SetActive(false);
         activated = false;

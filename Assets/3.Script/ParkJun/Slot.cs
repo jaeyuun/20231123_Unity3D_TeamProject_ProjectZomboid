@@ -12,6 +12,8 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public float itemweight;
     public Image itemImage;
 
+    private bool isFirstClick = true;
+
     [SerializeField]
     private Text text_Name;
     [SerializeField]
@@ -25,10 +27,10 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public GameObject Bat_B;
     public Player_Attack player_Attack;
 
+
     [SerializeField]
     private Slider slider;
 
-    private bool isUsingItem = false;
 
     private Rect baseRect;  // Inventory_Base 이미지의 Rect 정보 받아 옴.
 
@@ -40,12 +42,12 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     private Inventory inventory;
     [SerializeField]
     private ActionController thePlayer;
-
+    [SerializeField]
     private InputNumber theInputNumber;
 
     private void Start()
     {
-        baseRect = transform.parent.parent.GetComponent<RectTransform>().rect;
+        baseRect = transform.parent.parent.parent.GetComponent<RectTransform>().rect;
         // theitemEffectDataBase = get<ItemEffectDataBase>();
 
         // drop = FindObjectOfType<Drop>();
@@ -153,11 +155,23 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                 else if (item.itemType == Item.ItemType.objectUsed)
                 {
                     StartCoroutine(UseObjectWithSlider(item, 8f));
+
+                   
                 }
                 else
                 {
-                    inventory.increaseBag(20);
-                    SetSlotCount(-1);
+                    // 첫 번째 클릭 시
+                    if (isFirstClick)
+                    {
+                        inventory.OnBag(20);
+                        isFirstClick = false;
+                    }
+                    // 두 번째 클릭 시
+                    else
+                    {
+                        inventory.OffBag(20);
+                        isFirstClick = true;
+                    }
                 }
             }
         }
@@ -166,12 +180,12 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         float timer = 0f;
         slider.gameObject.SetActive(true); //슬라이더 활성화 
-
-
+        player_Attack.anim.SetBool("isDrinking", true);
+        
         while (timer < duration)
         {
             timer += Time.deltaTime; //시간 흐를수록 타이머 제어
-
+            
             // 시간에 따라 슬라이더 갱신 
             slider.value = timer / duration;
 
@@ -187,7 +201,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
         // 슬라이더 비활성화
         slider.gameObject.SetActive(false);
-
+        player_Attack.anim.SetBool("isDrinking", false);
         //currentWeight -= _item.itemweight;
         drop.UpdateTotalWeight();
         inventory.UpdateTotalWeight2();
@@ -257,11 +271,11 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         {
 
 
-            // theInputNumber.Call();
-            DragSlot.instance.dragSlot.ClearSlot();
+            if (DragSlot.instance.dragSlot != null)
+                theInputNumber.OK();
            
 
-           
+
         }
         else
         {
