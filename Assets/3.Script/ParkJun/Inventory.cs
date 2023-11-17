@@ -15,13 +15,16 @@ public class Inventory : MonoBehaviour
     [SerializeField]
     private GameObject go_SlotsParent;
     [SerializeField]
-    private Slider slider; 
+    private Slider slider;
+    [SerializeField]
+    private Player_Move player_move;
 
     public  float invenmaxweight = 20f;
 
 
     public Text text_inventoryweight;
 
+    public GameObject Bag;
 
     private Slot[] slots;
     [SerializeField]
@@ -131,20 +134,36 @@ public class Inventory : MonoBehaviour
 
         if (totalWeight2 >= invenmaxweight)
         {
-            //넘으면 플레이어 무브 느리게 한다던지
+            //넘으면 플레이어 무브 느리게 한다던지 
+            player_move.speed = Mathf.Max(1.5f, Mathf.Min(3f, player_move.speed - 1.5f));
+            //무겁다는 아이콘 띄우기 
+        }
+        else if (totalWeight2 <=invenmaxweight)
+        {
+            //같거나 작아진다면 
+            //속도 정상화 
+            player_move.speed = Mathf.Max(1.5f, Mathf.Min(3f, player_move.speed + 1.5f));
+            //무겁다는 아이콘 오프 
         }
     }
-    public void increaseBag(int _count)
+    public void OnBag(int _count)
     {
 
         invenmaxweight += _count;
         StartCoroutine(UseObjectWithSlider(3f));
         
     }
+    public void OffBag(int _count)
+    {
+        invenmaxweight -= _count;
+        Bag.SetActive(false);
+        UpdateTotalWeight2(); // 가방 무게 업데이트
+    }
     private IEnumerator UseObjectWithSlider(float duration)
     {
         float timer = 0f;
         slider.gameObject.SetActive(true); //슬라이더 활성화 
+        Bag.SetActive(true);
 
 
         while (timer < duration)

@@ -60,6 +60,8 @@ public class ItemEffectDataBase : MonoBehaviour
                                 break;
                             case Hungry:
                                 thePlayerStatus.increaseHungry(itemEffects[x].num[y]);
+                                
+
                                 break;
                             case THIRSTY:
                                 thePlayerStatus.increaseThirsty(itemEffects[x].num[y]);

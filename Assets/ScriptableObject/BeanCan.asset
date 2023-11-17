@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 847e159dd81040640aa3e15f248a7d21, type: 3}
+  m_Name: BeanCan
+  m_EditorClassIdentifier: 
+  itemType: 1
+  itemName: "\uCF69\uD1B5\uC870\uB9BC"
+  itemDesc: "\uCF69\uC744 \uAC08\uC544 \uB9CC\uB4E0 \uD1B5\uC870\uB9BC"
+  itemImage: {fileID: 21300000, guid: d70bfe5adbf25954cbce44544193e732, type: 3}
+  itemPrefab: {fileID: 1304313792671894971, guid: e53d6512ca5c8774f8e176a5638a46bf, type: 3}
+  weight: 1
+  itemweight: 1
+  weaponType: 

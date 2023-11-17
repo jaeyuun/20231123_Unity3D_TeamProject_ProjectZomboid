@@ -239,6 +239,7 @@ public class StatusController : MonoBehaviour
         {
             currentSp = sp;
         }
+        Debug.Log("sp"+_count);
 
     }
 
@@ -267,6 +268,7 @@ public class StatusController : MonoBehaviour
             currentHungry += _count;
         }
         else currentHungry = hungry;
+        Debug.Log("배고픔"+_count);
     }
     public void DecreaseHungry(int _count)
     {
@@ -291,6 +293,7 @@ public class StatusController : MonoBehaviour
             currentThirsty += _count;
         }
         else currentThirsty = thirsty;
+        Debug.Log("목마름"+_count);
     }
     public void DecreaseThirsty(int _count)
     {
