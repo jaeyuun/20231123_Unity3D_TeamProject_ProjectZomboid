@@ -310,10 +310,13 @@ public class ZombieController : HP, IState
         }
     }
 
-    public void Stun()
+    public IEnumerator Stun()
     {
         NavmeshStop();
-        zombieAnim.SetTrigger("isStun");
+        yield return new WaitForSeconds(2f);
+        zombieAnim.SetBool("isStun", true);
+        yield return new WaitForSeconds(2f);
+        zombieAnim.SetBool("isStun", false);
         NavmeshResume();
     }
     #endregion
