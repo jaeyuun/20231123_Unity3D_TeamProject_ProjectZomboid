@@ -1,9 +1,9 @@
 ﻿
 using UnityEngine;
 
-internal class Line
+public class Line
 {
-/*    private Orientation orientation;
+    Orientation orientation;
     Vector2Int coordinates;
 
     public Line(Orientation orientation, Vector2Int coodinates)
@@ -11,6 +11,14 @@ internal class Line
         this.orientation = orientation;
         this.coordinates = coordinates;
     }
-*/
 
+    public Orientation Orientation { get => orientation; set => orientation = value; }
+    public Vector2Int Coordinates { get => coordinates; set => coordinates = value; }
 }
+
+public enum Orientation
+{
+    Horiszontal = 0,
+    Vertical = 1
+}
+
