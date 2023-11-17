@@ -7,7 +7,7 @@ public class ZombieSpawner : MonoBehaviour
     public ZombieData[] zombieDatas;
     public ZombieController zombieController;
     [SerializeField] private Transform[] spawnPoint;
-    private List<ZombieController> zombieList = new List<ZombieController>();
+    public List<ZombieController> zombieList = new List<ZombieController>();
     private int zombieCount = 50;
 
     private void Awake()
@@ -50,5 +50,9 @@ public class ZombieSpawner : MonoBehaviour
         ZombieController zombieController = Instantiate(this.zombieController, point.position, point.rotation);
         zombieController.SetUp(data);
         zombieList.Add(zombieController);
+
+        // zombie Die()
+        zombieController.onDead += () => { zombieList.Remove(zombieController); };
+        zombieController.onDead += () => { Destroy(gameObject, 10f); };
     }
 }

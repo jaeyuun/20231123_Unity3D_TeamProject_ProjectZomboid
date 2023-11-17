@@ -19,6 +19,7 @@ public class Player_isCar : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.E))
             {
+                Debug.Log("후드으으으");
                 CarInfo.SetActive(true);
             }
         }
