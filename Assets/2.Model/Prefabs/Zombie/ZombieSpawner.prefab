@@ -97,6 +97,8 @@ MonoBehaviour:
   - {fileID: 7239957639805509058}
   - {fileID: 7239957639688556453}
   - {fileID: 7239957640199403755}
+  zombieList: []
+  zombieListObject: {fileID: 1619867546342163718, guid: 10ba5275339613f45990b02bba1d0352, type: 3}
 --- !u!1 &7239957639688556454
 GameObject:
   m_ObjectHideFlags: 0
