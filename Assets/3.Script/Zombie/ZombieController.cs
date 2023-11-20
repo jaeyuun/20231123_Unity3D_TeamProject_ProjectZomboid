@@ -133,7 +133,9 @@ public class ZombieController : HP, IState
         if (other.CompareTag("Kick") && !isDie)
         {
             // zombie down
-            Stun();
+            StartCoroutine(Stun());
+            //코루틴으로 바꾸셔서 코드 수정 1120_mhk
+            
         }
     }
 
@@ -316,6 +318,7 @@ public class ZombieController : HP, IState
         {
             zombieAttackCol.enabled = false;
         }
+        
         NavmeshStop();
         yield return new WaitForSeconds(2f);
         zombieAnim.SetBool("isStun", true);

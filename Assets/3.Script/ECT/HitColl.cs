@@ -41,7 +41,7 @@ public class HitColl : MonoBehaviour
         player = GetComponentInParent<Player_Attack>();
         hp = GetComponentInParent<HP>();
         Player_HP=hp.Start_HP(Player_HP);
-        Debug.Log(Player_HP);
+        
         player_Fog = GetComponentInParent<Player_Fog>();
 
     }
@@ -60,7 +60,7 @@ public class HitColl : MonoBehaviour
            
             StartCoroutine(Hit_co(Hit_pos));
           
-            Debug.Log(Player_HP);
+           
 
             if (health && !isDie)
             {
@@ -69,7 +69,7 @@ public class HitColl : MonoBehaviour
                 player.GetComponent<Player_Attack>().enabled = false;
                 player.anim.SetLayerWeight(1, 0);//상체 애니메이션 재생해제
                 player.anim.SetTrigger("isDie");
-                Debug.Log("끄아아아아아아아앜!");
+              
                 audioSource.PlayOneShot(Die_Sound);
                 player_Fog.viewAngle = 360f;
                 player_Fog.ViewRadius = 50f;

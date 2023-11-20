@@ -38,22 +38,22 @@ public class PauseMenu : MonoBehaviour
     }
     public void ClickSave()
     {
-        Debug.Log("세이브 ");
+        
         theSaveAndLoad.SaveData();
     }
     public void ClicKLoad()
     {
-        Debug.Log("로드 ");
+        
         theSaveAndLoad.LoadData();
     }
     public void ClickExit()
     {
-        Debug.Log("종료 ");
+        
         Application.Quit();
     }
     public void ClickIntroSave()
     {
-        Debug.Log("세이브 ");
+        
         CloseMenu();
         theSaveAndLoad.SaveData();
      

@@ -26,19 +26,6 @@ public class Player_Window_Jump : MonoBehaviour
 
                 if (door != null) // Door_bool 컴포넌트가 존재한다는 것 확인
                 {
-                    Debug.Log("ok");
-
-                    if (door.isOpen)
-                    {
-                        //door.animator.SetBool("isOpen",false);
-                        Debug.Log("트루");
-                    }
-                    else
-                    {
-                        //door.animator.SetBool("isOpen", true);
-                        Debug.Log("펄스");
-                    }
-
 
                     if (keydown >= 0.8f && door.isOpen)
                     {
@@ -47,21 +34,21 @@ public class Player_Window_Jump : MonoBehaviour
                         if (player.transform.rotation.y < 0) //WD방향
                         {
                             player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y - 4f, 0);
-                            Debug.Log("WD방향");
-                            Debug.Log(player.transform.rotation.y);
+                           
+                            
                         }
                         else if (player.transform.rotation.y > 0) //S방향
                         {
                             player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y - 4f, 0);
-                            Debug.Log("S방향");
-                            Debug.Log(player.transform.rotation.y);
+                            
+                            
                         }
                         keydown = 0f;
                     }
                 }
                 else
                 {
-                    Debug.Log("Door_bool 컴포넌트가 없습니다.");
+                    
                 }
             }
             else

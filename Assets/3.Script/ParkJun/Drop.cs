@@ -137,7 +137,7 @@ public class Drop : MonoBehaviour
 
         if (totalWeight >= dropmaxweight)
         {
-            Debug.Log("넘었냐?");
+           
             // TODO: 처리할 내용 추가
         }
     }

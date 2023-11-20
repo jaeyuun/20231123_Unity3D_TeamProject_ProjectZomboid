@@ -13,13 +13,13 @@ public class Player_isCar : MonoBehaviour
         if(other.gameObject.CompareTag("CarDoor"))
         {
             iscar = true;
-            Debug.Log("도어어어어");
+            
         }
         if (other.gameObject.CompareTag("CarHood"))
         {
             if(Input.GetKeyDown(KeyCode.E))
             {
-                Debug.Log("후드으으으");
+                
                 CarInfo.SetActive(true);
             }
         }

@@ -123,7 +123,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public void ClearSlot()
     {
        // itemweight -= item.itemweight * itemCount; // 들어온 무게 빼기
-        Debug.Log("무게 감소: " + itemweight);
+        
 
 
 
@@ -217,7 +217,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         
         // 아이템 효과 적용 
         theitemEffectDataBase.UseItem(_item);
-        Debug.Log(_item.itemName + " 을 사용했습니다.");
+        
 
         // 슬라이더 비활성화
         slider.gameObject.SetActive(false);
@@ -248,7 +248,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
         // 아이템 효과 적용 
         theitemEffectDataBase.UseItem(_item);
-        Debug.Log(_item.itemName + " 을 사용했습니다.");
+        
 
         // 슬라이더 비활성화
         slider.gameObject.SetActive(false);
@@ -307,7 +307,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         {
             //drop.UpdateTotalWeight();
            // inventory.UpdateTotalWeight2();
-            Debug.Log("OnEndDrag 호출됨");
+            
             DragSlot.instance.SetColor(0);
             DragSlot.instance.dragSlot = null;
         }
@@ -348,7 +348,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         drop.UpdateTotalWeight();
         inventory.UpdateTotalWeight2();
 
-        Debug.Log("OnDrop 호출됨");
+       
 
     }
     private void ChangeSlot()
@@ -370,7 +370,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
             itemweight -= _tempItemWeight * _tempItemCount;
 
-            Debug.Log("무게 감소: " + itemweight);
+            
 
         }
         else
@@ -378,7 +378,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             ItemDisObject();
 
             DragSlot.instance.dragSlot.ClearSlot();
-            Debug.Log("ChangeSlot - Cleared Slot");
+            
 
         }
 
@@ -407,7 +407,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                     {
                         Destroy(coll.gameObject);
                     }
-                    Debug.Log(draggedItem.itemName + " 아이템이 파괴되었습니다.");
+                    
                 }
             }
         }
