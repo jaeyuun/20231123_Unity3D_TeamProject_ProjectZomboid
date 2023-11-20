@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-
 public class Line
 {
     Orientation orientation;
@@ -17,7 +16,6 @@ public class Line
 
 public enum Orientation
 {
-    Horiszontal = 0,
+    Horizontal = 0,
     Vertical = 1
 }
-
