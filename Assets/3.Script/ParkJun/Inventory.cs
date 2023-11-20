@@ -9,9 +9,11 @@ public class Inventory : MonoBehaviour
 
     //필요한 컴포넌트 
     [SerializeField]
-    private GameObject go_inventotyBase;
+    private GameObject go_inventotyBase; //인벤토리 영역 
     [SerializeField]
-    private GameObject go_Base;
+    private GameObject go_ToolTipBase;
+    [SerializeField]
+    private GameObject go_QuickSlotParent;  // 퀵슬롯 영역
     [SerializeField]
     private GameObject go_SlotsParent;
     [SerializeField]
@@ -27,6 +29,7 @@ public class Inventory : MonoBehaviour
     public GameObject Bag;
 
     private Slot[] slots;
+    private Slot[] quickSlots; // 퀵슬롯의 슬롯들
     [SerializeField]
     private Drop drop;
 
@@ -47,11 +50,13 @@ public class Inventory : MonoBehaviour
     private void Start()
     {
         slots = go_SlotsParent.GetComponentsInChildren<Slot>();
+        quickSlots = go_QuickSlotParent.GetComponentsInChildren<Slot>();
         //drop = FindObjectOfType<Drop>();
     }
     private void Update()
     {
         TryOpenInventory();
+        TryDoubleClick();
     }
 
     private void TryOpenInventory()
@@ -78,7 +83,7 @@ public class Inventory : MonoBehaviour
     {
 
         go_inventotyBase.SetActive(false);
-        go_Base.SetActive(false); // 기존 CloseInventory에 추가하기
+        go_ToolTipBase.SetActive(false); // 기존 CloseInventory에 추가하기
     }
     public void ToggleinventoryBase()
     {
@@ -115,7 +120,44 @@ public class Inventory : MonoBehaviour
         }
         UpdateTotalWeight2();
     }
-   
+
+    private void TryDoubleClick()
+    {
+        // 마우스 왼쪽 더블클릭 감지
+        if (Input.GetMouseButtonDown(0) && Input.GetMouseButtonDown(0))
+        {
+            // 더블클릭한 슬롯을 찾아서 해당 아이템을 퀵슬롯에 추가
+            TryDoubleClickToAddToQuickSlot();
+        }
+    }
+    private void TryDoubleClickToAddToQuickSlot()
+    {
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (slots[i].item != null && slots[i].isFirstClick)
+            {
+                // 더블클릭한 슬롯의 아이템을 퀵슬롯에 추가
+                AddToQuickSlot(slots[i].item, slots[i].item.itemName, slots[i].itemweight, slots[i].itemCount);
+                break; // 더블클릭 처리가 끝났으므로 반복문 종료
+            }
+        }
+    }
+    private void AddToQuickSlot(Item _item, string _name, float _itemWeight, int _count = 1)
+    {
+        for (int i = 0; i < quickSlots.Length; i++)
+        {
+            if (quickSlots[i].item == null)
+            {
+                // 퀵슬롯 배열에서 비어있는 첫 번째 슬롯에 아이템 추가
+                quickSlots[i].AddItem(_item, _name, _itemWeight, _count);
+                // 해당 슬롯의 isFirstClick 상태를 변경 (더블클릭 방지를 위해)
+                quickSlots[i].isFirstClick = false;
+                break; // 아이템 추가가 완료되었으므로 반복문 종료
+            }
+        }
+    }
+
+
     public void UpdateTotalWeight2()
     {
         float totalWeight2 = 0f;
@@ -156,14 +198,14 @@ public class Inventory : MonoBehaviour
     public void OffBag(int _count)
     {
         invenmaxweight -= _count;
-        Bag.SetActive(false);
+        // Bag.SetActive(false);
         UpdateTotalWeight2(); // 가방 무게 업데이트
     }
     private IEnumerator UseObjectWithSlider(float duration)
     {
         float timer = 0f;
         slider.gameObject.SetActive(true); //슬라이더 활성화 
-        Bag.SetActive(true);
+       // Bag.SetActive(true);
 
 
         while (timer < duration)

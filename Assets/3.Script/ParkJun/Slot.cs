@@ -12,7 +12,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public float itemweight;
     public Image itemImage;
 
-    private bool isFirstClick = true;
+    public bool isFirstClick = true;
 
     [SerializeField]
     private Text text_Name;
@@ -31,8 +31,10 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     [SerializeField]
     private Slider slider;
 
-
-    private Rect baseRect;  // Inventory_Base 이미지의 Rect 정보 받아 옴.
+    [SerializeField] private RectTransform baseRect;  // Inventory_Base 의 영역
+    [SerializeField] private RectTransform dropRect;
+   // private Rect baseRect;  // Inventory_Base 이미지의 Rect 정보 받아 옴.
+    [SerializeField] RectTransform quickSlotBaseRect;
 
     [SerializeField]
     private ItemEffectDataBase theitemEffectDataBase;
@@ -47,14 +49,16 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     private void Start()
     {
-        baseRect = transform.parent.parent.parent.GetComponent<RectTransform>().rect;
-        // theitemEffectDataBase = get<ItemEffectDataBase>();
+       /* Transform parentTransform = transform.parent.parent.parent;
+        baseRect = parentTransform.GetComponent<RectTransform>().rect;*/
 
+       
+        // theitemEffectDataBase = get<ItemEffectDataBase>();
         // drop = FindObjectOfType<Drop>();
         // inventory = FindObjectOfType<Inventory>();
         // theInputNumber = FindObjectOfType<InputNumber>();
-        //  thePlayer = FindObjectOfType<ActionController>();
-    }
+       //  thePlayer = FindObjectOfType<ActionController>();
+    } 
 
     //이미지의 투명도 조절 
     private void SetColor(float _alpha)
@@ -150,7 +154,8 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                 }
                 else if (item.itemType == Item.ItemType.Used)
                 {
-                    if (isFirstClick)
+                    RectTransform slotRectTransform = GetComponent<RectTransform>();
+                    if (!IsInsideBaseRect(slotRectTransform))
                     {
                         StartCoroutine(UseItemWithSlider(item, 2f));
                         isFirstClick = false;
@@ -185,6 +190,11 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             }
         }
     }
+    private bool IsInsideBaseRect(RectTransform slotRectTransform)
+    {
+        // 기준 Rect 내부에 있는지 여부 확인
+        return RectTransformUtility.RectangleContainsScreenPoint(dropRect, slotRectTransform.position);
+    }
     private IEnumerator UseItemWithSlider(Item _item, float duration)
     {
         float timer = 0f;
@@ -202,8 +212,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             yield return null; // 다음 프레임까지 기다리고 
         }
 
-        // 소모 시킨 후 
-        ItemDis();
+      
         
         
         // 아이템 효과 적용 
@@ -275,10 +284,15 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
 
 
-        if (DragSlot.instance.transform.localPosition.x < baseRect.xMin
-            || DragSlot.instance.transform.localPosition.x > baseRect.xMax
-            || DragSlot.instance.transform.localPosition.y < baseRect.yMin
-            || DragSlot.instance.transform.localPosition.y > baseRect.yMax)
+        if (!((DragSlot.instance.transform.localPosition.x > baseRect.rect.xMin
+           && DragSlot.instance.transform.localPosition.x < baseRect.rect.xMax
+           && DragSlot.instance.transform.localPosition.y > baseRect.rect.yMin
+           && DragSlot.instance.transform.localPosition.y < baseRect.rect.yMax)
+           ||
+           (DragSlot.instance.transform.localPosition.x > quickSlotBaseRect.rect.xMin
+           && DragSlot.instance.transform.localPosition.x < quickSlotBaseRect.rect.xMax
+           && DragSlot.instance.transform.localPosition.y + baseRect.transform.localPosition.y > quickSlotBaseRect.rect.yMin + quickSlotBaseRect.transform.localPosition.y
+           && DragSlot.instance.transform.localPosition.y + baseRect.transform.localPosition.y < quickSlotBaseRect.rect.yMax + quickSlotBaseRect.transform.localPosition.y)))
         {
 
 
@@ -371,12 +385,12 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     }
     private void ItemDisObject()
     {
-        // OverlapSphere에 사용할 반경 정의
-        float range = 1.5f;
-        // 플레이어 주변 지정된 반경 내의 모든 콜라이더 가져오기
-        Collider[] hitcoll = Physics.OverlapSphere(thePlayer.transform.position, range);
+        // OverlapBox에 사용할 박스 영역 정의
+        Vector3 halfExtents = new Vector3(0.5f, 4f, 1f);
+        // 플레이어 주변 지정된 박스 영역 내의 모든 콜라이더 가져오기
+        Collider[] hitColliders = Physics.OverlapBox(thePlayer.transform.position, halfExtents);
 
-        foreach (Collider coll in hitcoll)
+        foreach (Collider coll in hitColliders)
         {
             // 콜라이더가 지정된 태그를 가지고 있는지 확인
             if (coll.CompareTag("Item"))
@@ -386,43 +400,33 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                 // 슬롯에 옮겨진 아이템과 플레이어 주변 아이템을 비교
                 if (draggedItem != null && draggedItem == coll.GetComponent<ItemPickup>().item)
                 {
-                    Destroy(coll.gameObject);
+                    int itemCountToDestroy = DragSlot.instance.dragSlot.itemCount; // 드래그 된 아이템의 갯수 가져오기
 
+                    // 드래그 된 갯수만큼 아이템 파괴
+                    for (int i = 0; i < itemCountToDestroy; i++)
+                    {
+                        Destroy(coll.gameObject);
+                    }
                     Debug.Log(draggedItem.itemName + " 아이템이 파괴되었습니다.");
                 }
             }
         }
     }
-    private void ItemDis()
-    {
-        // OverlapSphere에 사용할 반경 정의
-        float range = 1.5f;
-        // 플레이어 주변 지정된 반경 내의 모든 콜라이더 가져오기
-        Collider[] hitcoll = Physics.OverlapSphere(thePlayer.transform.position, range);
-
-        foreach (Collider coll in hitcoll)
-        {
-            // 콜라이더가 지정된 태그를 가지고 있는지 확인
-            if (coll.CompareTag("Item"))
-            {
-              
-                // 슬롯에 옮겨진 아이템과 플레이어 주변 아이템을 비교
-                if (coll.GetComponent<ItemPickup>().item)
-                {
-                    Destroy(coll.gameObject);
-
-                    
-                }
-            }
-        }
-    }
-
-
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(thePlayer.transform.position, 1.5f);
+        // OverlapBox에 사용할 박스 영역 정의
+        Vector3 halfExtents = new Vector3(0.5f, 4f, 1f);
+
+        // 기즈모의 색상 설정
+        Gizmos.color = Color.yellow;
+
+        // 기즈모로 박스의 윤곽선 그리기
+        Gizmos.DrawWireCube(thePlayer.transform.position,  halfExtents);
     }
+
+
+
+ 
 
     //마우스가 슬롯에 들어갈 때 
     public void OnPointerEnter(PointerEventData eventData)

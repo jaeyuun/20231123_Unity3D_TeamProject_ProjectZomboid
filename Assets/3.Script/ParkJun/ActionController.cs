@@ -11,7 +11,7 @@ public class ActionController : MonoBehaviour
     private bool pickupActivated = false; // 습득 가능할 시 true
     
 
-    private Collider hitCollider; // 충돌한 콜라이더 정보 저장
+
 
     [SerializeField]
     private string itemTag = "Item"; // 아이템에 할당된 태그
