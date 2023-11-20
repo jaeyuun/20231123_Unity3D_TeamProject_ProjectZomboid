@@ -1,12 +1,11 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Line
 {
     Orientation orientation;
     Vector2Int coordinates;
 
-    public Line(Orientation orientation, Vector2Int coodinates)
+    public Line(Orientation orientation, Vector2Int coordinates)
     {
         this.orientation = orientation;
         this.coordinates = coordinates;

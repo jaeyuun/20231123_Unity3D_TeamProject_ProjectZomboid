@@ -3,16 +3,14 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-internal class BinarySpacePartitioner
+public class BinarySpacePartitioner
 {
     RoomNode rootNode;
    
-    public RoomNode RoomNode { get => rootNode; }
+    public RoomNode RootNode { get => rootNode; }
 
     public BinarySpacePartitioner(int dungeonWidth,  int dungeonLength)
     {
-        /* this.dungeonWidth = dungeonWidth;
-         this.dungeonLength = dungeonLength;*/
         this.rootNode = new RoomNode(new Vector2Int(0, 0), new Vector2Int(dungeonWidth, dungeonLength), null, 0);
     }
 
@@ -23,11 +21,12 @@ internal class BinarySpacePartitioner
         graph.Enqueue(this.rootNode);
         listToReturn.Add(this.rootNode);
         int iterations = 0;
+
         while(iterations<maxIterations && graph.Count>0)
         {
             iterations++;
             RoomNode currentNode = graph.Dequeue();
-            if(currentNode.Width >= roomwidthMin*2 || currentNode.Length >=roomLengthMin*2)
+            if(currentNode.Width >= roomwidthMin*2 || currentNode.Length >= roomLengthMin*2)
             {
                 SplitTheSpace(currentNode, listToReturn, roomwidthMin, roomLengthMin, graph);
             }
@@ -40,9 +39,10 @@ internal class BinarySpacePartitioner
             currentNode.BottomLeftAreaCorner,
             currentNode.TopRightAreaCorner,
             roomwidthMin,
-            roomLengthMin
-            );
+            roomLengthMin);
+
         RoomNode node1, node2;
+
         if(line.Orientation == Orientation.Horiszontal)
         {
             node1 = new RoomNode(currentNode.BottomLeftAreaCorner,
@@ -50,7 +50,7 @@ internal class BinarySpacePartitioner
                 currentNode,
                 currentNode.TreeLayerIndex+1);
 
-            node2 = new RoomNode(new Vector2Int(line.Coordinates.x, currentNode.BottomLeftAreaCorner.y),
+            node2 = new RoomNode(new Vector2Int(currentNode.BottomLeftAreaCorner.x, line.Coordinates.y),
                 currentNode.TopRightAreaCorner,
                 currentNode,
                 currentNode.TreeLayerIndex + 1);
@@ -85,11 +85,11 @@ internal class BinarySpacePartitioner
         bool widthStaus = (topRightAreaCorner.x - bottomLeftAreaCorner.x) >= 2 * roomwidthMin;
         if(lengthStatus && widthStaus)
         {
-            orientation = (Orientation)(Random.Range(0, 2));
+            orientation = (Orientation)(Random.Range(0,2));
         }
         else if (widthStaus)
         {
-            orientation = Orientation.Horiszontal;
+            orientation = Orientation.Vertical;
         }
         else
         {
@@ -101,7 +101,7 @@ internal class BinarySpacePartitioner
             topRightAreaCorner, 
             roomwidthMin, 
             roomLengthMin));
-       // throw new NotImplementedException();
+      
     }
 
     private Vector2Int GetCooldinatesFororitention(Orientation orientation, Vector2Int bottomLeftAreaCorner, Vector2Int topRightAreaCorner, int roomwidthMin, int roomLengthMin)
@@ -119,8 +119,9 @@ internal class BinarySpacePartitioner
         {
             cooldinates = new Vector2Int(
                  Random.Range(
-                    (bottomLeftAreaCorner.y + roomwidthMin),
-                    (topRightAreaCorner.y - roomwidthMin)), 0);
+                    (bottomLeftAreaCorner.x + roomwidthMin),
+                    (topRightAreaCorner.x - roomwidthMin))
+                 ,0);
 
         }
         return cooldinates;

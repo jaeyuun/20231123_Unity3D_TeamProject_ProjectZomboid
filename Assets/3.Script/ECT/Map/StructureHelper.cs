@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-internal class StructureHelper
+using UnityEngine;
+using Random = UnityEngine.Random;
+
+public static class StructureHelper
 {
     public static List<Node> TraverseGraphToExtractLowestLeafes(RoomNode parentNode)
     {
@@ -32,27 +35,28 @@ internal class StructureHelper
         return listToReturn;
     }
 
-    /*public static Vector2Int GenerateBottomLeftCornerBetween(VectorInt boundaryLeftPoint, Vecter2Int boundaryRightPoint, float pointModifier, int offset)
+    public static Vector2Int GenerateBottomLeftCornerBetween(
+        Vector2Int boundaryLeftPoint, Vector2Int boundaryRightPoint, float pointModifier, int offset)
     {
         int minX = boundaryLeftPoint.x + offset;
-        int maxX = boundaryRightPoint.x - offset;
+        int maxX = boundaryRightPoint.x - offset; 
         int minY = boundaryLeftPoint.y + offset;
         int maxY = boundaryRightPoint.y - offset;
         return new Vector2Int(
              Random.Range(minX, (int)(minX + (maxX - minX) * pointModifier)),
-             Random.Range(minY, (int)(minY + (maxY - minY) * pointModifier)));
+             Random.Range(minY, (int)(minY + (minY - minY) * pointModifier)));
     }
 
     public static Vector2Int GenerateTopRightCornerBetween(
-  VectorInt boundaryLeftPoint, Vecter2Int boundaryRightPoint, float pointModifier, int offset)
+        Vector2Int boundaryLeftPoint, Vector2Int boundaryRightPoint, float pointModifier, int offset)
     {
         int minX = boundaryLeftPoint.x + offset;
         int maxX = boundaryRightPoint.x - offset;
         int minY = boundaryLeftPoint.y + offset;
         int maxY = boundaryRightPoint.y - offset;
         return new Vector2Int(
-             Random.Range(Random.Range(int)(minX + (maxX - minX) * pointModifier), maxX)),
-             Random.Range(minY, (int)(minY + (maxY - minY) * pointModifier), maxY));
-    }*/
+             Random.Range((int)(minX + (maxX - minX) * pointModifier),maxX),
+             Random.Range((int)(minY + (minY - minY) * pointModifier), maxY));
+    }
 
 }
