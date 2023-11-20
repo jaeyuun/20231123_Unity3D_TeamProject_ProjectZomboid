@@ -12,7 +12,7 @@ public class Game_Cursor : MonoBehaviour
     }
     public void OnMouseOver()
     {
-        Cursor.SetCursor(cursorHover, new Vector2(cursorHover.width / 4, 0), CursorMode.ForceSoftware); print("mouse over");
+        Cursor.SetCursor(cursorHover, new Vector2(cursorHover.width / 4, 0), CursorMode.ForceSoftware);
     }
     public void OnMouseExit()
     {
