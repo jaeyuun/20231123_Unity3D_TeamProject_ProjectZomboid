@@ -27,7 +27,7 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
     //Detect if a click occurs
     public void OnPointerClick(PointerEventData pointerEventData)
     {
-        if (pointerEventData.button.Equals(PointerEventData.InputButton.Right) && isAim)
+        if (pointerEventData.button.Equals(PointerEventData.InputButton.Right) && !isAim)
         {
             ListClear();
             rightClickMenu.transform.position = new Vector2(pointerEventData.position.x + 150f, pointerEventData.position.y - (buttonCount * 50f));
@@ -64,7 +64,7 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
             for (int i = 0; i < hit.Length; i++)
             { // 우클릭 시 첫번째로 잡히는 오브젝트만 반환
                 hitObject = hit[i];
-                if (hit[i].collider.CompareTag("Window") || hit[i].collider.CompareTag("Door") || hit[i].collider.CompareTag("Fence"))
+                if (hit[i].collider.CompareTag("Window") || hit[i].collider.CompareTag("Door") || hit[i].collider.CompareTag("Fence")) // window hit 추가... todo
                 {
                     break;
                 }

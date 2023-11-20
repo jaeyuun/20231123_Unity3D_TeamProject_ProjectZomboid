@@ -12,7 +12,7 @@ public class ZombieSpawner : MonoBehaviour
 
     [SerializeField] GameObject zombieListObject; // Zombie List의 부모 오브젝트
 
-    private float dayTime = 300f; // 1day time count
+    private float dayTime = 1440f; // 1day time count
 
     private void Awake()
     {
