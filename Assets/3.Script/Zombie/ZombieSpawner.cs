@@ -10,9 +10,13 @@ public class ZombieSpawner : MonoBehaviour
     public List<ZombieController> zombieList = new List<ZombieController>();
     private int zombieCount = 50;
 
+    [SerializeField] GameObject zombieListObject; // Zombie List의 부모 오브젝트
+
+    private float dayTime = 1440f; // 1day time count
+
     private void Awake()
     {
-        SetUpSpawnPoint();
+        StartCoroutine(SetUpSpawnPoint());
     }
 
     private IEnumerator SetUpSpawnPoint()
@@ -24,7 +28,7 @@ public class ZombieSpawner : MonoBehaviour
             spawnPoint[i] = transform.GetChild(i).transform;
         }
 
-        yield return new WaitForSeconds(300f); // 나중에 Day Time으로 바꿔주기
+        yield return new WaitForSeconds(dayTime); // 1 day Time으로 바꿔주기
     }
 
     private void Update()
@@ -48,7 +52,8 @@ public class ZombieSpawner : MonoBehaviour
         ZombieData data = zombieDatas[Random.Range(0, zombieDatas.Length)];
         Transform point = spawnPoint[Random.Range(0, spawnPoint.Length)];
         ZombieController zombieController = Instantiate(this.zombieController, point.position, point.rotation);
-        zombieController.SetUp(data);
+        zombieController.transform.SetParent(zombieListObject.transform); // zombie list ZombieListObject에 상속
+        zombieController.SetUp(data); // RandomZombie Data SetUp
         zombieList.Add(zombieController);
 
         // zombie Die()

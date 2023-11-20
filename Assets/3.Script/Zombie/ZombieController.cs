@@ -312,6 +312,10 @@ public class ZombieController : HP, IState
 
     public IEnumerator Stun()
     {
+        if (zombieAttackCol.enabled)
+        {
+            zombieAttackCol.enabled = false;
+        }
         NavmeshStop();
         yield return new WaitForSeconds(2f);
         zombieAnim.SetBool("isStun", true);
