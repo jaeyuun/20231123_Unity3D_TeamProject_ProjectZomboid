@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
+#region Enum
 public enum SliderList
 {
-    ALL = 0,
+    Master = 0,
     BGM,
     SFX,
 }
@@ -14,18 +16,36 @@ public enum SliderList
 public enum BGMSound
 {
     Main = 0,
+    Loading,
     Game,
 }
 
 public enum SFXSound
 {
-    PlayerWalk = 0,
-    Zombie,
+    Player_FootStep = 0,
+    Player_Run,
+    Player_Die,
+    Player_BatSwing,
+    Player_Hit,
+    Zombie_Hit,
+    Zombie_Die,
+    Car_StartUp,
+    Car_Dirve,
+    Car_Brake,
+    Car_InOut,
+    Window_Bottele,
+    Door_Open, // door open, broken, crash 찾기
+    Door_Broken,
+    Door_Crash,
+    Gun_Shot,
+    Rock_Hit,
+    Rock_Broken,
 }
-
+#endregion
 public class MusicController : MonoBehaviour
 {
-    public MusicController instance;
+    public static MusicController instance;
+    public AudioMixer audioMixer;
 
     private AudioSource bgmPlayer;
     private AudioSource sfxPlayer;
@@ -44,13 +64,12 @@ public class MusicController : MonoBehaviour
         {
             Destroy(instance);
         }
-        bgmPlayer = FindObjectOfType<AudioSource>();
-        sfxPlayer = FindObjectOfType<AudioSource>();
 
-        bgmPlayer.volume = 100;
-        sfxPlayer.volume = 100;
+        slider[(int)SliderList.Master].onValueChanged.AddListener(SetMasterVolume);
+        slider[(int)SliderList.BGM].onValueChanged.AddListener(SetBGMVolume);
+        slider[(int)SliderList.SFX].onValueChanged.AddListener(SetSFXVolume);
 
-        PlayBGMSound("Main");
+        PlayBGMSound("Main"); // GameStart
     }
 
     #region Sound Play
@@ -71,35 +90,23 @@ public class MusicController : MonoBehaviour
         // 효과음 플레이
         int index = (int)(SFXSound)Enum.Parse(typeof(BGMSound), type);
         sfxPlayer.clip = sfxClips[index];
-        sfxPlayer.Play();
+        sfxPlayer.PlayOneShot(sfxPlayer.clip);
     }
     #endregion
     #region Volume Setting
-    public void AllSetting()
+    public void SetMasterVolume(float volume)
     {
-        slider[(int)SliderList.ALL].onValueChanged.AddListener(ChangeBGMVolume);
-        slider[(int)SliderList.ALL].onValueChanged.AddListener(ChangeSFXVolume);
+        audioMixer.SetFloat("Master", Mathf.Log10(volume) * 20);
     }
 
-    public void BGMSetting()
+    public void SetBGMVolume(float volume)
     {
-        slider[(int)SliderList.BGM].onValueChanged.AddListener(ChangeBGMVolume);
+        audioMixer.SetFloat("BGM", Mathf.Log10(volume) * 20);
     }
 
-    public void SFXSetting()
+    public void SetSFXVolume(float volume)
     {
-        slider[(int)SliderList.BGM].onValueChanged.AddListener(ChangeSFXVolume);
-    }
-
-    // Slider volume setting
-    private void ChangeBGMVolume(float value)
-    {
-        bgmPlayer.volume = value;
-    }
-
-    private void ChangeSFXVolume(float value)
-    {
-        sfxPlayer.volume = value;
+        audioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
     }
     #endregion
 }

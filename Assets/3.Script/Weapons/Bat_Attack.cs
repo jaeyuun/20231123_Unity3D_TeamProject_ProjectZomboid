@@ -7,13 +7,13 @@ public class Bat_Attack : MonoBehaviour
     public GameObject sound;
     public Player_Attack player_Attack;
     public AudioClip BatHit;
-    private AudioSource audioSource;
+    // private AudioSource audioSource;
 
     public Transform hitPoint;//이펙트
     public GameObject projectile;
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        // audioSource = GetComponent<AudioSource>();
         player_Attack = GameObject.Find("Player_Move").GetComponent<Player_Attack>();//Player 게임오브젝트 찾기
     }
 
@@ -24,7 +24,8 @@ public class Bat_Attack : MonoBehaviour
         {
             sound.SetActive(true);
 
-            audioSource.PlayOneShot(BatHit);
+            // audioSource.PlayOneShot(BatHit);
+            MusicController.instance.PlaySFXSound("Zombie_Hit");
             AttackEvent();
         }
 

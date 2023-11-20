@@ -8,10 +8,10 @@ public class HitColl : MonoBehaviour
     public Transform Hit_pos;//피튀는곳
     public GameObject hit;//피오브젝트선언
 
-    [Header("피격(사운드클립)")]
+    /*[Header("피격(사운드클립)")]
     private AudioSource audioSource;
     public AudioClip Hit_Sound;
-    public AudioClip Die_Sound;
+    public AudioClip Die_Sound;*/
 
     [Header("플레이어 넣어주세요")]
     public Player_Attack player;
@@ -20,15 +20,10 @@ public class HitColl : MonoBehaviour
     public GameObject[] BodyDmg;
     public GameObject[] Bandage_Point;
 
-
     public StatusController statusController;
     [Header("Player_Btn_On_Hpbar")]
-    
-
-
     public Player_Fog player_Fog;//좀비 다 보이게 하기
     public GameObject Bleeding;
-    
 
     public HP hp;
     private float Player_HP;
@@ -37,7 +32,7 @@ public class HitColl : MonoBehaviour
     private float isHitTime = 0;
     private void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        // audioSource = GetComponent<AudioSource>();
         player = GetComponentInParent<Player_Attack>();
         hp = GetComponentInParent<HP>();
         Player_HP=hp.Start_HP(Player_HP);
@@ -50,8 +45,6 @@ public class HitColl : MonoBehaviour
     {
         isHitTime += Time.deltaTime;
     }
-
-
 
     private void OnTriggerEnter(Collider other)
     {
@@ -70,13 +63,12 @@ public class HitColl : MonoBehaviour
                 player.anim.SetLayerWeight(1, 0);//상체 애니메이션 재생해제
                 player.anim.SetTrigger("isDie");
               
-                audioSource.PlayOneShot(Die_Sound);
+                // audioSource.PlayOneShot(Die_Sound);
+                MusicController.instance.PlaySFXSound("Player_Die");
                 player_Fog.viewAngle = 360f;
                 player_Fog.ViewRadius = 50f;
                 isDie = true;
                 //StartCoroutine(Die_Zombie_co());
-               
-
             }
             isHitTime = 0;
         }
@@ -84,18 +76,17 @@ public class HitColl : MonoBehaviour
     }
 
     //좀비용 피튀는거
-
     public void Zombie_Hit(Transform Hit_pos)
     {
         StartCoroutine(Hit_co(Hit_pos));
     }
 
-
     public IEnumerator Hit_co(Transform Hit_pos)
     {
         Instantiate(hit, Hit_pos.transform.position, Hit_pos.transform.rotation);
         player.anim.SetTrigger("isHit");
-        audioSource.PlayOneShot(Hit_Sound);
+        // audioSource.PlayOneShot(Hit_Sound);
+        MusicController.instance.PlaySFXSound("Player_Hit");
         health = statusController.DecreaseHP(10);
      
         bodyDmg();
