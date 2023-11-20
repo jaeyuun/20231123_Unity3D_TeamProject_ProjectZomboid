@@ -36,28 +36,29 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
    // private Rect baseRect;  // Inventory_Base 이미지의 Rect 정보 받아 옴.
     [SerializeField] RectTransform quickSlotBaseRect;
 
-    [SerializeField]
+   
     private ItemEffectDataBase theitemEffectDataBase;
-    [SerializeField]
-    private Drop drop;
-    [SerializeField]
-    private Inventory inventory;
-    [SerializeField]
-    private ActionController thePlayer;
-    [SerializeField]
-    private InputNumber theInputNumber;
 
+    private Drop drop;
+    
+    private Inventory inventory;
+ 
+    private ActionController thePlayer;
+ 
+    private InputNumber theInputNumber;
+    private Player_Move playerMove;
     private void Start()
     {
        /* Transform parentTransform = transform.parent.parent.parent;
         baseRect = parentTransform.GetComponent<RectTransform>().rect;*/
 
        
-        // theitemEffectDataBase = get<ItemEffectDataBase>();
-        // drop = FindObjectOfType<Drop>();
-        // inventory = FindObjectOfType<Inventory>();
-        // theInputNumber = FindObjectOfType<InputNumber>();
-       //  thePlayer = FindObjectOfType<ActionController>();
+        theitemEffectDataBase = FindObjectOfType<ItemEffectDataBase>();
+         drop = FindObjectOfType<Drop>();
+         inventory = FindObjectOfType<Inventory>();
+         theInputNumber = FindObjectOfType<InputNumber>();
+        thePlayer = FindObjectOfType<ActionController>();
+        playerMove = FindObjectOfType<Player_Move>();
     } 
 
     //이미지의 투명도 조절 
@@ -169,8 +170,8 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                 else if (item.itemType == Item.ItemType.objectUsed)
                 {
                     StartCoroutine(UseObjectWithSlider(item, 8f));
+                 
 
-                   
                 }
                 else
                 {
@@ -231,7 +232,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         float timer = 0f;
         slider.gameObject.SetActive(true); //슬라이더 활성화 
-
+        playerMove.speed = Mathf.Max(0.1f, Mathf.Min(2f, playerMove.speed - 1.5f));
 
         while (timer < duration)
         {
@@ -252,7 +253,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
         // 슬라이더 비활성화
         slider.gameObject.SetActive(false);
-
+        playerMove.speed = Mathf.Max(0.1f, Mathf.Min(2f, playerMove.speed + 1.5f));
         //currentWeight -= _item.itemweight;
         drop.UpdateTotalWeight();
         inventory.UpdateTotalWeight2();
@@ -386,7 +387,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     private void ItemDisObject()
     {
         // OverlapBox에 사용할 박스 영역 정의
-        Vector3 halfExtents = new Vector3(0.5f, 4f, 1f);
+        Vector3 halfExtents = new Vector3(0.7f, 4f, 0.7f);
         // 플레이어 주변 지정된 박스 영역 내의 모든 콜라이더 가져오기
         Collider[] hitColliders = Physics.OverlapBox(thePlayer.transform.position, halfExtents);
 
@@ -412,7 +413,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             }
         }
     }
-    private void OnDrawGizmos()
+/*    private void OnDrawGizmos()
     {
         // OverlapBox에 사용할 박스 영역 정의
         Vector3 halfExtents = new Vector3(0.5f, 4f, 1f);
@@ -423,7 +424,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         // 기즈모로 박스의 윤곽선 그리기
         Gizmos.DrawWireCube(thePlayer.transform.position,  halfExtents);
     }
-
+*/
 
 
  

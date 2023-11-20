@@ -20,14 +20,20 @@ public class Inventory : MonoBehaviour
     private Slider slider;
     [SerializeField]
     private Player_Move player_move;
+    public GameObject slotPrefab;
+
+
 
     public  float invenmaxweight = 20f;
+    public float currentWeight = 0f;
 
+    private bool isDoubleClick = false;
+    private float doubleClickTime = 0.4f; // 더블클릭 간격 (초)
 
     public Text text_inventoryweight;
 
     public GameObject Bag;
-
+    [SerializeField ]
     private Slot[] slots;
     private Slot[] quickSlots; // 퀵슬롯의 슬롯들
     [SerializeField]
@@ -49,15 +55,68 @@ public class Inventory : MonoBehaviour
     }
     private void Start()
     {
+        UpdateSlotCount();
         slots = go_SlotsParent.GetComponentsInChildren<Slot>();
         quickSlots = go_QuickSlotParent.GetComponentsInChildren<Slot>();
+        
         //drop = FindObjectOfType<Drop>();
     }
     private void Update()
     {
+       
         TryOpenInventory();
         TryDoubleClick();
     }
+    private void UpdateSlotCount()
+    {
+        // invenmaxweight 값을 슬롯 개수로 변환
+        int slotCount = Mathf.CeilToInt(invenmaxweight);
+        
+        // 슬롯 개수에 따라 슬롯을 동적으로 생성
+        for (int i = 0; i < slotCount; i++)
+        {
+            // 슬롯을 생성하고 부모를 지정
+            GameObject slotObject = Instantiate(slotPrefab, go_SlotsParent.transform);
+          
+        }
+    }
+
+
+    private void TryDoubleClick()
+    {
+        if (IsMouseOverInventoryArea())
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (isDoubleClick)
+                {
+                    // 더블클릭한 슬롯을 찾아서 해당 아이템을 퀵슬롯에 추가
+                    DoubleClickAddQuickSlot();
+                    isDoubleClick = false; // 더블클릭 상태 초기화
+                }
+                else
+                {
+                    isDoubleClick = true; // 첫 번째 클릭 감지
+                    StartCoroutine(DoubleClickTimer());
+                }
+            }
+        }
+      
+    }
+    private IEnumerator DoubleClickTimer()
+    {
+        yield return new WaitForSeconds(doubleClickTime);
+
+        // 더블클릭 타이머가 끝났을 때
+        isDoubleClick = false;
+    }
+    private bool IsMouseOverInventoryArea()
+    {
+        RectTransform inventoryRect = go_inventotyBase.GetComponent<RectTransform>();
+        Vector2 mousePosition = Input.mousePosition;
+        return RectTransformUtility.RectangleContainsScreenPoint(inventoryRect, mousePosition);
+    }
+
 
     private void TryOpenInventory()
     {
@@ -121,28 +180,27 @@ public class Inventory : MonoBehaviour
         UpdateTotalWeight2();
     }
 
-    private void TryDoubleClick()
-    {
-        // 마우스 왼쪽 더블클릭 감지
-        if (Input.GetMouseButtonDown(0) && Input.GetMouseButtonDown(0))
-        {
-            // 더블클릭한 슬롯을 찾아서 해당 아이템을 퀵슬롯에 추가
-            TryDoubleClickToAddToQuickSlot();
-        }
-    }
-    private void TryDoubleClickToAddToQuickSlot()
+
+    private void DoubleClickAddQuickSlot()
     {
         for (int i = 0; i < slots.Length; i++)
         {
             if (slots[i].item != null && slots[i].isFirstClick)
             {
                 // 더블클릭한 슬롯의 아이템을 퀵슬롯에 추가
-                AddToQuickSlot(slots[i].item, slots[i].item.itemName, slots[i].itemweight, slots[i].itemCount);
-                break; // 더블클릭 처리가 끝났으므로 반복문 종료
+               if( AddQuickSlot(slots[i].item, slots[i].item.itemName, slots[i].itemweight, slots[i].itemCount))
+                { 
+                    // 퀵슬롯이 다 차지 않았으면 해당 슬롯을 클리어하고 무게 업데이트
+                    slots[i].ClearSlot();
+                    UpdateTotalWeight2();
+                }
+               
+                return; // 더블클릭 처리가 끝났으므로 반복문 종료
             }
+            
         }
     }
-    private void AddToQuickSlot(Item _item, string _name, float _itemWeight, int _count = 1)
+    private bool AddQuickSlot(Item _item, string _name, float _itemWeight, int _count = 1)
     {
         for (int i = 0; i < quickSlots.Length; i++)
         {
@@ -150,11 +208,16 @@ public class Inventory : MonoBehaviour
             {
                 // 퀵슬롯 배열에서 비어있는 첫 번째 슬롯에 아이템 추가
                 quickSlots[i].AddItem(_item, _name, _itemWeight, _count);
+               
                 // 해당 슬롯의 isFirstClick 상태를 변경 (더블클릭 방지를 위해)
                 quickSlots[i].isFirstClick = false;
-                break; // 아이템 추가가 완료되었으므로 반복문 종료
+
+                return true; // 아이템 추가가 완료되었으므로 true 반환
             }
         }
+
+        Debug.Log("퀵슬롯이 다 차서 추가되지 않았습니다.");
+        return false; // 퀵슬롯이 다 찼으므로 false 반환
     }
 
 
@@ -170,17 +233,17 @@ public class Inventory : MonoBehaviour
                 totalWeight2 += slots[i].itemweight * slots[i].itemCount;
             }
         }
-
+        currentWeight = totalWeight2;
         // 텍스트 업데이트
-        text_inventoryweight.text = $"{totalWeight2.ToString()}/{invenmaxweight}";
+        text_inventoryweight.text = $"{currentWeight}/{invenmaxweight}";
 
-        if (totalWeight2 >= invenmaxweight)
+        if (  currentWeight  > invenmaxweight)
         {
             //넘으면 플레이어 무브 느리게 한다던지 
             player_move.speed = Mathf.Max(1.5f, Mathf.Min(3f, player_move.speed - 1.5f));
             //무겁다는 아이콘 띄우기 
         }
-        else if (totalWeight2 <=invenmaxweight)
+        else if (currentWeight <= invenmaxweight)
         {
             //같거나 작아진다면 
             //속도 정상화 
@@ -192,6 +255,7 @@ public class Inventory : MonoBehaviour
     {
 
         invenmaxweight += _count;
+        UpdateSlotCount();
         StartCoroutine(UseObjectWithSlider(3f));
         
     }
