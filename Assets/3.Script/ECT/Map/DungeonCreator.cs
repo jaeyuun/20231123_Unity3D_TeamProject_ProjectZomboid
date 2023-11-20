@@ -9,6 +9,7 @@ public class DungeonCreator : MonoBehaviour
     public int roomWidthMiin, roomLengthMin;
     public int maxIterations;
     public int corridorWidth;
+    public Material material;
 
     MeshRenderer meshRenderer;
 
@@ -22,7 +23,7 @@ public class DungeonCreator : MonoBehaviour
             }
         }*/
 
-    
+
 
     private void Start()
     {
@@ -31,7 +32,7 @@ public class DungeonCreator : MonoBehaviour
     private void CreateDungeon()
     {
         DungeonGenerator generator = new DungeonGenerator(dungeonWidth, dungeonLength);
-       // var listoOfRooms = generator.CalculateRooms(maxIterations, roomWidthMiin, roomLengthMin);
+        // var listoOfRooms = generator.CalculateRooms(maxIterations, roomWidthMiin, roomLengthMin);
 
     }
 

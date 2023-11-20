@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class WindowActive : MonoBehaviour
 {
-    public float radius = 0.15f;
+    public float radius = 1f;
     private GameObject window;
     private int hitCount = 0;
     [SerializeField] private AudioClip bottele;
@@ -15,18 +15,23 @@ public class WindowActive : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position + Vector3.up * 1.5f, radius);
+        Gizmos.DrawWireSphere(transform.position + new Vector3(0, 1.5f, 0), radius);
     }
 
     private void Update()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position + Vector3.up * 1.5f, radius);
+        WindowBroke();
+    }
 
-        if(Input.GetKeyDown(KeyCode.E))
+    private void WindowBroke()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position + new Vector3(0, 1.5f, 0), radius);
+        if (Input.GetKeyDown(KeyCode.Y))
         {
             foreach (Collider collider in colliders)
             {
-                if (collider.gameObject.CompareTag("Window"))
+                
+                if (collider.CompareTag("Window"))
                 {
                     //Debug.Log("hit");
 
@@ -35,28 +40,22 @@ public class WindowActive : MonoBehaviour
                     window.SetActive(false);
                 }
 
-                if (collider.gameObject.CompareTag("WindowHit"))
+                if (collider.CompareTag("WindowHit"))
                 {
                     WIndow_bool window = collider.GetComponentInChildren<WIndow_bool>();
                     if (window != null)
                     {
+                        Debug.Log(hitCount);
+                        hitCount++;
                         if (hitCount >= 3)
                         {
-                            Debug.Log(hitCount);
-                            hitCount++;
                             window.isOpen = !window.isOpen;
+                            hitCount = 0;
                         }
-                        
+
                     }
-
-
-
-
                 }
             }
         }
-          
-            
-        
     }
 }

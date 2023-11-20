@@ -31,7 +31,7 @@ public class CurtainControll : MonoBehaviour
         foreach (Collider collider in colliders)
         {
                     Debug.Log(collider.tag);
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.Y))
             {
                 if (collider.CompareTag("Curtain"))
                 {
