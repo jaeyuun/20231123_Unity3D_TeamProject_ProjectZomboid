@@ -51,6 +51,8 @@ public class Player_Attack : MonoBehaviour
     public bool Melee_weapon;
     public bool Range_weapon;
 
+    [SerializeField] private RightClickMenu rightClickMenu;
+    float keydown = 0f;
     private void Start()
     {
         anim = GetComponent<Animator>();
@@ -62,14 +64,14 @@ public class Player_Attack : MonoBehaviour
 
     private void Update()
     {
-        for (int i = 0; i < inventory.slots.Length; i++)
+        for (int i = 0; i < inventory.slots.Length; i++)//문제점을 찾았는데 어떻게 해야할까 
         {
             if (inventory.slots[i].itemName == "Bullet")
             {
-                bullet = inventory.slots[i].itemCount;                
+                bullet = inventory.slots[i].itemCount;
             }
         }
-
+        Debug.Log("총알개수" + bullet);
 
         if (Melee_weapon)
         {
@@ -88,36 +90,38 @@ public class Player_Attack : MonoBehaviour
                 IsMovement = true; //행동제약
                 Debug.Log("재장전찰칵찰칵");
                 Invoke("isMovement", 1.5f);
-                if(bullet>=20)
+
+                if (bullet >= 20)
                 {
-                    magazine += 20;//20발장전
                     bullet -= 20;//20발감소
                     for (int i = 0; i < inventory.slots.Length; i++)
                     {
                         if (inventory.slots[i].itemName == "Bullet")
                         {
-                            inventory.slots[i].SetSlotCount(-magazine);
-                        }
+                            inventory.slots[i].SetSlotCount(-20);
+                        }                       
                     }
-                    
+                    magazine += 20;//20발장전
                 }
-                else if(bullet>0)
+                else if (bullet > 0)
                 {
+                   
                     magazine += bullet;
                     for (int i = 0; i < inventory.slots.Length; i++)
                     {
                         if (inventory.slots[i].itemName == "Bullet")
                         {
-                            inventory.slots[i].SetSlotCount(-magazine);
+                            inventory.slots[i].SetSlotCount(-bullet);
                         }
                     }
                     bullet = 0;
                 }
                 else
                 {
-                    //장전못했어 찰칵칼착 소리재생
+                    
                 }
             }
+
             anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
 
         }
@@ -160,61 +164,70 @@ public class Player_Attack : MonoBehaviour
 
         if (Input.GetMouseButton(1))//우클릭시
         {
-            game_Cursor.OnMouseOver();
-            anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
-            anim.SetBool("isRight_click", true);
+            keydown += Time.deltaTime;
 
-            if (Melee_weapon)//밀리가 있던가 둘다 없던가
+            if(keydown>0.8f)
             {
-                if (Input.GetMouseButtonDown(0) && !IsMovement)//좌클릭을 하면
+                rightClickMenu.isAim = true;
+                game_Cursor.OnMouseOver();
+                anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
+                anim.SetBool("isRight_click", true);
+
+                if (Melee_weapon)//밀리가 있던가 둘다 없던가
                 {
-                    anim.SetTrigger("isSwing");//스윙공격을 한다
-                    isAttack = true;
-                    Invoke("BatSWingClip", 0.3f);
-                    IsMovement = true;
-                    Invoke("isMovement", 1f);
+                    if (Input.GetMouseButtonDown(0) && !IsMovement)//좌클릭을 하면
+                    {
+                        anim.SetTrigger("isSwing");//스윙공격을 한다
+                        isAttack = true;
+                        Invoke("BatSWingClip", 0.3f);
+                        IsMovement = true;
+                        Invoke("isMovement", 1f);
+                    }
+                }
+                if (!Melee_weapon && !Range_weapon)//둘다 없던가
+                {
+                    if (Input.GetMouseButtonDown(0) && !IsMovement)//좌클릭을 하면
+                    {
+                        anim.SetTrigger("isSwing");//밟는다.
+                        Invoke("isStomp", 0.5f);
+                        isAttack = true;
+                        IsMovement = true;
+                        Invoke("isMovement", 1.1f);
+                    }
+                }
+
+                else if (Range_weapon)
+                {
+                    anim.SetBool("isAiming", true);//총조준
+
+                    if (Input.GetMouseButton(0) && !IsMovement && magazine > 0)//총쏘기
+                    {
+
+                        gun_Shot.ShotEvent();
+                        anim.SetTrigger("isFiring");
+                        Sound_Gun.SetActive(true);
+                        IsMovement = true;
+                        Invoke("isMovement", 0.3f);
+                        magazine -= 1;
+                        StartCoroutine(Sound_Gun_false_co());
+                    }
+                    else if (Input.GetMouseButton(0) && !IsMovement && magazine == 0)
+                    {
+                        IsMovement = true;
+                        Invoke("isMovement", 0.3f);
+                        //총알 없는소리 찰칵찰칵
+                        Debug.Log("찰칵찰칵");
+                    }
+
                 }
             }
-            if (!Melee_weapon && !Range_weapon)//둘다 없던가
-            {
-                if (Input.GetMouseButtonDown(0) && !IsMovement)//좌클릭을 하면
-                {
-                    anim.SetTrigger("isSwing");//밟는다.
-                    Invoke("isStomp", 0.5f);
-                    isAttack = true;
-                    IsMovement = true;
-                    Invoke("isMovement", 1.1f);
-                }
-            }
 
-            else if (Range_weapon)
-            {
-                anim.SetBool("isAiming", true);//총조준
-
-                if (Input.GetMouseButton(0) && !IsMovement && magazine > 0)//총쏘기
-                {
-
-                    gun_Shot.ShotEvent();
-                    anim.SetTrigger("isFiring");
-                    Sound_Gun.SetActive(true);
-                    IsMovement = true;
-                    Invoke("isMovement", 0.3f);
-                    magazine -= 1;
-                    StartCoroutine(Sound_Gun_false_co());
-                }
-                else if (Input.GetMouseButton(0) && !IsMovement && magazine == 0)
-                {
-                    IsMovement = true;
-                    Invoke("isMovement", 0.3f);
-                    //총알 없는소리 찰칵찰칵
-                    Debug.Log("찰칵찰칵");
-                }
-
-            }
 
         }
-        else if (Input.GetMouseButtonUp(1))
+        if (Input.GetMouseButtonUp(1))
         {
+            keydown = 0f;
+            rightClickMenu.isAim = false;
             game_Cursor.OnMouseExit();
             anim.SetBool("isRight_click", false);
             anim.SetBool("isAiming", false);
