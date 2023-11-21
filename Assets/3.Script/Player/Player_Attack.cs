@@ -32,8 +32,17 @@ public class Player_Attack : MonoBehaviour
     [SerializeField] private GameObject calf_l;
     [SerializeField] private GameObject calf_r;
 
+    //등에 있는 총
+    [SerializeField] private GameObject Gun_Spine;
+    private bool Gun_In = true;
+    //손에 있는 총
+    [SerializeField] private GameObject Gun_Hand;
+    private bool Gun_Out;
+
+
     [Header("테스트를위한")]
     public bool Bat_Get;//배트를 가지고 있냐?    
+    public bool Gun_Get;
     public bool Melee_weapon;
     public bool Range_weapon;
 
@@ -85,7 +94,16 @@ public class Player_Attack : MonoBehaviour
         {
             anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
             Debug.Log("누르는중~~~");
-            Bat_take_out(Bat_Get);
+
+            if(Bat_Get)
+            {
+                Bat_take_out(Bat_Get);
+            }
+            else if(Gun_Get)
+            {
+                Gun_take_out(Gun_Get);
+            }
+            
 
         }
 
@@ -153,19 +171,48 @@ public class Player_Attack : MonoBehaviour
     {
         if (Bat)
         {
-            Debug.Log("배트는있어");
+            
             if (Bat_In)
             {
-                Debug.Log("등뒤에 있어");
+                
                 anim.SetTrigger("isOver");
                 StartCoroutine(ActivateWithDelay(Bat_Spine, Bat_Hand, false, true));
                 Melee_weapon = true;
+                Gun_Hand.SetActive(false);
+                Range_weapon = false;
             }
             else if (Bat_Out)
             {
                 anim.SetTrigger("isOver");
                 StartCoroutine(ActivateWithDelay(Bat_Hand, Bat_Spine, true, false));
                 Melee_weapon = false;
+                
+            }
+        }
+    }
+
+    private void Gun_take_out(bool Gun)// 배트를 뽑는 애니메이션
+    {
+        if (Gun)
+        {
+            
+            if (Gun_In)
+            {
+                
+                anim.SetTrigger("isOver");
+                StartCoroutine(ActivateWithDelay(Gun_Spine, Gun_Hand, false, true));
+                Range_weapon = true;
+                Gun_In = false;
+                Gun_Out = true;
+            }
+            else if (Gun_Out)
+            {
+                anim.SetTrigger("isOver");
+                StartCoroutine(ActivateWithDelay(Gun_Hand, Gun_Spine, true, false));
+                Range_weapon = false;
+                Gun_In = true;
+                Gun_Out = false;
+                Bat_Hand.SetActive(false);
             }
         }
     }

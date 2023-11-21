@@ -86,7 +86,7 @@ public class HitColl : MonoBehaviour
         Instantiate(hit, Hit_pos.transform.position, Hit_pos.transform.rotation);
         player.anim.SetTrigger("isHit");
         // audioSource.PlayOneShot(Hit_Sound);
-        MusicController.instance.PlaySFXSound("Player_Hit");
+        //MusicController.instance.PlaySFXSound("Player_Hit");//tobo 주석풀어줘
         health = statusController.DecreaseHP(10);
      
         bodyDmg();
