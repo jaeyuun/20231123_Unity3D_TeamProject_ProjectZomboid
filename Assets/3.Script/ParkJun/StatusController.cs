@@ -103,7 +103,6 @@ public class StatusController : MonoBehaviour
         currentThirsty = LoadThirsty;
     }
 
-
     private void Start()
     {
         currentHp = hp;
@@ -117,11 +116,15 @@ public class StatusController : MonoBehaviour
     }
     private void Update()
     {
+        if (!GameManager.isPause)
+        {
             Hungry();
             Thirsty();
             SPRechargeTime();
             SPRecover();
             GagueUpdate();
+        }
+          
             
     }
     
@@ -166,7 +169,7 @@ public class StatusController : MonoBehaviour
         currentDp -= _count;
         if (currentDp <= 0)
         {
-            Debug.Log("캐릭터의 dp가 0입니다.");
+           
         }
     }
 
@@ -239,7 +242,7 @@ public class StatusController : MonoBehaviour
         {
             currentSp = sp;
         }
-        Debug.Log("sp"+_count);
+      
 
     }
 
@@ -268,7 +271,7 @@ public class StatusController : MonoBehaviour
             currentHungry += _count;
         }
         else currentHungry = hungry;
-        Debug.Log("배고픔"+_count);
+       
     }
     public void DecreaseHungry(int _count)
     {
@@ -293,7 +296,7 @@ public class StatusController : MonoBehaviour
             currentThirsty += _count;
         }
         else currentThirsty = thirsty;
-        Debug.Log("목마름"+_count);
+      
     }
     public void DecreaseThirsty(int _count)
     {
@@ -322,6 +325,7 @@ public class StatusController : MonoBehaviour
             else
             {
                 currentHungry--;
+               
                 currentHungryDecreaseTime = 0;
             }
             if (currentHungry<30)
@@ -333,8 +337,8 @@ public class StatusController : MonoBehaviour
                 image_Hungry.gameObject.SetActive(false);
             }
         }
-        else
-            Debug.Log("배고픔 수치가 0이 되었습니다.");
+      
+          
     }
     private void Thirsty()
     {
@@ -348,6 +352,7 @@ public class StatusController : MonoBehaviour
             {
 
                 currentThirsty--;
+              
                 currentThirstyDecreaseTime = 0;
             }
            
@@ -363,8 +368,8 @@ public class StatusController : MonoBehaviour
                 //image_Thirsty.enabled = true;
             }
         }
-        else
-            Debug.Log("목마름 수치가 0이 되었습니다.");
+      
+           
     }
     private void GagueUpdate()
     {

@@ -127,16 +127,12 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         // itemweight -= item.itemweight * itemCount; // 들어온 무게 빼기
 
 
-
-
         item = null;
-        itemCount = 0;
         itemImage.sprite = null;
         itemName = null;
         SetColor(0);
 
         go_NameImage.SetActive(false);
-
 
         text_Count.text = "0";
         go_CountImage.SetActive(false);
@@ -311,10 +307,15 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         {
 
 
-            /*if (DragSlot.instance.dragSlot != null)
-                theInputNumber.OK();
-           */
-            DragSlot.instance.dragSlot.ClearSlot();
+            for (int i = 0; i < DragSlot.instance.dragSlot.itemCount; i++)
+            {
+                Instantiate(DragSlot.instance.dragSlot.item.itemPrefab,
+                            thePlayer.transform.position + thePlayer.transform.forward * 1.5f,
+                            Quaternion.identity);
+            }
+
+
+             DragSlot.instance.dragSlot.ClearSlot();
 
 
         }
@@ -401,7 +402,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     private void ItemDisObject()
     {
         // OverlapBox에 사용할 박스 영역 정의
-        Vector3 halfExtents = new Vector3(0.7f, 4f, 0.7f);
+        Vector3 halfExtents = new Vector3(0.8f, 4f, 0.8f);
         // 플레이어 주변 지정된 박스 영역 내의 모든 콜라이더 가져오기
         Collider[] hitColliders = Physics.OverlapBox(thePlayer.transform.position, halfExtents);
 
