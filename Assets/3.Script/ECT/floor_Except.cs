@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Secondfloor_Except : MonoBehaviour
+public class SecondFloor_Except : MonoBehaviour
 {
     public string targetTag = "Except";
     public string floorDelet = "2floor";
