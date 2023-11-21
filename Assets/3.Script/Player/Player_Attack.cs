@@ -37,7 +37,12 @@ public class Player_Attack : MonoBehaviour
     private bool Gun_In = true;
     //¼Õ¿¡ ÀÖ´Â ÃÑ
     [SerializeField] private GameObject Gun_Hand;
+
+    [Header("ÀÎº¥Åä¸®")]
+    [SerializeField] private Inventory inventory;
     private bool Gun_Out;
+    private int bullet = 0;//ÀÎº¥Åä¸® ÃÑ¾Ë ¼ö
+    private int magazine = 5;//ÅºÃ¢ ¼ö 
 
 
     [Header("Å×½ºÆ®¸¦À§ÇÑ")]
@@ -65,9 +70,8 @@ public class Player_Attack : MonoBehaviour
         {
             anim.SetBool("isWeapon", false);
         }
-        if (Range_weapon)
+        if (Range_weapon && !IsMovement)
         {
-            
             anim.SetBool("isGun", true);
             anim.SetLayerWeight(1, 1);//»óÃ¼ ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý
 
@@ -101,7 +105,9 @@ public class Player_Attack : MonoBehaviour
             }
             else if(Gun_Get)
             {
+                IsMovement = true;
                 Gun_take_out(Gun_Get);
+                Invoke("isMovement", 1f);
             }
             
 
@@ -139,7 +145,21 @@ public class Player_Attack : MonoBehaviour
             else if (Range_weapon)
             {
                 anim.SetBool("isAiming", true);//ÃÑÁ¶ÁØ
-                if (Input.GetMouseButton(0) && !IsMovement)//ÃÑ½î±â
+
+                if (Input.GetKeyDown(KeyCode.R))
+                {
+                    Debug.Log("R key was pressed");
+                    if (!IsMovement)
+                    {
+                        IsMovement = true; //Çàµ¿Á¦¾à
+                        Debug.Log("ÀçÀåÀüÂûÄ¬ÂûÄ¬");
+                        Invoke("isMovement", 1.5f);
+
+                        //ÂûÄ¬ÂûÄ¬ ÀçÀåÀü¼Ò¸®
+                    }
+                }
+
+                if (Input.GetMouseButton(0) && !IsMovement && magazine>0)//ÃÑ½î±â
                 {
 
                     gun_Shot.ShotEvent();
@@ -147,8 +167,16 @@ public class Player_Attack : MonoBehaviour
                     Sound_Gun.SetActive(true);
                     IsMovement = true;
                     Invoke("isMovement", 0.3f);
+                    magazine -= 1;
                     StartCoroutine(Sound_Gun_false_co());
                 }
+                else if(Input.GetMouseButton(0) && !IsMovement && magazine == 0)
+                {
+                    IsMovement = true;
+                    Invoke("isMovement", 0.3f);
+                    //ÃÑ¾Ë ¾ø´Â¼Ò¸® ÂûÄ¬ÂûÄ¬
+                    Debug.Log("ÂûÄ¬ÂûÄ¬");
+                }  
 
             }
 
