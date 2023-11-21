@@ -16,6 +16,7 @@ namespace WorldTime
 
         private void Awake()
         {
+            TryGetComponent(out _worldTime);
             _light = GetComponent<Light>();
             _worldTime.WorldTimeChanged += OnWorldTimeChanged;
         }
