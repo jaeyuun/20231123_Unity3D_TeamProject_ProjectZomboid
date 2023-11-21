@@ -8,7 +8,7 @@ public class SaveData
     public Vector3 playerPos;
     public Vector3 playerRot;
 
-    public int savedHp;
+    public float savedHp;
     public int savedSp;
     public int savedDp;
     public int saveAtt;
