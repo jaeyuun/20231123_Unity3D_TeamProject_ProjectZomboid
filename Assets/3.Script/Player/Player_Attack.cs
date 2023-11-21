@@ -18,7 +18,7 @@ public class Player_Attack : MonoBehaviour
     private bool IsMovement = false;
 
     [Header("¸¶¿ì½º Ä¿¼­")]
-    public Game_Cursor game_Cursor; 
+    public Game_Cursor game_Cursor;
 
     [Header("¿¢Æ¼ºêÇÒ º£Æ®µé")]
     //µî¿¡ ÀÖ´Â ¹èÆ®
@@ -42,7 +42,7 @@ public class Player_Attack : MonoBehaviour
     [SerializeField] private Inventory inventory;
     private bool Gun_Out;
     private int bullet = 0;//ÀÎº¥Åä¸® ÃÑ¾Ë ¼ö
-    private int magazine = 5;//ÅºÃ¢ ¼ö 
+    private int magazine = 0;//ÅºÃ¢ ¼ö 
 
 
     [Header("Å×½ºÆ®¸¦À§ÇÑ")]
@@ -56,12 +56,21 @@ public class Player_Attack : MonoBehaviour
         anim = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         gun_Shot = GetComponent<Gun_Shot>();
-       
+
 
     }
 
     private void Update()
     {
+        for (int i = 0; i < inventory.slots.Length; i++)
+        {
+            if (inventory.slots[i].itemName == "Bullet")
+            {
+                bullet = inventory.slots[i].itemCount;                
+            }
+        }
+
+
         if (Melee_weapon)
         {
             anim.SetBool("isWeapon", true);
@@ -73,12 +82,48 @@ public class Player_Attack : MonoBehaviour
         if (Range_weapon && !IsMovement)
         {
             anim.SetBool("isGun", true);
+
+            if (Input.GetKeyDown(KeyCode.R) && !IsMovement)//ÀçÀåÀü
+            {
+                IsMovement = true; //Çàµ¿Á¦¾à
+                Debug.Log("ÀçÀåÀüÂûÄ¬ÂûÄ¬");
+                Invoke("isMovement", 1.5f);
+                if(bullet>=20)
+                {
+                    magazine += 20;//20¹ßÀåÀü
+                    bullet -= 20;//20¹ß°¨¼Ò
+                    for (int i = 0; i < inventory.slots.Length; i++)
+                    {
+                        if (inventory.slots[i].itemName == "Bullet")
+                        {
+                            inventory.slots[i].SetSlotCount(-magazine);
+                        }
+                    }
+                    
+                }
+                else if(bullet>0)
+                {
+                    magazine += bullet;
+                    for (int i = 0; i < inventory.slots.Length; i++)
+                    {
+                        if (inventory.slots[i].itemName == "Bullet")
+                        {
+                            inventory.slots[i].SetSlotCount(-magazine);
+                        }
+                    }
+                    bullet = 0;
+                }
+                else
+                {
+                    //ÀåÀü¸øÇß¾î ÂûÄ¬Ä®Âø ¼Ò¸®Àç»ý
+                }
+            }
             anim.SetLayerWeight(1, 1);//»óÃ¼ ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý
 
         }
         else if (!Range_weapon)
         {
-            
+
             anim.SetBool("isGun", false);
             anim.SetLayerWeight(1, 1);//»óÃ¼ ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý
 
@@ -90,7 +135,7 @@ public class Player_Attack : MonoBehaviour
             anim.SetLayerWeight(1, 0);
             anim.SetTrigger("isKickig");
             IsMovement = true;
-            Invoke("isKick",0.5f);
+            Invoke("isKick", 0.5f);
             Invoke("isMovement", 1.5f);
         }
 
@@ -99,17 +144,17 @@ public class Player_Attack : MonoBehaviour
             anim.SetLayerWeight(1, 1);//»óÃ¼ ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý
             Debug.Log("´©¸£´ÂÁß~~~");
 
-            if(Bat_Get)
+            if (Bat_Get)
             {
                 Bat_take_out(Bat_Get);
             }
-            else if(Gun_Get)
+            else if (Gun_Get)
             {
                 IsMovement = true;
                 Gun_take_out(Gun_Get);
                 Invoke("isMovement", 1f);
             }
-            
+
 
         }
 
@@ -146,20 +191,7 @@ public class Player_Attack : MonoBehaviour
             {
                 anim.SetBool("isAiming", true);//ÃÑÁ¶ÁØ
 
-                if (Input.GetKeyDown(KeyCode.R))
-                {
-                    Debug.Log("R key was pressed");
-                    if (!IsMovement)
-                    {
-                        IsMovement = true; //Çàµ¿Á¦¾à
-                        Debug.Log("ÀçÀåÀüÂûÄ¬ÂûÄ¬");
-                        Invoke("isMovement", 1.5f);
-
-                        //ÂûÄ¬ÂûÄ¬ ÀçÀåÀü¼Ò¸®
-                    }
-                }
-
-                if (Input.GetMouseButton(0) && !IsMovement && magazine>0)//ÃÑ½î±â
+                if (Input.GetMouseButton(0) && !IsMovement && magazine > 0)//ÃÑ½î±â
                 {
 
                     gun_Shot.ShotEvent();
@@ -170,13 +202,13 @@ public class Player_Attack : MonoBehaviour
                     magazine -= 1;
                     StartCoroutine(Sound_Gun_false_co());
                 }
-                else if(Input.GetMouseButton(0) && !IsMovement && magazine == 0)
+                else if (Input.GetMouseButton(0) && !IsMovement && magazine == 0)
                 {
                     IsMovement = true;
                     Invoke("isMovement", 0.3f);
                     //ÃÑ¾Ë ¾ø´Â¼Ò¸® ÂûÄ¬ÂûÄ¬
                     Debug.Log("ÂûÄ¬ÂûÄ¬");
-                }  
+                }
 
             }
 
@@ -199,10 +231,10 @@ public class Player_Attack : MonoBehaviour
     {
         if (Bat)
         {
-            
+
             if (Bat_In)
             {
-                
+
                 anim.SetTrigger("isOver");
                 StartCoroutine(ActivateWithDelay(Bat_Spine, Bat_Hand, false, true));
                 Melee_weapon = true;
@@ -214,7 +246,7 @@ public class Player_Attack : MonoBehaviour
                 anim.SetTrigger("isOver");
                 StartCoroutine(ActivateWithDelay(Bat_Hand, Bat_Spine, true, false));
                 Melee_weapon = false;
-                
+
             }
         }
     }
@@ -223,10 +255,10 @@ public class Player_Attack : MonoBehaviour
     {
         if (Gun)
         {
-            
+
             if (Gun_In)
             {
-                
+
                 anim.SetTrigger("isOver");
                 StartCoroutine(ActivateWithDelay(Gun_Spine, Gun_Hand, false, true));
                 Range_weapon = true;
@@ -261,15 +293,15 @@ public class Player_Attack : MonoBehaviour
     private void isMovement()//Çàµ¿°¡´É¿©ºÎ
     {
         IsMovement = false;
-        if(calf_l == true)
+        if (calf_l == true)
         {
             calf_l.SetActive(false);
         }
-         if(calf_r == true)
+        if (calf_r == true)
         {
             calf_r.SetActive(false);
         }
-        
+
     }
 
     private void isKick()
