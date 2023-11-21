@@ -184,7 +184,7 @@ public class StatusController : MonoBehaviour
     }
 
     //쉬기 
-    private void SPRecover()
+    public void SPRecover()
     {
         //V를 누르면 쉬면서 스테미너가 채워진다.
         if (Input.GetKeyDown(KeyCode.V))

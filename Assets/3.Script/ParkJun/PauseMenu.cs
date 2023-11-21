@@ -11,7 +11,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (!GameManager.isPause)
             {
@@ -36,15 +36,10 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
 
     }
-    public void ClickSave()
+    public void ClickReturn()
     {
-        
-        theSaveAndLoad.SaveData();
-    }
-    public void ClicKLoad()
-    {
-        
-        theSaveAndLoad.LoadData();
+        CloseMenu();
+       
     }
     public void ClickExit()
     {

@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14581dcaed3b8a5498219d423363a4cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: Pjunyeong2
+  sceneName: Pjunyeong
   text1: {fileID: 1376216963}
   text2: {fileID: 193333193}
   continueButton: {fileID: 856715420}
@@ -629,7 +629,7 @@ GameObject:
   - component: {fileID: 1193510516}
   - component: {fileID: 1193510515}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Next
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

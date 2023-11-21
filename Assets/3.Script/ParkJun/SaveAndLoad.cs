@@ -8,9 +8,6 @@ public class SaveData
     public Vector3 playerPos;
     public Vector3 playerRot;
 
-    public Vector3 zombiePos;
-    public Vector3 zombieRot;
-
     public int savedHp;
     public int savedSp;
     public int savedDp;
@@ -41,7 +38,7 @@ public class SaveAndLoad : MonoBehaviour
     private string save_filename = "/SaveFile.txt";
 
     private Player_Move thePlayer;
-    private ZombieController theZombie;
+   
   
 
     private Inventory theInventory;
@@ -59,7 +56,7 @@ public class SaveAndLoad : MonoBehaviour
     {
         thePlayer = FindObjectOfType<Player_Move>();
         theInventory = FindObjectOfType<Inventory>();
-        theZombie = FindObjectOfType<ZombieController>();
+        
         theStatus = FindObjectOfType<StatusController>();
 
 
@@ -68,8 +65,6 @@ public class SaveAndLoad : MonoBehaviour
         saveData.playerRot = thePlayer.transform.eulerAngles; //회전값 저장 
 
 
-        saveData.zombiePos = theZombie.transform.position;
-        saveData.zombieRot = theZombie.transform.eulerAngles;
 
         //플레이어 스탯 
         saveData.savedHp = theStatus.GetcurrentHP();
@@ -106,15 +101,13 @@ public class SaveAndLoad : MonoBehaviour
 
             thePlayer = FindObjectOfType<Player_Move>();
             theInventory = FindObjectOfType<Inventory>();
-            theZombie = FindObjectOfType<ZombieController>();
+           
             theStatus = FindObjectOfType<StatusController>();
 
             //플레이어 위치 
             thePlayer.transform.position = saveData.playerPos; //위치 불러오기 
             thePlayer.transform.eulerAngles = saveData.playerRot; //회전값 불러오기 
 
-            theZombie.transform.position = saveData.zombiePos;
-            theZombie.transform.eulerAngles = saveData.zombieRot;
 
             //플레이어 스탯 
             theStatus.SetcurrentHP(saveData.savedHp);
