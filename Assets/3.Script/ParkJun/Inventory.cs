@@ -40,6 +40,7 @@ public class Inventory : MonoBehaviour
     private Drop drop;
 
     public Slot[] GetSlots() { return slots; }
+    public Slot[] GetQuickSlots() { return quickSlots; }
 
     [SerializeField] private Item[] items;
     public void LoadToDrop(int _arrayNum, string _itemName,float _itemweight, int _itemNum)
@@ -52,6 +53,10 @@ public class Inventory : MonoBehaviour
                 UpdateTotalWeight2();
             }
         }
+    }
+    public void LoadToQuick(int _arrayNum, string _itemName, float _itemweight, int _itemNum)
+    {
+
     }
     private void Start()
     {

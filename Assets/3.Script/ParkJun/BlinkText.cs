@@ -10,14 +10,20 @@ public class BlinkText : MonoBehaviour
 
     void Start()
     {
+        Color transparentColor = textToBlink.color;
+        transparentColor.a = 255f; // 알파 값을 0으로 설정 (투명)
+        textToBlink.color =transparentColor;
         // 코루틴을 시작합니다.
         StartCoroutine(Blink_Text());
+       
+
     }
 
     IEnumerator Blink_Text()
     {
         while (true)
         {
+           
             // 텍스트를 활성화 또는 비활성화합니다.
             textToBlink.enabled = !textToBlink.enabled;
 
