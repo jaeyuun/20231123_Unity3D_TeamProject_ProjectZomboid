@@ -9,22 +9,19 @@ public class VehicleInteract : MonoBehaviour
     public GameObject Vehicle;
     public GameObject Carmer;
     public Rigidbody rig;
-    [Header("승하차")]
+    private bool inVehicle = false;
+    /*[Header("승하차")]
     public AudioClip Car_in;
     public AudioClip Car_out;
     private AudioSource audioSource;
 
-    private bool inVehicle = false;
-
-
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
-    }
+    }*/
 
     void Update()
     {
-        
         if (Input.GetKeyDown(KeyCode.E) && !inVehicle && player_isCar.iscar)
         {
 
@@ -34,15 +31,13 @@ public class VehicleInteract : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.E) && inVehicle)
         {
             StartCoroutine(ExitVehicle()); // 차량에서 내림
-            
         }
     }
 
-
-
    private IEnumerator EnterVehicle()
     {
-        audioSource.PlayOneShot(Car_in);
+        // audioSource.PlayOneShot(Car_in);
+        MusicController.instance.PlaySFXSound("Car_InOut");
         yield return new WaitForSeconds(1f);
         // 플레이어를 차량 내부에 위치
         Player.transform.position = Vehicle.transform.position;
@@ -59,7 +54,8 @@ public class VehicleInteract : MonoBehaviour
 
     private IEnumerator ExitVehicle()
     {
-        audioSource.PlayOneShot(Car_out);
+        // audioSource.PlayOneShot(Car_out);
+        MusicController.instance.PlaySFXSound("Car_InOut");
         yield return new WaitForSeconds(1f);
 
         // 플레이어를 차량 외부에 위치

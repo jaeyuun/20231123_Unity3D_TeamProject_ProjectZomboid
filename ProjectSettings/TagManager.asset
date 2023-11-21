@@ -28,6 +28,8 @@ TagManager:
   - CurtainDown
   - Kick
   - Stomp
+  - MusicSlider
+  - SettingButton
   layers:
   - Default
   - TransparentFX

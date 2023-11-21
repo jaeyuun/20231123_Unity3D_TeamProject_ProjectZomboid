@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Car_Sound : MonoBehaviour
 {
-    [Header("矫悼家府")]
+    /*[Header("矫悼家府")]
     public AudioClip start_up;// 矫悼家府
     [Header("款傈家府")]
     public AudioClip drive;// 款傈家府
@@ -18,9 +18,7 @@ public class Car_Sound : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
     }
-
-
-
+*/
     private bool isDriveSoundPlaying = false;
 
     private IEnumerator Drive_Sound()
@@ -31,7 +29,8 @@ public class Car_Sound : MonoBehaviour
         }
 
         isDriveSoundPlaying = true;
-        audioSource.PlayOneShot(drive);
+        // audioSource.PlayOneShot(drive);
+        MusicController.instance.PlaySFXSound("Car_Dirve");
         yield return new WaitForSeconds(0.9f);
 
         isDriveSoundPlaying = false;
@@ -39,7 +38,8 @@ public class Car_Sound : MonoBehaviour
 
     public void Start_up()//矫悼家府
     {
-        audioSource.PlayOneShot(start_up);
+        // audioSource.PlayOneShot(start_up);
+        MusicController.instance.PlaySFXSound("Car_StartUp");
     }
 
     public void Drive()//款傈家府
@@ -58,7 +58,8 @@ public class Car_Sound : MonoBehaviour
         }
 
         isBrakeSoundPlaying = true;
-        audioSource.PlayOneShot(brake);
+        // audioSource.PlayOneShot(brake);
+        MusicController.instance.PlaySFXSound("Car_Brake");
         yield return new WaitForSeconds(1.5f);
 
         isBrakeSoundPlaying = false;
@@ -66,7 +67,6 @@ public class Car_Sound : MonoBehaviour
     public void Brake()//宏饭捞农
     {
         StartCoroutine(Brake_Sound());
-
     }
 
 }

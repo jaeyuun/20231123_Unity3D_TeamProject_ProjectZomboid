@@ -5,13 +5,13 @@ public class WindowActive : MonoBehaviour
     public float radius = 1f;
     private GameObject window;
     private int hitCount = 0;
-    [SerializeField] private AudioClip bottele;
+    /*[SerializeField] private AudioClip bottele;
     private AudioSource audio;
 
     private void Start()
     {
         audio = GetComponent<AudioSource>();
-    }
+    }*/
 
     private void OnDrawGizmos()
     {
@@ -30,13 +30,11 @@ public class WindowActive : MonoBehaviour
         {
             foreach (Collider collider in colliders)
             {
-                
                 if (collider.CompareTag("Window"))
                 {
-                    //Debug.Log("hit");
-
                     window = collider.gameObject.transform.GetChild(0).gameObject;
-                    audio.PlayOneShot(bottele);
+                    // audio.PlayOneShot(bottele);
+                    MusicController.instance.PlaySFXSound("Player_Hit");
                     window.SetActive(false);
                 }
 
@@ -45,14 +43,12 @@ public class WindowActive : MonoBehaviour
                     WIndow_bool window = collider.GetComponentInChildren<WIndow_bool>();
                     if (window != null)
                     {
-                        Debug.Log(hitCount);
                         hitCount++;
                         if (hitCount >= 3)
                         {
                             window.isOpen = !window.isOpen;
                             hitCount = 0;
                         }
-
                     }
                 }
             }

@@ -6,7 +6,7 @@ public class Door_Hp : MonoBehaviour
 {
 
     private int door_hp = 20;
-    private AudioSource audioSource;
+    /*private AudioSource audioSource;
     [Header("滴靛府绰 家府甫 持绢林技夸")]
     public AudioClip Door_crash;
     [Header("何辑瘤绰 家府甫 持绢林技夸")]
@@ -15,7 +15,7 @@ public class Door_Hp : MonoBehaviour
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
-    }
+    }*/
 
     private void OnTriggerEnter(Collider other)
     {
@@ -24,7 +24,8 @@ public class Door_Hp : MonoBehaviour
             StartCoroutine(door_hit_co());
             if(door_hp<=0)
             {
-                audioSource.PlayOneShot(Door_broken);
+                // audioSource.PlayOneShot(Door_broken);
+                MusicController.instance.PlaySFXSound("Door_Broken");
                 Destroy(gameObject);
             }
         }
@@ -33,8 +34,8 @@ public class Door_Hp : MonoBehaviour
     private IEnumerator door_hit_co()
     {
         door_hp -= 1;
-        audioSource.PlayOneShot(Door_crash);
+        // audioSource.PlayOneShot(Door_crash);
+        MusicController.instance.PlaySFXSound("Door_Crash");
         yield return new WaitForSeconds(2f);
-
     }
 }
