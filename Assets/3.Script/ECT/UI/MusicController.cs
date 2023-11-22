@@ -5,19 +5,19 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using DigitalRuby.RainMaker;
 
 #region Enum
 public enum SliderList
 {
-    Master = 0,
+    SFX = 0,
     BGM,
-    SFX,
 }
 
 public enum BGMSound
 {
     Main = 0,
-    Loading,
+    Load,
     Game,
 }
 
@@ -49,17 +49,23 @@ public class MusicController : MonoBehaviour
     public AudioMixer audioMixer;
     private Canvas canvas;
 
+    // RainSound
+    private RainScript rainScript = null;
+
     private AudioSource bgmPlayer;
     private AudioSource sfxPlayer;
 
     [SerializeField] private GameObject musicUI;
     [SerializeField] private AudioClip[] bgmClips;
-    [SerializeField] private AudioClip[] sfxClips; // BGM 이외의 Audio Clip 전부 가져오기
+    [SerializeField] private List<AudioClip> sfxClips;
     [SerializeField] private GameObject[] sliderObject;
     [SerializeField] private Slider[] slider;
 
     private Button settingButton;
-    private GameObject musicSettingPanel = null;
+    private GameObject musicSettingPanel;
+
+    public float bgmVolume = 0f;
+    public float sfxVolume = 0f;
 
     private void Awake()
     {
@@ -71,35 +77,59 @@ public class MusicController : MonoBehaviour
         {
             Destroy(instance);
         }
-
         TryGetComponent(out bgmPlayer);
         TryGetComponent(out sfxPlayer);
+        rainScript = FindObjectOfType<RainScript>();
 
-        canvas = GameObject.Find("Canvas").transform.GetComponent<Canvas>();
-        settingButton = GameObject.FindGameObjectWithTag("SettingButton").transform.GetComponent<Button>();
-        settingButton.onClick.AddListener(SetActiveTrue);
-        settingButton.onClick.AddListener(SetActiveFalse);
+        AwakeSetting();
+        SettingButton();
+        PlayerPrefs.SetFloat("BGMVolume", 0f);
+        PlayerPrefs.SetFloat("SFXVolume", 0f);
     }
 
-    private void OnEnable()
+    public void ChangeSceneMusic(string type)
     {
+        // Scene이 바뀔때 출력되는 메소드
+        AwakeSetting();
+        OnEnableMusic();
+        PlayBGMSound(type);
+    }
+
+    public void AwakeSetting()
+    {
+        musicSettingPanel = null;
         if (canvas == null)
         {
             canvas = GameObject.Find("Canvas").transform.GetComponent<Canvas>();
         }
-        canvas = GameObject.Find("Canvas").transform.GetComponent<Canvas>();
+    }
+
+    public void SettingButton()
+    {
+        settingButton = null;
         if (settingButton == null)
         {
-            settingButton = GameObject.FindGameObjectWithTag("SettingButton").transform.GetComponent<Button>();
-            Debug.Log("AddListener");
+            settingButton = GameObject.FindGameObjectWithTag("SettingMenu").transform.GetChild(2).gameObject.transform.GetComponent<Button>();
             settingButton.onClick.AddListener(SetActiveTrue);
-            settingButton.onClick.AddListener(SetActiveFalse);
         }
     }
 
-    private void OnDisable()
+    public void OnEnableMusic()
     {
-        settingButton.onClick.RemoveAllListeners(); //이벤트 모두 제거
+        // Sound PlayerPrefs Check
+        if (PlayerPrefs.HasKey("BGMVolume"))
+        {
+            bgmVolume = PlayerPrefs.GetFloat("BGMVolume");
+        }
+        if (PlayerPrefs.HasKey("SFXVolume"))
+        {
+            sfxVolume = PlayerPrefs.GetFloat("SFXVolume");
+        }
+    }
+
+    public void OnDisableMusic()
+    {
+        settingButton.onClick.RemoveAllListeners(); // Event Remove All
     }
 
     private void Start()
@@ -112,15 +142,10 @@ public class MusicController : MonoBehaviour
 
     private void SetActiveTrue()
     {
-        Debug.Log("SetActive");
-        if (!musicSettingPanel.activeSelf)
-        {
-            musicSettingPanel.SetActive(true);
-        }
         // Setting Button Click, Menu activeSelf true
         if (musicSettingPanel == null)
         {
-            musicSettingPanel = Instantiate(musicUI, canvas.transform);
+            musicSettingPanel = Instantiate(musicUI, canvas.transform); // 수진언니 canvas 켜져있으면 오류남, canvas 합쳐야함
             sliderObject = GameObject.FindGameObjectsWithTag("MusicSlider");
             if (musicSettingPanel.activeSelf)
             {
@@ -128,24 +153,28 @@ public class MusicController : MonoBehaviour
                 {
                     slider[i] = sliderObject[i].transform.GetComponent<Slider>();
                 }
-                slider[(int)SliderList.Master].onValueChanged.AddListener(SetMasterVolume);
                 slider[(int)SliderList.BGM].onValueChanged.AddListener(SetBGMVolume);
                 slider[(int)SliderList.SFX].onValueChanged.AddListener(SetSFXVolume);
+                SliderHandlerPosition();
             }
+        }
+        if (!musicSettingPanel.activeSelf)
+        {
+            musicSettingPanel.SetActive(true);
         }
     }
 
-    private void SetActiveFalse()
+    public void SliderHandlerPosition()
     {
-        // Menu activeSelf false
-        if (musicSettingPanel.activeSelf)
-        {
-            musicSettingPanel.SetActive(false);
-        }
+        // 버튼 클릭 시 슬라이더 핸들러 위치
+        SetBGMVolume(PlayerPrefs.GetFloat("BGMVolume"));
+        SetSFXVolume(PlayerPrefs.GetFloat("SFXVolume"));
+        slider[(int)SliderList.BGM].value = PlayerPrefs.GetFloat("BGMVolume");
+        slider[(int)SliderList.SFX].value = PlayerPrefs.GetFloat("SFXVolume");
     }
 
     #region Sound Play
-    public void PlayBGMSound(string type)
+    private void PlayBGMSound(string type)
     {
         // 배경음 플레이
         if (bgmPlayer.isPlaying)
@@ -166,28 +195,23 @@ public class MusicController : MonoBehaviour
     }
     #endregion
     #region Volume Setting
-    public void SetMasterVolume(float volume)
-    {
-        // audioMixer.SetFloat("Master", volume);
-        SetBGMVolume(volume);
-        SetSFXVolume(volume);
-    }
-
     public void SetBGMVolume(float volume)
     {
         audioMixer.SetFloat("BGM", volume);
+        bgmVolume = volume;
         AudioListenerVolume("BGM", volume);
     }
 
     public void SetSFXVolume(float volume)
     {
         audioMixer.SetFloat("SFX", volume);
+        sfxVolume = volume;
         AudioListenerVolume("SFX", volume);
     }
 
     private void AudioListenerVolume(string type, float volume)
     {
-        // AudioSource 할당
+        // AudioSource 할당, volume에 따른 음소거 설정
         AudioSource typeAudio = null;
         if (type.Equals("BGM"))
         {
