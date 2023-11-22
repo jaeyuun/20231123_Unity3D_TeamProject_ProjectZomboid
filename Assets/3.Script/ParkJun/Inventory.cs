@@ -67,7 +67,7 @@ public class Inventory : MonoBehaviour
     }
     private void Start()
     {
-        UpdateSlotCount();
+        //UpdateSlotCount();
         slots = go_SlotsParent.GetComponentsInChildren<Slot>();
         quickSlots = go_QuickSlotParent.GetComponentsInChildren<Slot>();
         
@@ -77,7 +77,11 @@ public class Inventory : MonoBehaviour
     {
         
         TryOpenInventory();
-        TryDoubleClick();
+        if (go_inventotyBase.activeSelf )
+        {
+            TryDoubleClick();
+        }
+        
     }
     private void UpdateSlotCount()
     {
@@ -136,7 +140,7 @@ public class Inventory : MonoBehaviour
 
     private void TryOpenInventory()
     {
-        if (Input.GetKeyDown(KeyCode.I)) 
+        if (Input.GetKeyDown(KeyCode.Tab)) 
         {
             inventoryActiveated = !inventoryActiveated;
             if (inventoryActiveated)
@@ -153,6 +157,7 @@ public class Inventory : MonoBehaviour
     {
        
         go_inventotyBase.SetActive(true);
+
     }
     public void CloseInventory()
     {
@@ -219,14 +224,14 @@ public class Inventory : MonoBehaviour
     { 
         //마우스 포인터 위치 
         Vector2 mousePosition = Input.mousePosition;
-        //인벤토리 영역에서만 
+       /* //인벤토리 영역에서만 
         RectTransform inventoryRect = go_inventotyBase.GetComponent<RectTransform>();
 
         if (!RectTransformUtility.RectangleContainsScreenPoint(inventoryRect, mousePosition, null))
         {
             return -1;
         }
-
+*/
 
         for (int i = 0; i < slots.Length; i++)
         {

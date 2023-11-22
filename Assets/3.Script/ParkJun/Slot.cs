@@ -306,29 +306,32 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
            && DragSlot.instance.transform.localPosition.y + baseRect.transform.localPosition.y < quickSlotBaseRect.rect.yMax + quickSlotBaseRect.transform.localPosition.y)))
         {
 
-
-            for (int i = 0; i < DragSlot.instance.dragSlot.itemCount; i++)
+            if (DragSlot.instance.dragSlot!=null)
             {
-                Instantiate(DragSlot.instance.dragSlot.item.itemPrefab,
-                            thePlayer.transform.position + thePlayer.transform.forward * 1.5f,
-                            Quaternion.identity);
+                for (int i = 0; i < DragSlot.instance.dragSlot.itemCount; i++)
+                {
+                    Instantiate(DragSlot.instance.dragSlot.item.itemPrefab,
+                                thePlayer.transform.position + thePlayer.transform.forward * 1.5f,
+                                Quaternion.identity);
+                   
+
+                }
+                DragSlot.instance.dragSlot.ClearSlot();
             }
 
             //아이템 버릴 때 사운드  Todo...      Exit_item
-            DragSlot.instance.dragSlot.ClearSlot();
-
+          
 
         }
-        else
-        {
-            //drop.UpdateTotalWeight();
-            // inventory.UpdateTotalWeight2();
-
-            DragSlot.instance.SetColor(0);
-            DragSlot.instance.dragSlot = null;
-        }
+        DragSlot.instance.SetColor(0);
+        DragSlot.instance.dragSlot = null;
         drop.UpdateTotalWeight();
         inventory.UpdateTotalWeight2();
+
+
+
+
+
     }
 
 

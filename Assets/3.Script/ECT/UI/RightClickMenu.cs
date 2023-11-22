@@ -9,9 +9,9 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
     private GameObject rightClickMenu; // UI 보여줄 위치
     private RectTransform rightClickRect;
 
-    [SerializeField] private GameObject buttonPrefab;
-    private List<GameObject> rightClickButtons = new List<GameObject>();
-    private GameObject buttonList;
+    [SerializeField] private Button buttonPrefab;
+    private List<Button> rightClickButtons = new List<Button>();
+    private Button buttonList;
     private Text buttonText;
     private int buttonCount = 0;
     private RaycastHit hitObject;
@@ -64,7 +64,7 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
             for (int i = 0; i < hit.Length; i++)
             { // 우클릭 시 첫번째로 잡히는 오브젝트만 반환
                 hitObject = hit[i];
-                if (hit[i].collider.CompareTag("Window") || hit[i].collider.CompareTag("Door") || hit[i].collider.CompareTag("Fence")) // window hit 추가... todo
+                if (hit[i].collider.CompareTag("Window")) // window hit 추가... todo
                 {
                     break;
                 }
@@ -78,12 +78,6 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
         {
             case "Window":
                 WindowClick();
-                break;
-            case "Door":
-                DoorClick();
-                break;
-            case "Fence":
-                FenceClick();
                 break;
             default: // player, sound, untagged 등
                 // player 관련 상호작용
@@ -113,22 +107,14 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
         ClickMenuLoad(menu);
     }
 
-    public void DoorClick()
-    {
-        string[] menu = { "문 닫기", "문 열기" }; // Text, 오브젝트마다 달라짐
-        ClickMenuLoad(menu);
-    }
-
     public void WindowClick()
     {
         string[] menu = { "창문 열기", "창문 닫기" };
         ClickMenuLoad(menu);
-    }
 
-    public void FenceClick()
-    {
-        string[] menu = { "Fence1" };
-        ClickMenuLoad(menu);
+        WIndow_bool window = hitObject.collider.transform.GetComponent<WIndow_bool>();
+        rightClickButtons[0].onClick.AddListener(window.WindowAnimation);
+        rightClickButtons[1].onClick.AddListener(window.WindowAnimation);
     }
     #endregion
 }

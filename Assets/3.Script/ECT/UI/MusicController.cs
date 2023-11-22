@@ -103,10 +103,6 @@ public class MusicController : MonoBehaviour
         AwakeSetting();
         SettingButton();
         PlayBGMSound();
-        if (player == null)
-        {
-            player = FindObjectOfType<HitColl>();
-        }
     }
 
     public void AwakeSetting()
@@ -115,6 +111,10 @@ public class MusicController : MonoBehaviour
         {
             canvas = GameObject.Find("Canvas").transform.GetComponent<Canvas>();
             musicSettingPanel = null;
+        }
+        if (player == null && SceneManager.GetActiveScene().name.Equals("MainGame_Fake"))
+        {
+            player = FindObjectOfType<HitColl>();
         }
     }
 
@@ -175,10 +175,10 @@ public class MusicController : MonoBehaviour
     public void PlayBGMSound()
     {
         string type = SceneManager.GetActiveScene().name;
-        if (player.isDie)
+        /*if (player != null && player.isDie)
         {
             type = "Player_Death";
-        }
+        }*/
         // 배경음 플레이
         if (bgmPlayer.isPlaying)
         {
@@ -187,7 +187,10 @@ public class MusicController : MonoBehaviour
         int index = (int)(BGMSound)Enum.Parse(typeof(BGMSound), type); // string을 enum으로 변경 후 int로 변경
         bgmPlayer.clip = bgmClips[index];
         bgmPlayer.loop = true;
-        bgmPlayer.Play();
+        if (!type.Equals("Player_Death") || player.isDie)
+        {
+            bgmPlayer.Play();
+        }
     }
     public void PlaySFXSound(string type)
     {
