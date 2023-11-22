@@ -79,10 +79,10 @@ public class MusicController : MonoBehaviour
             instance.ChangeSceneMusic();
             Destroy(gameObject);
         }
-        TryGetComponent(out bgmPlayer);
-        TryGetComponent(out sfxPlayer);
 
-        
+        // audioSource
+        bgmPlayer = transform.GetChild(0).GetComponent<AudioSource>();
+        sfxPlayer = transform.GetChild(1).GetComponent<AudioSource>();
     }
 
     private void OnEnable()
@@ -161,9 +161,10 @@ public class MusicController : MonoBehaviour
     }
 
     #region Sound Play
-    private void PlayBGMSound()
+    public void PlayBGMSound()
     {
         string type = SceneManager.GetActiveScene().name;
+        Debug.Log(type);
         // 배경음 플레이
         if (bgmPlayer.isPlaying)
         {

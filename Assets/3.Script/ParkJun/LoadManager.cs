@@ -16,6 +16,7 @@ public class LoadManager : MonoBehaviour
 
     private void Awake()
     {
+        MusicController.instance.PlayBGMSound();
         if (instance == null)
         {
             instance = this;

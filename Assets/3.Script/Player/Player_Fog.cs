@@ -15,13 +15,6 @@ public class Player_Fog : MonoBehaviour
     public float lookingAngle;
     public Vector3 lookDir;
 
-    private void Awake()
-    {
-       
-    }
-
-
-
     private void OnDrawGizmos()
     {
         myPos = transform.position + Vector3.up * 1.5f; // 캐릭터 포지션

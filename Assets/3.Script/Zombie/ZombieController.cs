@@ -250,7 +250,7 @@ public class ZombieController : HP, IState
     {
         yield return new WaitForSeconds(2f);
         zombieHp = Damage(25f, zombieHp);
-        if (zombieHp <= 0)
+        if (zombieHp <= 0 && !isDie)
         {
             Die();
         }

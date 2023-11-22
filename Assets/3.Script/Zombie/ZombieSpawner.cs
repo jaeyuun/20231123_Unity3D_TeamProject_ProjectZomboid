@@ -56,6 +56,6 @@ public class ZombieSpawner : MonoBehaviour
 
         // zombie Die()
         zombieController.onDead += () => { zombieList.Remove(zombieController); };
-        zombieController.onDead += () => { Destroy(gameObject, 10f); };
+        zombieController.onDead += () => { Destroy(zombieController.gameObject, 10f); };
     }
 }

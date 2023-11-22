@@ -10,10 +10,10 @@ public class NewLoad : MonoBehaviour
     public Text text1;
     public Text text2;
     public Button continueButton;
- 
 
     private void Start()
     {
+        MusicController.instance.PlayBGMSound();
         StartCoroutine(ShowText1());
     }
 

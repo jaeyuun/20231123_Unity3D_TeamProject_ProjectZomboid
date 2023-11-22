@@ -1041,6 +1041,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36934fe8e35485e4a89dbe43309c6697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  continueButton: {fileID: 0}
 --- !u!4 &2121915382
 Transform:
   m_ObjectHideFlags: 0
