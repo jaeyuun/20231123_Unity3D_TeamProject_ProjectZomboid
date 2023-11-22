@@ -103,6 +103,5 @@ public class LoadManager : MonoBehaviour
 
         thesaveAndLoad = FindObjectOfType<SaveAndLoad>(); // ¥Ÿ¿Ω æ¿¿« SaveAndLoad
         thesaveAndLoad.LoadData();
-        //gameObject.SetActive(false);
     }
 }
