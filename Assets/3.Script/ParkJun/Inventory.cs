@@ -21,9 +21,10 @@ public class Inventory : MonoBehaviour
     [SerializeField]
     private Player_Move player_move;
     public GameObject slotPrefab;
+    public GameObject Heavy;
 
 
-
+    
     public  float invenmaxweight = 20f;
     public float currentWeight = 0f;
 
@@ -34,7 +35,7 @@ public class Inventory : MonoBehaviour
 
     public GameObject Bag;
     [SerializeField ]
-    private Slot[] slots;
+    public Slot[] slots;
     private Slot[] quickSlots; // 퀵슬롯의 슬롯들
     [SerializeField]
     private Drop drop;
@@ -56,7 +57,13 @@ public class Inventory : MonoBehaviour
     }
     public void LoadToQuick(int _arrayNum, string _itemName, float _itemweight, int _itemNum)
     {
-
+        for (int i = 0; i < items.Length; i++)
+        {
+            if (items[i].itemName==_itemName)
+            {
+                quickSlots[_arrayNum].AddItem(items[i], _itemName, _itemweight, _itemNum);
+            }
+        }
     }
     private void Start()
     {
@@ -68,7 +75,7 @@ public class Inventory : MonoBehaviour
     }
     private void Update()
     {
-       
+        
         TryOpenInventory();
         TryDoubleClick();
     }
@@ -93,11 +100,14 @@ public class Inventory : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
+
+                int clickedIndex = GetClickedSlotIndex();
+
                 if (isDoubleClick)
                 {
                     // 더블클릭한 슬롯을 찾아서 해당 아이템을 퀵슬롯에 추가
-                    DoubleClickAddQuickSlot();
-                    isDoubleClick = false; // 더블클릭 상태 초기화
+                    DoubleClickAddQuickSlot(clickedIndex);
+                     isDoubleClick = false; // 더블클릭 상태 초기화
                 }
                 else
                 {
@@ -108,6 +118,7 @@ public class Inventory : MonoBehaviour
         }
       
     }
+    
     private IEnumerator DoubleClickTimer()
     {
         yield return new WaitForSeconds(doubleClickTime);
@@ -186,42 +197,75 @@ public class Inventory : MonoBehaviour
     }
 
 
-    private void DoubleClickAddQuickSlot()
+    private void DoubleClickAddQuickSlot(int clickedIndex)
     {
-        for (int i = 0; i < slots.Length; i++)
-        {
-            if (slots[i].item != null && slots[i].isFirstClick)
+         
+            if (slots[clickedIndex].item != null && slots[clickedIndex].isFirstClick)//에러확인필요mh
             {
                 // 더블클릭한 슬롯의 아이템을 퀵슬롯에 추가
-               if( AddQuickSlot(slots[i].item, slots[i].item.itemName, slots[i].itemweight, slots[i].itemCount))
+               if( AddQuickSlot(slots[clickedIndex].item, slots[clickedIndex].item.itemName, slots[clickedIndex].itemweight, slots[clickedIndex].itemCount))
                 { 
                     // 퀵슬롯이 다 차지 않았으면 해당 슬롯을 클리어하고 무게 업데이트
-                    slots[i].ClearSlot();
+                    slots[clickedIndex].ClearSlot();
                     UpdateTotalWeight2();
                 }
                
                 return; // 더블클릭 처리가 끝났으므로 반복문 종료
             }
             
+        
+    }
+    private  int GetClickedSlotIndex()
+    { 
+        //마우스 포인터 위치 
+        Vector2 mousePosition = Input.mousePosition;
+        //인벤토리 영역에서만 
+        RectTransform inventoryRect = go_inventotyBase.GetComponent<RectTransform>();
+
+        if (!RectTransformUtility.RectangleContainsScreenPoint(inventoryRect, mousePosition, null))
+        {
+            return -1;
         }
+
+
+        for (int i = 0; i < slots.Length; i++)
+        {
+            RectTransform slotRect = slots[i].GetComponent<RectTransform>();
+
+            if (RectTransformUtility.RectangleContainsScreenPoint(slotRect, mousePosition, null))
+            {
+                return i; // 클릭한 슬롯의 인덱스 반환
+            }
+        }
+
+        return -1; // 어떤 슬롯도 클릭되지 않은 경우 -1 반환
+
+
     }
     private bool AddQuickSlot(Item _item, string _name, float _itemWeight, int _count = 1)
     {
         for (int i = 0; i < quickSlots.Length; i++)
         {
-            if (quickSlots[i].item == null)
+            if (quickSlots[i].item != null&& quickSlots[i].item.itemName == _name)
             {
-                // 퀵슬롯 배열에서 비어있는 첫 번째 슬롯에 아이템 추가
-                quickSlots[i].AddItem(_item, _name, _itemWeight, _count);
-               
+                quickSlots[i].SetSlotCount(quickSlots[i].itemCount+_count);
                 // 해당 슬롯의 isFirstClick 상태를 변경 (더블클릭 방지를 위해)
                 quickSlots[i].isFirstClick = false;
 
                 return true; // 아이템 추가가 완료되었으므로 true 반환
             }
+            else if (quickSlots[i].item ==null)
+            {
+                // 퀵슬롯 배열에서 비어있는 첫 번째 슬롯에 아이템 추가
+                quickSlots[i].AddItem(_item, _name, _itemWeight, _count);
+                // 해당 슬롯의 isFirstClick 상태를 변경 (더블클릭 방지를 위해)
+                quickSlots[i].isFirstClick = false;
+
+                return true; // 아이템 추가가 완료되었으므로 true 반환
+
+            }
         }
 
-        Debug.Log("퀵슬롯이 다 차서 추가되지 않았습니다.");
         return false; // 퀵슬롯이 다 찼으므로 false 반환
     }
 
@@ -245,15 +289,18 @@ public class Inventory : MonoBehaviour
         if (  currentWeight  > invenmaxweight)
         {
             //넘으면 플레이어 무브 느리게 한다던지 
-            player_move.speed = Mathf.Max(1.5f, Mathf.Min(3f, player_move.speed - 1.5f));
+            player_move.speed = Mathf.Max(1f, Mathf.Min(0.5f, player_move.speed - 1f));
             //무겁다는 아이콘 띄우기 
+            Heavy.SetActive(true);
+
         }
         else if (currentWeight <= invenmaxweight)
         {
             //같거나 작아진다면 
             //속도 정상화 
-            player_move.speed = Mathf.Max(1.5f, Mathf.Min(3f, player_move.speed + 1.5f));
+            player_move.speed = Mathf.Max(1.5f, Mathf.Min(0.5f, player_move.speed + 1f));
             //무겁다는 아이콘 오프 
+            Heavy.SetActive(false);
         }
     }
     public void OnBag(int _count)
@@ -261,13 +308,14 @@ public class Inventory : MonoBehaviour
 
         invenmaxweight += _count;
         UpdateSlotCount();
+        Bag.SetActive(true);
         StartCoroutine(UseObjectWithSlider(3f));
         
     }
     public void OffBag(int _count)
     {
         invenmaxweight -= _count;
-        // Bag.SetActive(false);
+         Bag.SetActive(false);
         UpdateTotalWeight2(); // 가방 무게 업데이트
     }
     private IEnumerator UseObjectWithSlider(float duration)

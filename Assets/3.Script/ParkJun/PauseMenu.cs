@@ -7,7 +7,7 @@ public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private GameObject go_BaseUI;
     [SerializeField] private SaveAndLoad theSaveAndLoad;
-    public string sceneName = "TestIntro_UIFix Test";
+    private string sceneName = "Intro";
 
     private void Update()
     {
@@ -48,19 +48,16 @@ public class PauseMenu : MonoBehaviour
     }
     public void ClickIntroSave()
     {
-        
-        CloseMenu();
         theSaveAndLoad.SaveData();
-     
+        CloseMenu();
         StartCoroutine(LoadWithDelay());
-
     }
 
     IEnumerator LoadWithDelay()
     {
         // 원하는 딜레이(예: 2초)만큼 기다린 후 씬 로드
         yield return new WaitForSeconds(1f);
-       SceneManager.LoadScene(sceneName);
+        SceneManager.LoadScene(sceneName);
 
         while (!SceneManager.LoadSceneAsync(sceneName).isDone)
         {

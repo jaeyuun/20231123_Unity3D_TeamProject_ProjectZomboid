@@ -60,24 +60,15 @@ public class ItemEffectDataBase : MonoBehaviour
                                 break;
                             case Hungry:
                                 thePlayerStatus.increaseHungry(itemEffects[x].num[y]);
-                                
-
                                 break;
                             case THIRSTY:
                                 thePlayerStatus.increaseThirsty(itemEffects[x].num[y]);
                                 break;
-                            default:
-                                Debug.Log("잘못된 Status 부위");
-                                break;
-
-                        
-
                         }
                     }
                     return; //for문이 만족할때까지 만족한게 없으면 끝내버리기
                 }
             }
-            Debug.Log("일치하는 itemName이 없습니다 ");
         }
         if (_item.itemType == Item.ItemType.objectUsed)
         {
@@ -93,11 +84,8 @@ public class ItemEffectDataBase : MonoBehaviour
                             case ATT:
                                 thePlayerStatus.increaseATT(itemEffects[x].num[y]);
                                 break;
-                           
                             default:
-                                Debug.Log("잘못된 Status 부위");
                                 break;
-
                         }
                     }
                     return; //for문이 만족할때까지 만족한게 없으면 끝내버리기

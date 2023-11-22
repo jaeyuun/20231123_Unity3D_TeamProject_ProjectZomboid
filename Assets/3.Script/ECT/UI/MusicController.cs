@@ -16,9 +16,11 @@ public enum SliderList
 
 public enum BGMSound
 {
-    Main = 0,
-    Load,
-    Game,
+    Intro = 0,
+    GameLoad,
+    GameNew,
+    MainGame_Fake,
+    Player_Death,
 }
 
 public enum SFXSound
@@ -30,17 +32,21 @@ public enum SFXSound
     Player_Hit,
     Zombie_Hit,
     Zombie_Die,
+    Zombie_Die2,
     Car_StartUp,
     Car_Dirve,
     Car_Brake,
     Car_InOut,
     Window_Bottele,
-    Door_Open, // door open, broken, crash 찾기
+    Door_Open,
     Door_Broken,
     Door_Crash,
     Gun_Shot,
     Rock_Hit,
     Rock_Broken,
+    Reload,
+    NoBullet,
+    LevelUp,
 }
 #endregion
 public class MusicController : MonoBehaviour
@@ -48,9 +54,6 @@ public class MusicController : MonoBehaviour
     public static MusicController instance;
     public AudioMixer audioMixer;
     private Canvas canvas;
-
-    // RainSound
-    private RainScript rainScript = null;
 
     private AudioSource bgmPlayer;
     private AudioSource sfxPlayer;
@@ -64,6 +67,8 @@ public class MusicController : MonoBehaviour
     private Button settingButton;
     private GameObject musicSettingPanel;
 
+    private HitColl player; // isDie 가져오기 위함
+
     public float bgmVolume = 0f;
     public float sfxVolume = 0f;
 
@@ -71,36 +76,45 @@ public class MusicController : MonoBehaviour
     {
         if (instance == null)
         {
+            PlayerPrefs.SetFloat("BGMVolume", 0f);
+            PlayerPrefs.SetFloat("SFXVolume", 0f);
             instance = this;
             DontDestroyOnLoad(instance);
-        } else
+        } 
+        else
         {
-            Destroy(instance);
+            instance.ChangeSceneMusic();
+            Destroy(gameObject);
         }
-        TryGetComponent(out bgmPlayer);
-        TryGetComponent(out sfxPlayer);
-        rainScript = FindObjectOfType<RainScript>();
 
-        AwakeSetting();
-        SettingButton();
-        PlayerPrefs.SetFloat("BGMVolume", 0f);
-        PlayerPrefs.SetFloat("SFXVolume", 0f);
+        // audioSource
+        bgmPlayer = transform.GetChild(0).GetComponent<AudioSource>();
+        sfxPlayer = transform.GetChild(1).GetComponent<AudioSource>();
     }
 
-    public void ChangeSceneMusic(string type)
+    private void OnEnable()
+    {
+        ChangeSceneMusic();
+    }
+
+    public void ChangeSceneMusic()
     {
         // Scene이 바뀔때 출력되는 메소드
         AwakeSetting();
-        OnEnableMusic();
-        PlayBGMSound(type);
+        SettingButton();
+        PlayBGMSound();
+        if (player == null)
+        {
+            player = FindObjectOfType<HitColl>();
+        }
     }
 
     public void AwakeSetting()
     {
-        musicSettingPanel = null;
         if (canvas == null)
         {
             canvas = GameObject.Find("Canvas").transform.GetComponent<Canvas>();
+            musicSettingPanel = null;
         }
     }
 
@@ -109,34 +123,27 @@ public class MusicController : MonoBehaviour
         settingButton = null;
         if (settingButton == null)
         {
+            /*if (settingButton.onClick != null)
+            {
+                settingButton.onClick.RemoveAllListeners(); // Event Remove All
+            }*/
             settingButton = GameObject.FindGameObjectWithTag("SettingMenu").transform.GetChild(2).gameObject.transform.GetComponent<Button>();
             settingButton.onClick.AddListener(SetActiveTrue);
         }
     }
 
-    public void OnEnableMusic()
+    public void SliderMusicSetting()
     {
         // Sound PlayerPrefs Check
         if (PlayerPrefs.HasKey("BGMVolume"))
         {
             bgmVolume = PlayerPrefs.GetFloat("BGMVolume");
+            slider[(int)SliderList.BGM].value = PlayerPrefs.GetFloat("BGMVolume");
         }
         if (PlayerPrefs.HasKey("SFXVolume"))
         {
             sfxVolume = PlayerPrefs.GetFloat("SFXVolume");
-        }
-    }
-
-    public void OnDisableMusic()
-    {
-        settingButton.onClick.RemoveAllListeners(); // Event Remove All
-    }
-
-    private void Start()
-    {
-        if (SceneManager.GetActiveScene().name.Equals("TestIntro_UIFix")) // IntroScene name
-        {
-            PlayBGMSound("Main"); // GameStart
+            slider[(int)SliderList.SFX].value = PlayerPrefs.GetFloat("SFXVolume");
         }
     }
 
@@ -145,7 +152,7 @@ public class MusicController : MonoBehaviour
         // Setting Button Click, Menu activeSelf true
         if (musicSettingPanel == null)
         {
-            musicSettingPanel = Instantiate(musicUI, canvas.transform); // 수진언니 canvas 켜져있으면 오류남, canvas 합쳐야함
+            musicSettingPanel = Instantiate(musicUI, canvas.transform);
             sliderObject = GameObject.FindGameObjectsWithTag("MusicSlider");
             if (musicSettingPanel.activeSelf)
             {
@@ -155,27 +162,23 @@ public class MusicController : MonoBehaviour
                 }
                 slider[(int)SliderList.BGM].onValueChanged.AddListener(SetBGMVolume);
                 slider[(int)SliderList.SFX].onValueChanged.AddListener(SetSFXVolume);
-                SliderHandlerPosition();
             }
         }
         if (!musicSettingPanel.activeSelf)
         {
             musicSettingPanel.SetActive(true);
         }
-    }
-
-    public void SliderHandlerPosition()
-    {
-        // 버튼 클릭 시 슬라이더 핸들러 위치
-        SetBGMVolume(PlayerPrefs.GetFloat("BGMVolume"));
-        SetSFXVolume(PlayerPrefs.GetFloat("SFXVolume"));
-        slider[(int)SliderList.BGM].value = PlayerPrefs.GetFloat("BGMVolume");
-        slider[(int)SliderList.SFX].value = PlayerPrefs.GetFloat("SFXVolume");
+        SliderMusicSetting();
     }
 
     #region Sound Play
-    private void PlayBGMSound(string type)
+    public void PlayBGMSound()
     {
+        string type = SceneManager.GetActiveScene().name;
+        if (player.isDie)
+        {
+            type = "Player_Death";
+        }
         // 배경음 플레이
         if (bgmPlayer.isPlaying)
         {
@@ -189,7 +192,7 @@ public class MusicController : MonoBehaviour
     public void PlaySFXSound(string type)
     {
         // 효과음 플레이
-        int index = (int)(SFXSound)Enum.Parse(typeof(BGMSound), type);
+        int index = (int)(SFXSound)Enum.Parse(typeof(SFXSound), type);
         sfxPlayer.clip = sfxClips[index];
         sfxPlayer.PlayOneShot(sfxPlayer.clip);
     }

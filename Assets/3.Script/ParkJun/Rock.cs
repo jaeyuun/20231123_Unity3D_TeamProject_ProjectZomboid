@@ -34,10 +34,10 @@ public class Rock : MonoBehaviour
     public void Mining()
     {
         audioSource.clip = effectClip1;
-        audioSource.Play();
+        // audioSource.Play();
+        MusicController.instance.PlaySFXSound("Rock_Hit");
         var clone = Instantiate(go_effect_Prefabs, COL.bounds.center, Quaternion.identity);
         Destroy(clone, destroyTime);
-
 
         hp--;
         if (hp<=0)
@@ -48,8 +48,8 @@ public class Rock : MonoBehaviour
     private void Destruction()
     {
         audioSource.clip = effectClip2;
-        audioSource.Play();
-
+        // audioSource.Play();
+        MusicController.instance.PlaySFXSound("Rock_Broken");
         COL.enabled = false;
         for (int i = 0; i < count; i++)
         {
@@ -70,12 +70,7 @@ public class Rock : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Attack"))
         {
-            Debug.Log("바위가 맞았다!");
-
             Mining();
-
         }
-
-        
     }
 }

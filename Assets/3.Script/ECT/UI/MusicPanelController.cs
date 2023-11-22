@@ -7,7 +7,7 @@ public class MusicPanelController : MonoBehaviour
     public void BackButton()
     {
         gameObject.SetActive(false);
-        MusicController.instance.SliderHandlerPosition();
+        MusicController.instance.SliderMusicSetting();
     }
 
     public void OKButton()

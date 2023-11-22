@@ -16,7 +16,7 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
     private int buttonCount = 0;
     private RaycastHit hitObject;
 
-    private bool isAim = false; // player 조준이 아닐 때
+    public bool isAim = false; // player 조준이 아닐 때
 
     private void Awake()
     {
@@ -109,19 +109,19 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
     #region Click State
     public void PlayerClick()
     {
-        string[] menu = { "Player1", "Player2", "Player3" }; // Text, 오브젝트마다 달라짐
+        string[] menu = { "휴식하기" }; // Text, 오브젝트마다 달라짐
         ClickMenuLoad(menu);
     }
 
     public void DoorClick()
     {
-        string[] menu = { "Door1", "Door2", "Door3", "Door4" }; // Text, 오브젝트마다 달라짐
+        string[] menu = { "문 닫기", "문 열기" }; // Text, 오브젝트마다 달라짐
         ClickMenuLoad(menu);
     }
 
     public void WindowClick()
     {
-        string[] menu = { "Window1" };
+        string[] menu = { "창문 열기", "창문 닫기" };
         ClickMenuLoad(menu);
     }
 

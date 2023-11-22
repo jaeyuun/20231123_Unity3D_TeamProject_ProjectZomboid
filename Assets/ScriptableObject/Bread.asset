@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Bread
   m_EditorClassIdentifier: 
   itemType: 1
-  itemName: "\uC2DD\uBE75"
+  itemName: Bread
   itemDesc: "\uC57D\uAC04\uC758 \uBC30\uACE0\uD514\uC744 \uCC44\uC6CC\uBCF4\uC790.."
   itemImage: {fileID: 21300000, guid: 17a46b332b667814bad25ce91b73b7cc, type: 3}
   itemPrefab: {fileID: 6534905955972478286, guid: a542f43fcea4edb4588166199de989e0, type: 3}
