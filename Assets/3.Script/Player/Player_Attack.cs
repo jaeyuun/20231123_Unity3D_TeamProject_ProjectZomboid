@@ -45,11 +45,22 @@ public class Player_Attack : MonoBehaviour
     private int magazine = 0;//탄창 수 
 
 
+    [Header("Level_Up")]
+    [SerializeField] private Player_Level_Up level_up;
+    [SerializeField] private GameObject[] health;
+    [SerializeField] private GameObject[] strength;
+    //레벨업을 위한 횟수
+    private int health_exe = 0;
+    private int strength_exe = 0;
+
     [Header("테스트를위한")]
     public bool Bat_Get;//배트를 가지고 있냐?    
     public bool Gun_Get;
     public bool Melee_weapon;
     public bool Range_weapon;
+
+
+    
 
     [SerializeField] private RightClickMenu rightClickMenu;
     float keydown = 0f;
@@ -64,6 +75,12 @@ public class Player_Attack : MonoBehaviour
 
     private void Update()
     {
+        if(health_exe >=10) // 레벨업
+        {
+            Debug.Log("레벨업");
+            level_up.Level_up(health);
+            health_exe = 0;//경험치 초기화
+        }
         for (int i = 0; i < inventory.slots.Length; i++)//문제점을 찾았는데 어떻게 해야할까 
         {
             if (inventory.slots[i].itemName == "Bullet")
@@ -136,6 +153,7 @@ public class Player_Attack : MonoBehaviour
 
         if (Input.GetButtonDown("Jump") && !IsMovement)//동작하길 바란다...Todo 필요없다면 삭제 하길...
         {
+            health_exe += 1;//경험치추가
             anim.SetLayerWeight(1, 0);
             anim.SetTrigger("isKickig");
             IsMovement = true;
@@ -182,6 +200,7 @@ public class Player_Attack : MonoBehaviour
                         Invoke("BatSWingClip", 0.3f);
                         IsMovement = true;
                         Invoke("isMovement", 1f);
+                        health_exe += 1;//경험치추가
                     }
                 }
                 if (!Melee_weapon && !Range_weapon)//둘다 없던가
@@ -193,6 +212,7 @@ public class Player_Attack : MonoBehaviour
                         isAttack = true;
                         IsMovement = true;
                         Invoke("isMovement", 1.1f);
+                        health_exe += 1;//경험치추가
                     }
                 }
 
