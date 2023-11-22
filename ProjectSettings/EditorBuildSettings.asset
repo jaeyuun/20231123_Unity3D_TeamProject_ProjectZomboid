@@ -17,4 +17,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/1.Scene/Pjunyeong.unity
     guid: 7ac33ab977ba03240b41c4291191df42
+  - enabled: 1
+    path: Assets/1.Scene/TestIntro_UIFix.unity
+    guid: 9956ae0d45262a148905dccbf6edb34a
+  - enabled: 1
+    path: Assets/1.Scene/MainGame _Jaeyun.unity
+    guid: 0a57949c56a4d9441a8f34ef7f6c75ec
   m_configObjects: {}

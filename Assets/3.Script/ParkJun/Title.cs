@@ -10,11 +10,12 @@ public class Title : MonoBehaviour
 
     public void ClickStart()
     {
+        MusicController.instance.ChangeSceneMusic("Load");
         SceneManager.LoadScene(NewName);
-       
     }
     public void ClickLoad()
     {
+        MusicController.instance.ChangeSceneMusic("Load");
         SceneManager.LoadScene(loadName);
     }
 
