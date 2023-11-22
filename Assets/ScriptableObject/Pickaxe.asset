@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Pickaxe
   m_EditorClassIdentifier: 
   itemType: 0
-  itemName: "\uACE1\uAC31\uC774"
+  itemName: Pickaxe
   itemDesc: "\uC7AC\uB8CC \uC544\uC774\uD15C\uC744 \n\uC5BB\uC744 \uC218 \uC788\uB2E4."
   itemImage: {fileID: 21300000, guid: 8eaffe99e8f556845b908f4cbc2ce2a3, type: 3}
   itemPrefab: {fileID: 1272433870825181008, guid: 3fd63e383b32d5a47acf29d1879bdf71, type: 3}

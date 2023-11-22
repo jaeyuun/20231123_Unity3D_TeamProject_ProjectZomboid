@@ -5,17 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class Title : MonoBehaviour
 {
-    public string NewName = "GameNew";
+    public string newName = "GameNew";
     public string loadName = "GameLoad";
 
     public void ClickStart()
     {
-        MusicController.instance.ChangeSceneMusic("Load");
-        SceneManager.LoadScene(NewName);
+        SceneManager.LoadScene(newName);
     }
     public void ClickLoad()
     {
-        MusicController.instance.ChangeSceneMusic("Load");
         SceneManager.LoadScene(loadName);
     }
 
@@ -23,5 +21,4 @@ public class Title : MonoBehaviour
     {
         Application.Quit();
     }
-   
 }

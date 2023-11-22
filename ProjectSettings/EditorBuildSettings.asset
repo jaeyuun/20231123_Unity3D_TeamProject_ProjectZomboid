@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/1.Scene/TestIntro_UIFix Test.unity
-    guid: 2906ae9e93034af4b972fd76d4ca6f03
+    path: Assets/1.Scene/Intro.unity
+    guid: 9956ae0d45262a148905dccbf6edb34a
   - enabled: 1
     path: Assets/1.Scene/GameNew.unity
     guid: f5d09c268489a95449ea5901c26e2836
@@ -15,12 +15,6 @@ EditorBuildSettings:
     path: Assets/1.Scene/GameLoad.unity
     guid: de0fd7c549366494cba4b21a907bdf43
   - enabled: 1
-    path: Assets/1.Scene/Pjunyeong.unity
-    guid: 7ac33ab977ba03240b41c4291191df42
-  - enabled: 1
-    path: Assets/1.Scene/TestIntro_UIFix.unity
-    guid: 9956ae0d45262a148905dccbf6edb34a
-  - enabled: 1
-    path: Assets/1.Scene/MainGame _Jaeyun.unity
-    guid: 0a57949c56a4d9441a8f34ef7f6c75ec
+    path: Assets/1.Scene/MainGame_Fake.unity
+    guid: b471804e55284df4e8f03220ba27fd93
   m_configObjects: {}

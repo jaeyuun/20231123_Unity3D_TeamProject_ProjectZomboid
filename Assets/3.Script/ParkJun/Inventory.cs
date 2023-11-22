@@ -21,6 +21,7 @@ public class Inventory : MonoBehaviour
     [SerializeField]
     private Player_Move player_move;
     public GameObject slotPrefab;
+    public GameObject Heavy;
 
 
     
@@ -199,7 +200,7 @@ public class Inventory : MonoBehaviour
     private void DoubleClickAddQuickSlot(int clickedIndex)
     {
          
-            if (slots[clickedIndex].item != null && slots[clickedIndex].isFirstClick)
+            if (slots[clickedIndex].item != null && slots[clickedIndex].isFirstClick)//에러확인필요mh
             {
                 // 더블클릭한 슬롯의 아이템을 퀵슬롯에 추가
                if( AddQuickSlot(slots[clickedIndex].item, slots[clickedIndex].item.itemName, slots[clickedIndex].itemweight, slots[clickedIndex].itemCount))
@@ -265,7 +266,6 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        Debug.Log("퀵슬롯이 다 차서 추가되지 않았습니다.");
         return false; // 퀵슬롯이 다 찼으므로 false 반환
     }
 
@@ -289,15 +289,18 @@ public class Inventory : MonoBehaviour
         if (  currentWeight  > invenmaxweight)
         {
             //넘으면 플레이어 무브 느리게 한다던지 
-            player_move.speed = Mathf.Max(1.5f, Mathf.Min(3f, player_move.speed - 1.5f));
+            player_move.speed = Mathf.Max(1f, Mathf.Min(0.5f, player_move.speed - 1f));
             //무겁다는 아이콘 띄우기 
+            Heavy.SetActive(true);
+
         }
         else if (currentWeight <= invenmaxweight)
         {
             //같거나 작아진다면 
             //속도 정상화 
-            player_move.speed = Mathf.Max(1.5f, Mathf.Min(3f, player_move.speed + 1.5f));
+            player_move.speed = Mathf.Max(1.5f, Mathf.Min(0.5f, player_move.speed + 1f));
             //무겁다는 아이콘 오프 
+            Heavy.SetActive(false);
         }
     }
     public void OnBag(int _count)
@@ -305,13 +308,14 @@ public class Inventory : MonoBehaviour
 
         invenmaxweight += _count;
         UpdateSlotCount();
+        Bag.SetActive(true);
         StartCoroutine(UseObjectWithSlider(3f));
         
     }
     public void OffBag(int _count)
     {
         invenmaxweight -= _count;
-        // Bag.SetActive(false);
+         Bag.SetActive(false);
         UpdateTotalWeight2(); // 가방 무게 업데이트
     }
     private IEnumerator UseObjectWithSlider(float duration)

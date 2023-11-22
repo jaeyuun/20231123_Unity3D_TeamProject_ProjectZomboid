@@ -34,9 +34,9 @@ public class ZombieController : HP, IState
     [SerializeField] private GameObject screamRange;
     private bool isScreamZombie = false;
 
-    [Header("효과음")]
+    /*[Header("효과음")]
     private AudioSource zombieAudio;
-    [SerializeField] private AudioClip[] audioClip;
+    [SerializeField] private AudioClip[] audioClip;*/
 
     // Zombie Hit
     private float zombieHp;
@@ -53,7 +53,7 @@ public class ZombieController : HP, IState
     {
         TryGetComponent(out nav);
         TryGetComponent(out zombieAnim);
-        TryGetComponent(out zombieAudio);
+        // TryGetComponent(out zombieAudio);
 
         skinned = transform.GetChild(0).GetComponent<SkinnedMeshRenderer>();
         zombieHp = hP;
@@ -135,7 +135,6 @@ public class ZombieController : HP, IState
             // zombie down
             StartCoroutine(Stun());
             //코루틴으로 바꾸셔서 코드 수정 1120_mhk
-            
         }
     }
 
@@ -282,7 +281,8 @@ public class ZombieController : HP, IState
         TryGetComponent(out Rigidbody rigid);
         isDie = true;
         NavmeshStop();
-        zombieAudio.PlayOneShot(audioClip[(int)ZombieAudio.Dead]);
+        // zombieAudio.PlayOneShot(audioClip[(int)ZombieAudio.Dead]);
+        MusicController.instance.PlaySFXSound("Zombie_Die");
 
         rigid.isKinematic = true;
         collider.enabled = false;

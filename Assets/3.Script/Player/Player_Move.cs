@@ -5,11 +5,11 @@ using UnityEngine;
 public class Player_Move : MonoBehaviour
 {
     [Header("걷기속도 (달리기는*2임)")]
-    public float speed = 3f;
+    public float speed = 1.5f;
     public Animator animator;
 
-    [Header("메인카메라")]
-    [SerializeField] private Camera followCamera;
+    /*[Header("메인카메라")]
+    [SerializeField] private Camera followCamera;*/
 
     [Header("발소리(사운드클립)")]
     public AudioClip FootSteps;
@@ -26,7 +26,6 @@ public class Player_Move : MonoBehaviour
     [Header("사운드 게임오브젝트")]
     public SphereCollider Sound;//게임오브젝트
 
-    public CapsuleCollider Man;
 
     private StatusController statusController;
     private void Start()
@@ -35,7 +34,7 @@ public class Player_Move : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         Sound =GetComponentInChildren<SphereCollider>();
 
-        GameObject statusControllerObject = GameObject.Find("Status_Base"); // 다른 게임 오브젝트의 이름을 사용
+        GameObject statusControllerObject = GameObject.Find("Status_Base2"); // 다른 게임 오브젝트의 이름을 사용
 
         if (statusControllerObject != null)
         {
@@ -49,8 +48,6 @@ public class Player_Move : MonoBehaviour
     {
         float moveHorizontal = Input.GetAxisRaw("Horizontal");
         float moveVertical = Input.GetAxisRaw("Vertical");
-
-       
 
         Vector3 movement = new Vector3(moveHorizontal+ moveVertical, 0.0f, moveVertical-moveHorizontal);
 
@@ -68,27 +65,52 @@ public class Player_Move : MonoBehaviour
         else if (movement != Vector3.zero) // 마우스를 바라보지 않는 상황에서 이동 중이라면
         {
             Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
-            transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, speed * Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, speed*3f * Time.deltaTime);
         }
 
+        /*if (moveHorizontal != 0 || moveVertical != 0)
+        {
+            statusController.DecreaseSP(1);
+            // walk
+            animator.SetBool("isRun", false);
+            animator.SetBool("isWalk", true);
+            Sound.radius = 10f;
+            transform.position += movement * speed * Time.deltaTime;
 
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                if (!Input.GetMouseButton(1) && statusController.GetcurrentSP() > 0)
+                {
+                    // runs
+                    animator.SetBool("isRun", true);
+                    Sound.radius = 15f;
+                    transform.position += movement * speed * 2f * Time.deltaTime;
+                }
+            }
 
+            if (speed >= 2f)
+            {
+                StartCoroutine(run_Sound());
+            } else
+            {
+                StartCoroutine(walking_Sound());
+            }
+        }*/
         if (moveHorizontal != 0 || moveVertical != 0)
         {
-            
-            if (Input.GetKey(KeyCode.LeftShift) &&statusController.GetcurrentSP()>0&& !Input.GetMouseButton(1))
+
+            if (Input.GetKey(KeyCode.LeftShift) && statusController.GetcurrentSP() > 0 && !Input.GetMouseButton(1))
             {
                 statusController.DecreaseSP(1);
                 animator.SetBool("isRun", true);
                 Sound.radius = 15f;
                 transform.position += movement * speed * 2f * Time.deltaTime;
-               
+
                 StartCoroutine(run_Sound());
-                ;
             }
-            else if (!Input.GetKey(KeyCode.LeftShift) ||statusController.GetcurrentSP()<=0|| Input.GetMouseButton(1))
+            else if (!Input.GetKey(KeyCode.LeftShift) || statusController.GetcurrentSP() <= 0 || Input.GetMouseButton(1))
             {
-  
+
                 animator.SetBool("isRun", false);
                 animator.SetBool("isWalk", true);
                 Sound.radius = 10f;
@@ -120,7 +142,6 @@ public class Player_Move : MonoBehaviour
             transform.LookAt(new Vector3(pointToLook.x, transform.position.y, pointToLook.z));      
            /* Quaternion toRotation = Quaternion.LookRotation(pointToLook, Vector3.up);
             transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, speed * Time.deltaTime);*/
-          
         }
     }
 
@@ -134,7 +155,8 @@ public class Player_Move : MonoBehaviour
         }
 
         isWalkingSoundPlaying = true;
-        audioSource.PlayOneShot(FootSteps);
+        // audioSource.PlayOneShot(FootSteps);
+        MusicController.instance.PlaySFXSound("Player_FootStep");
         yield return new WaitForSeconds(0.5f);
 
         isWalkingSoundPlaying = false;
@@ -148,20 +170,10 @@ public class Player_Move : MonoBehaviour
         }
 
         isWalkingSoundPlaying = true;
-        audioSource.PlayOneShot(FootSteps);
+        // audioSource.PlayOneShot(FootSteps);
+        MusicController.instance.PlaySFXSound("Player_FootStep");
         yield return new WaitForSeconds(0.35f);
 
         isWalkingSoundPlaying = false;
     }
-
-
-    private void Die()
-    {
-        audioSource.PlayOneShot(Death);
-    }
-
-
-
-
-
 }

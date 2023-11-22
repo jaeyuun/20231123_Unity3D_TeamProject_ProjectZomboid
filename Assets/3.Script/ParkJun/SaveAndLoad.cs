@@ -114,9 +114,6 @@ public class SaveAndLoad : MonoBehaviour
         }
         string json = JsonUtility.ToJson(saveData);
         File.WriteAllText(save_data_directory + save_filename, json);
-
-        Debug.Log("저장 완료");
-        Debug.Log(json);
     }
     public void LoadData()
     {
@@ -127,7 +124,7 @@ public class SaveAndLoad : MonoBehaviour
             saveData = JsonUtility.FromJson<SaveData>(loadJson);
 
             thePlayer = FindObjectOfType<Player_Move>();
-            theInventory = FindObjectOfType<Inventory>();  
+            theInventory = FindObjectOfType<Inventory>();
             theStatus = FindObjectOfType<StatusController>();
             theZombie = FindObjectOfType<ZombieSpawner>();
 
@@ -135,7 +132,7 @@ public class SaveAndLoad : MonoBehaviour
             thePlayer.transform.position = saveData.playerPos; //위치 불러오기 
             thePlayer.transform.eulerAngles = saveData.playerRot; //회전값 불러오기 
 
-        
+
 
             //플레이어 스탯 
             theStatus.SetcurrentHP(saveData.savedHp);
@@ -148,20 +145,15 @@ public class SaveAndLoad : MonoBehaviour
             //플레이어 아이템 (인벤토리)
             for (int i = 0; i < saveData.invenItemName.Count; i++)
             {
-                theInventory.LoadToDrop(saveData.invenArrayNumber[i], saveData.invenItemName[i],saveData.invenItemweight[i], saveData.invenItemNumber[i]);
+                theInventory.LoadToDrop(saveData.invenArrayNumber[i], saveData.invenItemName[i], saveData.invenItemweight[i], saveData.invenItemNumber[i]);
             }
-
             // 퀵슬롯 로드
             for (int i = 0; i < saveData.quickSlotItemName.Count; i++)
-                theInventory.LoadToQuick(saveData.quickSlotArrayNumber[i], saveData.quickSlotItemName[i],saveData.quickSlotItemweigh[i], saveData.quickSlotItemNumber[i]);
+            {
+                theInventory.LoadToQuick(saveData.quickSlotArrayNumber[i], saveData.quickSlotItemName[i], saveData.quickSlotItemweigh[i], saveData.quickSlotItemNumber[i]);
 
-
-            Debug.Log("로드 완료");
-            Debug.Log(loadJson);
+            }
         }
-        else
-            Debug.Log("세이브 파일이 없습니다.");
-        
     }
  
 

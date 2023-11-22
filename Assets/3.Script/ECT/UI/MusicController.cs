@@ -16,9 +16,10 @@ public enum SliderList
 
 public enum BGMSound
 {
-    Main = 0,
-    Load,
-    Game,
+    Intro = 0,
+    GameLoad,
+    GameNew,
+    MainGame_Fake,
 }
 
 public enum SFXSound
@@ -35,7 +36,7 @@ public enum SFXSound
     Car_Brake,
     Car_InOut,
     Window_Bottele,
-    Door_Open, // door open, broken, crash 찾기
+    Door_Open,
     Door_Broken,
     Door_Crash,
     Gun_Shot,
@@ -48,9 +49,6 @@ public class MusicController : MonoBehaviour
     public static MusicController instance;
     public AudioMixer audioMixer;
     private Canvas canvas;
-
-    // RainSound
-    private RainScript rainScript = null;
 
     private AudioSource bgmPlayer;
     private AudioSource sfxPlayer;
@@ -71,36 +69,41 @@ public class MusicController : MonoBehaviour
     {
         if (instance == null)
         {
+            PlayerPrefs.SetFloat("BGMVolume", 0f);
+            PlayerPrefs.SetFloat("SFXVolume", 0f);
             instance = this;
             DontDestroyOnLoad(instance);
-        } else
+        } 
+        else
         {
-            Destroy(instance);
+            instance.ChangeSceneMusic();
+            Destroy(gameObject);
         }
         TryGetComponent(out bgmPlayer);
         TryGetComponent(out sfxPlayer);
-        rainScript = FindObjectOfType<RainScript>();
 
-        AwakeSetting();
-        SettingButton();
-        PlayerPrefs.SetFloat("BGMVolume", 0f);
-        PlayerPrefs.SetFloat("SFXVolume", 0f);
+        
     }
 
-    public void ChangeSceneMusic(string type)
+    private void OnEnable()
+    {
+        ChangeSceneMusic();
+    }
+
+    public void ChangeSceneMusic()
     {
         // Scene이 바뀔때 출력되는 메소드
         AwakeSetting();
-        OnEnableMusic();
-        PlayBGMSound(type);
+        SettingButton();
+        PlayBGMSound();
     }
 
     public void AwakeSetting()
     {
-        musicSettingPanel = null;
         if (canvas == null)
         {
             canvas = GameObject.Find("Canvas").transform.GetComponent<Canvas>();
+            musicSettingPanel = null;
         }
     }
 
@@ -109,34 +112,27 @@ public class MusicController : MonoBehaviour
         settingButton = null;
         if (settingButton == null)
         {
+            /*if (settingButton.onClick != null)
+            {
+                settingButton.onClick.RemoveAllListeners(); // Event Remove All
+            }*/
             settingButton = GameObject.FindGameObjectWithTag("SettingMenu").transform.GetChild(2).gameObject.transform.GetComponent<Button>();
             settingButton.onClick.AddListener(SetActiveTrue);
         }
     }
 
-    public void OnEnableMusic()
+    public void SliderMusicSetting()
     {
         // Sound PlayerPrefs Check
         if (PlayerPrefs.HasKey("BGMVolume"))
         {
             bgmVolume = PlayerPrefs.GetFloat("BGMVolume");
+            slider[(int)SliderList.BGM].value = PlayerPrefs.GetFloat("BGMVolume");
         }
         if (PlayerPrefs.HasKey("SFXVolume"))
         {
             sfxVolume = PlayerPrefs.GetFloat("SFXVolume");
-        }
-    }
-
-    public void OnDisableMusic()
-    {
-        settingButton.onClick.RemoveAllListeners(); // Event Remove All
-    }
-
-    private void Start()
-    {
-        if (SceneManager.GetActiveScene().name.Equals("TestIntro_UIFix")) // IntroScene name
-        {
-            PlayBGMSound("Main"); // GameStart
+            slider[(int)SliderList.SFX].value = PlayerPrefs.GetFloat("SFXVolume");
         }
     }
 
@@ -145,7 +141,7 @@ public class MusicController : MonoBehaviour
         // Setting Button Click, Menu activeSelf true
         if (musicSettingPanel == null)
         {
-            musicSettingPanel = Instantiate(musicUI, canvas.transform); // 수진언니 canvas 켜져있으면 오류남, canvas 합쳐야함
+            musicSettingPanel = Instantiate(musicUI, canvas.transform);
             sliderObject = GameObject.FindGameObjectsWithTag("MusicSlider");
             if (musicSettingPanel.activeSelf)
             {
@@ -155,27 +151,19 @@ public class MusicController : MonoBehaviour
                 }
                 slider[(int)SliderList.BGM].onValueChanged.AddListener(SetBGMVolume);
                 slider[(int)SliderList.SFX].onValueChanged.AddListener(SetSFXVolume);
-                SliderHandlerPosition();
             }
         }
         if (!musicSettingPanel.activeSelf)
         {
             musicSettingPanel.SetActive(true);
         }
-    }
-
-    public void SliderHandlerPosition()
-    {
-        // 버튼 클릭 시 슬라이더 핸들러 위치
-        SetBGMVolume(PlayerPrefs.GetFloat("BGMVolume"));
-        SetSFXVolume(PlayerPrefs.GetFloat("SFXVolume"));
-        slider[(int)SliderList.BGM].value = PlayerPrefs.GetFloat("BGMVolume");
-        slider[(int)SliderList.SFX].value = PlayerPrefs.GetFloat("SFXVolume");
+        SliderMusicSetting();
     }
 
     #region Sound Play
-    private void PlayBGMSound(string type)
+    private void PlayBGMSound()
     {
+        string type = SceneManager.GetActiveScene().name;
         // 배경음 플레이
         if (bgmPlayer.isPlaying)
         {
@@ -189,7 +177,7 @@ public class MusicController : MonoBehaviour
     public void PlaySFXSound(string type)
     {
         // 효과음 플레이
-        int index = (int)(SFXSound)Enum.Parse(typeof(BGMSound), type);
+        int index = (int)(SFXSound)Enum.Parse(typeof(SFXSound), type);
         sfxPlayer.clip = sfxClips[index];
         sfxPlayer.PlayOneShot(sfxPlayer.clip);
     }

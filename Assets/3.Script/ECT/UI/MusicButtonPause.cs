@@ -10,9 +10,7 @@ public class MusicButtonPause : MonoBehaviour
         {
             if (GameManager.isPause)
             {
-                MusicController.instance.AwakeSetting();
-                MusicController.instance.SettingButton();
-                MusicController.instance.OnEnableMusic();
+                MusicController.instance.ChangeSceneMusic();
             }
         }   
     }

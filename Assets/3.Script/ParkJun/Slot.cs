@@ -314,8 +314,8 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                             Quaternion.identity);
             }
 
-
-             DragSlot.instance.dragSlot.ClearSlot();
+            //아이템 버릴 때 사운드  Todo...      Exit_item
+            DragSlot.instance.dragSlot.ClearSlot();
 
 
         }

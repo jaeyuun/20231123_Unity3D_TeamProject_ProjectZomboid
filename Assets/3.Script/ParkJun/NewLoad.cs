@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class NewLoad : MonoBehaviour
 {
-    public string sceneName = "MainGame _Jaeyun"; // 수정 필요...todo
+    private string sceneName = "MainGame_Fake";
     public Text text1;
     public Text text2;
     public Button continueButton;

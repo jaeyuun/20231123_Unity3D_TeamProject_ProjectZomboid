@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class floor_Except: MonoBehaviour
+public class Secondfloor_Except: MonoBehaviour
 {
     public string targetTag = "Except"; 
     public float deletionRadius = 20f; 

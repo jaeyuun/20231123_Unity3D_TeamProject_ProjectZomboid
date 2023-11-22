@@ -83,25 +83,25 @@ public class Player_Attack : MonoBehaviour
         //레벨업 확인
         if(health_exe >=10) // 레벨업
         {
-            Debug.Log("레벨업");//사운드로 바꿀것
+            Debug.Log("레벨업");//사운드로 바꿀것 ... todo
             level_up.Level_up(health);
             health_exe = 0;//경험치 초기화
         }
         else if(strength_exe >= 10)
         {
-            Debug.Log("레벨업");//사운드로 바꿀것
+            Debug.Log("레벨업");//사운드로 바꿀것 todo
             level_up.Level_up(strength);
             strength_exe = 0;//경험치 초기화
         }
         else if(mace_exe >= 5)
         {
-            Debug.Log("레벨업");//사운드로 바꿀것
+            Debug.Log("레벨업");//사운드로 바꿀것 todo
             level_up.Level_up(mace);
             mace_exe = 0;//경험치 초기화
         }
         else if(aiming_exe >= 5)
         {
-            Debug.Log("레벨업");//사운드로 바꿀것
+            Debug.Log("레벨업");//사운드로 바꿀것 todo
             level_up.Level_up(aiming);
             aiming_exe = 0;//경험치 초기화
         }
@@ -113,7 +113,6 @@ public class Player_Attack : MonoBehaviour
                 bullet = inventory.slots[i].itemCount;
             }
         }
-        Debug.Log("총알개수" + bullet);
 
         if (Melee_weapon)
         {
@@ -130,7 +129,7 @@ public class Player_Attack : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.R) && !IsMovement)//재장전
             {
                 IsMovement = true; //행동제약
-                Debug.Log("재장전찰칵찰칵");
+                Debug.Log("재장전찰칵찰칵"); // todo... 사운드로 바꿀 것
                 Invoke("isMovement", 1.5f);
 
                 if (bullet >= 20)
@@ -189,7 +188,6 @@ public class Player_Attack : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1) && !IsMovement)
         {
             anim.SetLayerWeight(1, 1);//상체 애니메이션 재생
-            Debug.Log("누르는중~~~");
 
             if (Bat_Get)
             {
@@ -209,7 +207,7 @@ public class Player_Attack : MonoBehaviour
         {
             keydown += Time.deltaTime;
 
-            if(keydown>0.8f)
+            if(keydown>0.5f)
             {
                 rightClickMenu.isAim = true;
                 game_Cursor.OnMouseOver();
@@ -262,7 +260,7 @@ public class Player_Attack : MonoBehaviour
                     {
                         IsMovement = true;
                         Invoke("isMovement", 0.3f);
-                        //총알 없는소리 찰칵찰칵
+                        //총알 없는소리 찰칵찰칵 ... todo
                         Debug.Log("찰칵찰칵");
                     }
 
@@ -284,7 +282,8 @@ public class Player_Attack : MonoBehaviour
 
     private void BatSWingClip()
     {
-        audioSource.PlayOneShot(BatSwing);
+        // audioSource.PlayOneShot(BatSwing);
+        MusicController.instance.PlaySFXSound("Player_BatSwing");
     }
 
     private void Bat_take_out(bool Bat)// 배트를 뽑는 애니메이션

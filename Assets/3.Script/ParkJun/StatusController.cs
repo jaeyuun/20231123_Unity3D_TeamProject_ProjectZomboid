@@ -12,7 +12,7 @@ public class StatusController : MonoBehaviour
 
     // 스태미나
     [SerializeField]
-    private int sp;  // 최대 스태미나. 유니티 에디터 슬롯에서 지정할 것.
+    private int sp = 1000;  // 최대 스태미나. 유니티 에디터 슬롯에서 지정할 것.
     private int currentSp;
 
     // 스태미나 증가량
@@ -67,6 +67,10 @@ public class StatusController : MonoBehaviour
     private GameObject image_Thirsty;
     [SerializeField]
     private GameObject image_Hungry;
+
+    //죽음참조
+    [SerializeField] private HitColl hitColl;
+
 
     private const int  DP = 0, SP = 1,ATT=2, HUNGRY = 3, THIRSTY = 4;
 
@@ -144,8 +148,10 @@ public class StatusController : MonoBehaviour
     {
        
         currentHp -= _count;
-        if (currentHp <= 0)
+        if (currentHp <= 0 && !hitColl.isDie)
         {
+            hitColl.Player_Die();
+            hitColl.isDie = true;
             return true;
         }
         return false;
@@ -160,7 +166,6 @@ public class StatusController : MonoBehaviour
         {
             currentDp = dp;
         }
-
     }
 
     public void DecreaseDP(int _count)
@@ -183,7 +188,6 @@ public class StatusController : MonoBehaviour
         {
             currentAtt = att;
         }
-
     }
 
     //쉬기 
@@ -207,6 +211,7 @@ public class StatusController : MonoBehaviour
             }
         }
     }
+
     IEnumerator RecoverStamina()
     {
         isSP = true;
@@ -217,6 +222,7 @@ public class StatusController : MonoBehaviour
         }
         isSP = false;
     }
+
     private void SPRechargeTime()
     {
         if (spUsed)
@@ -234,7 +240,7 @@ public class StatusController : MonoBehaviour
 
     public void increaseSP(int _count)
     {
-        if (currentSp + _count < sp)
+        if (currentSp < sp)
         {
             currentSp += _count;
         }
@@ -242,15 +248,13 @@ public class StatusController : MonoBehaviour
         {
             currentSp = sp;
         }
-      
-
     }
 
     public void DecreaseSP(int _count)
     {
         spUsed = true;
         currentSpRechargeTime = 0;
-        if (currentSp - _count>0)
+        if (currentSp > 0)
         {
             currentSp -= _count;
         }
@@ -260,9 +264,6 @@ public class StatusController : MonoBehaviour
         }
     }
   
-
-
-
     public void increaseHungry(int _count)
     {
 
