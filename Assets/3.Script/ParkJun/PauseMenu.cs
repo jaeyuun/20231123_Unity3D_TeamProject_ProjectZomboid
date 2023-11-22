@@ -8,6 +8,8 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject go_BaseUI;
     [SerializeField] private SaveAndLoad theSaveAndLoad;
     private string sceneName = "Intro";
+    private string newscene = "GameNew";
+
 
     private void Update()
     {
@@ -63,6 +65,15 @@ public class PauseMenu : MonoBehaviour
         {
             yield return null;
         }
+    }
+
+    public void ClickIntro()
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+    public void ClickNew()
+    {
+        SceneManager.LoadScene(newscene);
     }
 }
 

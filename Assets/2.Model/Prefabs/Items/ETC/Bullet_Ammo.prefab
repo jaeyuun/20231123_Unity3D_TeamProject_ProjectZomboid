@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hasBeenPickedUp: 0
-  item: {fileID: 0}
+  item: {fileID: 11400000, guid: da59c910a9f7d204c8ffa47ce7db12fa, type: 2}
 --- !u!65 &7157101307535112198
 BoxCollider:
   m_ObjectHideFlags: 0

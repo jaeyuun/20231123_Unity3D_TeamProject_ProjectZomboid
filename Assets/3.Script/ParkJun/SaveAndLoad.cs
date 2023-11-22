@@ -52,7 +52,7 @@ public class SaveAndLoad : MonoBehaviour
     private StatusController theStatus;
 
     // Load 일 때 SetUp 예외처리
-    public bool isLoad = true; // 저장된 파일이 있을 때 true
+    
 
     private void Start()
     {
@@ -84,7 +84,7 @@ public class SaveAndLoad : MonoBehaviour
         saveData.savedHp = theStatus.GetcurrentHP();
         saveData.savedDp = theStatus.GetcurrentDP();
         saveData.savedSp = theStatus.GetcurrentSP();
-        saveData.savedSp = theStatus.GetcurrentAtt();
+        saveData.saveAtt = theStatus.GetcurrentAtt();
         saveData.savedHungry = theStatus.GetcurrentHungry();
         saveData.savedThirsty = theStatus.GetcurrentThirsty();
 
@@ -119,7 +119,7 @@ public class SaveAndLoad : MonoBehaviour
     {
         if (File.Exists(save_data_directory + save_filename)) //파일이 있을때만 로드
         {
-            isLoad = true;
+            
             string loadJson = File.ReadAllText(save_data_directory + save_filename);
             saveData = JsonUtility.FromJson<SaveData>(loadJson);
 

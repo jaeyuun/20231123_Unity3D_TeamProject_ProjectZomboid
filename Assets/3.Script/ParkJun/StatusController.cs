@@ -12,7 +12,7 @@ public class StatusController : MonoBehaviour
 
     // 스태미나
     [SerializeField]
-    private int sp = 1000;  // 최대 스태미나. 유니티 에디터 슬롯에서 지정할 것.
+    private int sp;  // 최대 스태미나. 유니티 에디터 슬롯에서 지정할 것.
     private int currentSp;
 
     // 스태미나 증가량
