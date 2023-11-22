@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
 {
-    private GameObject rightClickMenu; // UI º¸¿©ÁÙ À§Ä¡
+    private GameObject rightClickMenu; // UI ë³´ì—¬ì¤„ ìœ„ì¹˜
     private RectTransform rightClickRect;
 
     [SerializeField] private Button buttonPrefab;
@@ -16,7 +16,7 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
     private int buttonCount = 0;
     private RaycastHit hitObject;
 
-    public bool isAim = false; // player Á¶ÁØÀÌ ¾Æ´Ò ¶§
+    public bool isAim = false; // player ì¡°ì¤€ì´ ì•„ë‹ ë•Œ
 
     private void Awake()
     {
@@ -54,7 +54,7 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
     }
 
     private void OnPointerObject()
-    { // Raycast Point¸¦ ÅëÇØ ¿ÀºêÁ§Æ® ¸ñ·Ï °¡Á®¿À±â
+    { // Raycast Pointë¥¼ í†µí•´ ì˜¤ë¸Œì íŠ¸ ëª©ë¡ ê°€ì ¸ì˜¤ê¸°
         RaycastHit[] hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         hit = Physics.RaycastAll(ray);
@@ -62,25 +62,25 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
         if (hit != null)
         {
             for (int i = 0; i < hit.Length; i++)
-            { // ¿ìÅ¬¸¯ ½Ã Ã¹¹øÂ°·Î ÀâÈ÷´Â ¿ÀºêÁ§Æ®¸¸ ¹İÈ¯
+            { // ìš°í´ë¦­ ì‹œ ì²«ë²ˆì§¸ë¡œ ì¡íˆëŠ” ì˜¤ë¸Œì íŠ¸ë§Œ ë°˜í™˜
                 hitObject = hit[i];
-                if (hit[i].collider.CompareTag("Window")) // window hit Ãß°¡... todo
+                if (hit[i].collider.CompareTag("Window")) // window hit ì¶”ê°€... todo
                 {
                     break;
                 }
             }
         }
-        // Player Tag´Â ½¬´Â °Í
-        // Door Tag ¿­±â
-        // Window ºÎ¼ö±â, ¿­±â, À¯¸®Ä¡¿ì±â, ³Ñ¾î°¡±â µî...
-        // ¸Ş´º °³¼ö
+        // Player TagëŠ” ì‰¬ëŠ” ê²ƒ
+        // Door Tag ì—´ê¸°
+        // Window ë¶€ìˆ˜ê¸°, ì—´ê¸°, ìœ ë¦¬ì¹˜ìš°ê¸°, ë„˜ì–´ê°€ê¸° ë“±...
+        // ë©”ë‰´ ê°œìˆ˜
         switch (hitObject.collider.tag)
         {
             case "Window":
                 WindowClick();
                 break;
-            default: // player, sound, untagged µî
-                // player °ü·Ã »óÈ£ÀÛ¿ë
+            default: // player, sound, untagged ë“±
+                // player ê´€ë ¨ ìƒí˜¸ì‘ìš©
                 PlayerClick();
                 break;
         }
@@ -89,8 +89,8 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
     private void ClickMenuLoad(string[] menu)
     {
         buttonCount = menu.Length;
-        rightClickRect.sizeDelta = new Vector2(300, 100 * buttonCount); // State¿¡ µû¸¥ ¹öÆ° Ä«¿îÆ® º¯È­, ¹öÆ° °³¼ö¸¸Å­ ³ôÀÌ°¡ ´Ã¾î³²
-        //  button ÇØ´ç »óÈ£ÀÛ¿ëÇÏ´Â ¸Ş´º¸¸Å­ »ı¼º button text ¸Â°Ô º¯°æÇØÁÖ±â
+        rightClickRect.sizeDelta = new Vector2(300, 100 * buttonCount); // Stateì— ë”°ë¥¸ ë²„íŠ¼ ì¹´ìš´íŠ¸ ë³€í™”, ë²„íŠ¼ ê°œìˆ˜ë§Œí¼ ë†’ì´ê°€ ëŠ˜ì–´ë‚¨
+        //  button í•´ë‹¹ ìƒí˜¸ì‘ìš©í•˜ëŠ” ë©”ë‰´ë§Œí¼ ìƒì„± button text ë§ê²Œ ë³€ê²½í•´ì£¼ê¸°
         for (int i = 0; i < buttonCount; i++)
         {
             buttonList = Instantiate(buttonPrefab, rightClickMenu.transform);
@@ -103,13 +103,13 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
     #region Click State
     public void PlayerClick()
     {
-        string[] menu = { "ÈŞ½ÄÇÏ±â" }; // Text, ¿ÀºêÁ§Æ®¸¶´Ù ´Ş¶óÁü
+        string[] menu = { "íœ´ì‹í•˜ê¸°" }; // Text, ì˜¤ë¸Œì íŠ¸ë§ˆë‹¤ ë‹¬ë¼ì§
         ClickMenuLoad(menu);
     }
 
     public void WindowClick()
     {
-        string[] menu = { "Ã¢¹® ¿­±â", "Ã¢¹® ´İ±â" };
+        string[] menu = { "ì°½ë¬¸ ì—´ê¸°", "ì°½ë¬¸ ë‹«ê¸°" };
         ClickMenuLoad(menu);
 
         WIndow_bool window = hitObject.collider.transform.GetComponent<WIndow_bool>();

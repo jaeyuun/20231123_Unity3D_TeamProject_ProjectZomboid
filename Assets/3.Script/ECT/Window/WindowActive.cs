@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class WindowActive : MonoBehaviour
 {
-    // Player_Move¿¡ ´Ş·ÁÀÖÀ½
+    // Player_Moveì— ë‹¬ë ¤ìˆìŒ
     public float radius = 1f;
     private Collider windowCollider;
 
@@ -25,7 +25,7 @@ public class WindowActive : MonoBehaviour
             if (collider.gameObject.CompareTag("Window"))
             {
                 windowCollider = collider;
-                // window tag´Â ±úÁø Ã¢¹® ¸ğµ¨¸µ¿¡ ´Ş¾ÆµÎ±â
+                // window tagëŠ” ê¹¨ì§„ ì°½ë¬¸ ëª¨ë¸ë§ì— ë‹¬ì•„ë‘ê¸°
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     WindowOpen();
@@ -36,7 +36,7 @@ public class WindowActive : MonoBehaviour
 
     public void WindowOpen()
     {
-        // player°¡ Ã¢¹® ¿©´Â Å° ´­·¶À» ¶§
+        // playerê°€ ì°½ë¬¸ ì—¬ëŠ” í‚¤ ëˆŒë €ì„ ë•Œ
         WIndow_bool window = windowCollider.GetComponent<WIndow_bool>();
         if (!window.isBroken)
         {
@@ -46,7 +46,7 @@ public class WindowActive : MonoBehaviour
 
     public void WindowBroken()
     {
-        // Ã¢¹® ºÎ¼ö±â, Player Attack¿¡ window°¡ enterÇßÀ» ¶§
+        // ì°½ë¬¸ ë¶€ìˆ˜ê¸°, Player Attackì— windowê°€ enterí–ˆì„ ë•Œ
         WIndow_bool window = windowCollider.GetComponent<WIndow_bool>();
         MusicController.instance.PlaySFXSound("Window_Bottele");
         if (!window.isBroken)
