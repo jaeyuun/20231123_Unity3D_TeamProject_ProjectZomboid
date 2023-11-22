@@ -20,6 +20,7 @@ public enum BGMSound
     GameLoad,
     GameNew,
     MainGame_Fake,
+    Player_Death,
 }
 
 public enum SFXSound
@@ -31,6 +32,7 @@ public enum SFXSound
     Player_Hit,
     Zombie_Hit,
     Zombie_Die,
+    Zombie_Die2,
     Car_StartUp,
     Car_Dirve,
     Car_Brake,
@@ -42,6 +44,9 @@ public enum SFXSound
     Gun_Shot,
     Rock_Hit,
     Rock_Broken,
+    Reload,
+    NoBullet,
+    LevelUp,
 }
 #endregion
 public class MusicController : MonoBehaviour
@@ -61,6 +66,8 @@ public class MusicController : MonoBehaviour
 
     private Button settingButton;
     private GameObject musicSettingPanel;
+
+    private HitColl player; // isDie 가져오기 위함
 
     public float bgmVolume = 0f;
     public float sfxVolume = 0f;
@@ -96,6 +103,10 @@ public class MusicController : MonoBehaviour
         AwakeSetting();
         SettingButton();
         PlayBGMSound();
+        if (player == null)
+        {
+            player = FindObjectOfType<HitColl>();
+        }
     }
 
     public void AwakeSetting()
@@ -164,7 +175,10 @@ public class MusicController : MonoBehaviour
     public void PlayBGMSound()
     {
         string type = SceneManager.GetActiveScene().name;
-        Debug.Log(type);
+        if (player.isDie)
+        {
+            type = "Player_Death";
+        }
         // 배경음 플레이
         if (bgmPlayer.isPlaying)
         {

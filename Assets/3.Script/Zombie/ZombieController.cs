@@ -136,6 +136,10 @@ public class ZombieController : HP, IState
             StartCoroutine(Stun());
             //코루틴으로 바꾸셔서 코드 수정 1120_mhk
         }
+        if (other.CompareTag("Attack") || other.CompareTag("Stomp") && !isDie)
+        {
+            StartCoroutine(ZombieDamage_Co());
+        }
     }
 
     private void OnTriggerStay(Collider other)
@@ -148,10 +152,6 @@ public class ZombieController : HP, IState
             {
                 StartCoroutine(ZombieAttack_Co());
             }
-        }
-        else if (other.CompareTag("Attack") || other.CompareTag("Stomp") && !isDie)
-        {
-            StartCoroutine(ZombieDamage_Co());
         }
         else
         {

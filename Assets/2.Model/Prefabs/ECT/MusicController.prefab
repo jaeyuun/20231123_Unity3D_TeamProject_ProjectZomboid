@@ -306,13 +306,14 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 8a89bed985dc30f42bf2c1742ffd7c46, type: 3}
   - {fileID: 8300000, guid: 8a89bed985dc30f42bf2c1742ffd7c46, type: 3}
   - {fileID: 8300000, guid: 9430a37b0de94d34dab26d1a2721b262, type: 3}
+  - {fileID: 8300000, guid: 3fd0e87737604924faae72783d5824d7, type: 3}
   sfxClips:
   - {fileID: 8300000, guid: d0c40ccbf54da4940bdf32dd39904055, type: 3}
   - {fileID: 8300000, guid: a0886263a16fac449ba1fa6d4e0cafcf, type: 3}
   - {fileID: 8300000, guid: bde3dfc74f065c948a74d23e709da96f, type: 3}
   - {fileID: 8300000, guid: 8ef119a5533c5f446b5bb67f023280b9, type: 3}
   - {fileID: 8300000, guid: 8e420aa0d00cda14fb7fbef00c3e2a06, type: 3}
-  - {fileID: 8300000, guid: 96e6c8b768e9c574eb31eef0a2014104, type: 3}
+  - {fileID: 8300000, guid: de048c0a473fb5846abf4412fbe6b972, type: 3}
   - {fileID: 8300000, guid: 2db9484e076a17948a507545d3bb9998, type: 3}
   - {fileID: 8300000, guid: 5c1cb01d77c81a7488141af51df7092c, type: 3}
   - {fileID: 8300000, guid: 2dbd1ff87dbdd9b47908c87218b80534, type: 3}
@@ -326,6 +327,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: c15d28aef82e13c4584131f3f187a41e, type: 3}
   - {fileID: 8300000, guid: 4c53975f3f8ce0b40b84cf56f0cbb1a5, type: 3}
   - {fileID: 8300000, guid: 75a039f4dd5ea594dac1c8d35234f966, type: 3}
+  - {fileID: 8300000, guid: f568a67cd6f6d554494ad4b7bc5f68a5, type: 3}
+  - {fileID: 8300000, guid: eadf79d04630e724e942377b6a31dfad, type: 3}
+  - {fileID: 8300000, guid: c9f465a9e899ca6448a0ac4e4d706c2f, type: 3}
   sliderObject: []
   slider:
   - {fileID: 0}
