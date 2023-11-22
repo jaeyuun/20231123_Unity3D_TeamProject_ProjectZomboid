@@ -47,11 +47,15 @@ public class Player_Attack : MonoBehaviour
 
     [Header("Level_Up")]
     [SerializeField] private Player_Level_Up level_up;
-    [SerializeField] private GameObject[] health;
-    [SerializeField] private GameObject[] strength;
+    [SerializeField] private GameObject[] health;//체력
+    [SerializeField] private GameObject[] strength;//힘
+    [SerializeField] private GameObject[] mace;//긴 둔기
+    [SerializeField] private GameObject[] aiming;//조준
     //레벨업을 위한 횟수
-    private int health_exe = 0;
-    private int strength_exe = 0;
+    private int health_exe = 0; //체력
+    private int strength_exe = 0; // 힘
+    private int mace_exe = 0; //긴둔기
+    private int aiming_exe = 0; //조준
 
     [Header("테스트를위한")]
     public bool Bat_Get;//배트를 가지고 있냐?    
@@ -75,12 +79,33 @@ public class Player_Attack : MonoBehaviour
 
     private void Update()
     {
+
+        //레벨업 확인
         if(health_exe >=10) // 레벨업
         {
-            Debug.Log("레벨업");
+            Debug.Log("레벨업");//사운드로 바꿀것
             level_up.Level_up(health);
             health_exe = 0;//경험치 초기화
         }
+        else if(strength_exe >= 10)
+        {
+            Debug.Log("레벨업");//사운드로 바꿀것
+            level_up.Level_up(strength);
+            strength_exe = 0;//경험치 초기화
+        }
+        else if(mace_exe >= 5)
+        {
+            Debug.Log("레벨업");//사운드로 바꿀것
+            level_up.Level_up(mace);
+            mace_exe = 0;//경험치 초기화
+        }
+        else if(aiming_exe >= 5)
+        {
+            Debug.Log("레벨업");//사운드로 바꿀것
+            level_up.Level_up(aiming);
+            aiming_exe = 0;//경험치 초기화
+        }
+
         for (int i = 0; i < inventory.slots.Length; i++)//문제점을 찾았는데 어떻게 해야할까 
         {
             if (inventory.slots[i].itemName == "Bullet")
@@ -200,7 +225,8 @@ public class Player_Attack : MonoBehaviour
                         Invoke("BatSWingClip", 0.3f);
                         IsMovement = true;
                         Invoke("isMovement", 1f);
-                        health_exe += 1;//경험치추가
+                        mace_exe += 1; //메이스 경험치 추가
+                        strength_exe += 1;//경험치추가
                     }
                 }
                 if (!Melee_weapon && !Range_weapon)//둘다 없던가
@@ -212,7 +238,7 @@ public class Player_Attack : MonoBehaviour
                         isAttack = true;
                         IsMovement = true;
                         Invoke("isMovement", 1.1f);
-                        health_exe += 1;//경험치추가
+                        strength_exe += 1;//경험치추가
                     }
                 }
 
@@ -229,6 +255,7 @@ public class Player_Attack : MonoBehaviour
                         IsMovement = true;
                         Invoke("isMovement", 0.3f);
                         magazine -= 1;
+                        aiming_exe += 1; // 총기경험치
                         StartCoroutine(Sound_Gun_false_co());
                     }
                     else if (Input.GetMouseButton(0) && !IsMovement && magazine == 0)
@@ -284,7 +311,7 @@ public class Player_Attack : MonoBehaviour
         }
     }
 
-    private void Gun_take_out(bool Gun)// 배트를 뽑는 애니메이션
+    private void Gun_take_out(bool Gun)// 총을 뽑는 애니메이션
     {
         if (Gun)
         {
