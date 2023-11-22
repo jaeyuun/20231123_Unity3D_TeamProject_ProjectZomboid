@@ -19,14 +19,14 @@ public class DoorControll : MonoBehaviour
         Ray ray = new Ray(transform.position + new Vector3(0, 1.2f, 0), transform.forward);
         RaycastHit hit;
 
-        //Debug.DrawRay(transform.position + new Vector3(0, 1.2f, 0), transform.forward * 5f, Color.white);
+        Debug.DrawRay(transform.position + new Vector3(0, 1.2f, 0), transform.forward * 5f, Color.white);
 
         if (Input.GetKeyDown(KeyCode.E))
         {
             //Debug.Log("E");
             if (Physics.Raycast(ray, out hit, InterectiveDistance))
             {
-                //Debug.Log(hit.collider.name);
+                Debug.Log(hit.collider.name);
                 if (hit.collider.gameObject.CompareTag("Door"))
                 {
                     Debug.Log("hit Door");

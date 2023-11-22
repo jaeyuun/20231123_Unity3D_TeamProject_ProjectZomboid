@@ -35,7 +35,7 @@ public class WindowActive : MonoBehaviour
                     window = collider.gameObject.transform.GetChild(0).gameObject;
                    
                     // audio.PlayOneShot(bottele);
-                    MusicController.instance.PlaySFXSound("Player_Hit");
+                    //MusicController.instance.PlaySFXSound("Player_Hit");
                     window.SetActive(false);
                 }
 
