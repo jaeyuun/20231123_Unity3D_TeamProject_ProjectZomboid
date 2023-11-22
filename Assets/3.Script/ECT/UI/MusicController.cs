@@ -55,8 +55,8 @@ public class MusicController : MonoBehaviour
     public AudioMixer audioMixer;
     private Canvas canvas;
 
-    private AudioSource bgmPlayer;
-    private AudioSource sfxPlayer;
+    public AudioSource bgmPlayer;
+    public AudioSource sfxPlayer;
 
     [SerializeField] private GameObject musicUI;
     [SerializeField] private AudioClip[] bgmClips;
@@ -102,7 +102,11 @@ public class MusicController : MonoBehaviour
         // Scene이 바뀔때 출력되는 메소드
         AwakeSetting();
         SettingButton();
-        PlayBGMSound();
+
+        if (!SceneManager.GetActiveScene().name.Equals("MainGame_Fake"))
+        {
+            PlayBGMSound();
+        }
         if (player == null)
         {
             player = FindObjectOfType<HitColl>();
@@ -179,10 +183,6 @@ public class MusicController : MonoBehaviour
     public void PlayBGMSound()
     {
         string type = SceneManager.GetActiveScene().name;
-        /*if (player != null && player.isDie)
-        {
-            type = "Player_Death";
-        }*/
         // 배경음 플레이
         if (bgmPlayer.isPlaying)
         {
@@ -191,10 +191,7 @@ public class MusicController : MonoBehaviour
         int index = (int)(BGMSound)Enum.Parse(typeof(BGMSound), type); // string을 enum으로 변경 후 int로 변경
         bgmPlayer.clip = bgmClips[index];
         bgmPlayer.loop = true;
-        if (!type.Equals("Player_Death") || player.isDie)
-        {
-            bgmPlayer.Play();
-        }
+        bgmPlayer.Play();
     }
     public void PlaySFXSound(string type)
     {

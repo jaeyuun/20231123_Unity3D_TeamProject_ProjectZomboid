@@ -37,6 +37,7 @@ public class NewLoad : MonoBehaviour
 
     public void NextScene()
     {
+        MusicController.instance.bgmPlayer.Stop();
         SceneManager.LoadScene(sceneName);
     }
 }

@@ -83,6 +83,7 @@ public class LoadManager : MonoBehaviour
 
     IEnumerator LoadCoroutine()
     {
+        MusicController.instance.bgmPlayer.Stop();
         operation = SceneManager.LoadSceneAsync(sceneName);
         operation.allowSceneActivation = false;
 
