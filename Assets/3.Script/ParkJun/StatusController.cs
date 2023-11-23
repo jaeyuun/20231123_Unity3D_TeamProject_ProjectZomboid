@@ -125,7 +125,7 @@ public class StatusController : MonoBehaviour
             Hungry();
             Thirsty();
             SPRechargeTime();
-            SPRecover();
+           
             GagueUpdate();
         }
           
@@ -194,7 +194,7 @@ public class StatusController : MonoBehaviour
     public void SPRecover()
     {
         //V를 누르면 쉬면서 스테미너가 채워진다.
-        if (Input.GetKeyDown(KeyCode.V))
+        if (true)
         {
             if (!isSP)
             {

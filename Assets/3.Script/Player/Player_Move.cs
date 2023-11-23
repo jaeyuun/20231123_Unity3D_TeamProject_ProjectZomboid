@@ -28,6 +28,7 @@ public class Player_Move : MonoBehaviour
 
 
     private StatusController statusController;
+    private bool isrest = false;
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -98,7 +99,8 @@ public class Player_Move : MonoBehaviour
         }*/
         if (moveHorizontal != 0 || moveVertical != 0)
         {
-
+            animator.SetBool("isRest", false);//ÈÞ½ÄÇØÁ¦
+            isrest = false;//ÈÞ½Ä°ª false
             if (Input.GetKey(KeyCode.LeftShift) && statusController.GetcurrentSP() > 0 && !Input.GetMouseButton(1))
             {
                 statusController.DecreaseSP(1);
@@ -175,5 +177,15 @@ public class Player_Move : MonoBehaviour
         yield return new WaitForSeconds(0.35f);
 
         isWalkingSoundPlaying = false;
+    }
+
+    public void Rest()//ÈÞ½ÄÇÏ±â
+    {
+        statusController.SPRecover();
+        if(!isrest)
+        {
+            animator.SetBool("isRest", true);
+            isrest = true;
+        }
     }
 }
