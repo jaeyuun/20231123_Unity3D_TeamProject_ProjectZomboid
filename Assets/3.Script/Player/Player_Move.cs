@@ -29,6 +29,7 @@ public class Player_Move : MonoBehaviour
 
     private StatusController statusController;
     private bool isrest = false;
+    public bool ismovement = true;
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -50,74 +51,48 @@ public class Player_Move : MonoBehaviour
         float moveHorizontal = Input.GetAxisRaw("Horizontal");
         float moveVertical = Input.GetAxisRaw("Vertical");
 
-        Vector3 movement = new Vector3(moveHorizontal+ moveVertical, 0.0f, moveVertical-moveHorizontal);
-
-        if(Input.GetButtonDown("Jump"))//스페이스 누를시에 상대방을 민다.
+        Vector3 movement = new Vector3(moveHorizontal + moveVertical, 0.0f, moveVertical - moveHorizontal);
+        if (ismovement)
         {
-            //animator.SetTrigger("isKickig");//애니메이션 재생
-            //Push.SetActive(true);
-        }
-
-        //캐릭터 회전
-        if (Input.GetMouseButton(1))//마우스 우클릭
-        {
-            Rotate();
-        }
-        else if (movement != Vector3.zero) // 마우스를 바라보지 않는 상황에서 이동 중이라면
-        {
-            Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
-            transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, speed*3f * Time.deltaTime);
-        }
-
-        /*if (moveHorizontal != 0 || moveVertical != 0)
-        {
-            statusController.DecreaseSP(1);
-            // walk
-            animator.SetBool("isRun", false);
-            animator.SetBool("isWalk", true);
-            Sound.radius = 10f;
-            transform.position += movement * speed * Time.deltaTime;
-
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetButtonDown("Jump"))//스페이스 누를시에 상대방을 민다.
             {
-                if (!Input.GetMouseButton(1) && statusController.GetcurrentSP() > 0)
+                //animator.SetTrigger("isKickig");//애니메이션 재생
+                //Push.SetActive(true);
+            }
+
+            //캐릭터 회전
+            if (Input.GetMouseButton(1))//마우스 우클릭
+            {
+                Rotate();
+            }
+            else if (movement != Vector3.zero) // 마우스를 바라보지 않는 상황에서 이동 중이라면
+            {
+                Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
+                transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, speed * 3f * Time.deltaTime);
+            }
+
+            if (moveHorizontal != 0 || moveVertical != 0)
+            {
+                animator.SetBool("isRest", false);//휴식해제
+                isrest = false;//휴식값 false
+                if (Input.GetKey(KeyCode.LeftShift) && statusController.GetcurrentSP() > 0 && !Input.GetMouseButton(1))
                 {
-                    // runs
+                    statusController.DecreaseSP(1);
                     animator.SetBool("isRun", true);
                     Sound.radius = 15f;
                     transform.position += movement * speed * 2f * Time.deltaTime;
+
+                    StartCoroutine(run_Sound());
                 }
-            }
+                else if (!Input.GetKey(KeyCode.LeftShift) || statusController.GetcurrentSP() <= 0 || Input.GetMouseButton(1))
+                {
 
-            if (speed >= 2f)
-            {
-                StartCoroutine(run_Sound());
-            } else
-            {
-                StartCoroutine(walking_Sound());
-            }
-        }*/
-        if (moveHorizontal != 0 || moveVertical != 0)
-        {
-            animator.SetBool("isRest", false);//휴식해제
-            isrest = false;//휴식값 false
-            if (Input.GetKey(KeyCode.LeftShift) && statusController.GetcurrentSP() > 0 && !Input.GetMouseButton(1))
-            {
-                statusController.DecreaseSP(1);
-                animator.SetBool("isRun", true);
-                Sound.radius = 15f;
-                transform.position += movement * speed * 2f * Time.deltaTime;
-
-                StartCoroutine(run_Sound());
-            }
-            else if (!Input.GetKey(KeyCode.LeftShift) || statusController.GetcurrentSP() <= 0 || Input.GetMouseButton(1))
-            {
-
-                animator.SetBool("isRun", false);
-                animator.SetBool("isWalk", true);
-                Sound.radius = 10f;
-                transform.position += movement * speed * Time.deltaTime;
-                //StartCoroutine(walking_Sound());
+                    animator.SetBool("isRun", false);
+                    animator.SetBool("isWalk", true);
+                    Sound.radius = 10f;
+                    transform.position += movement * speed * Time.deltaTime;
+                    //StartCoroutine(walking_Sound());
+                }
             }
         }
 

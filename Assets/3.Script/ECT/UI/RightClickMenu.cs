@@ -105,6 +105,8 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
     {
         string[] menu = { "휴식하기" }; // Text, 오브젝트마다 달라짐
         ClickMenuLoad(menu);
+        Player_Move player = hitObject.collider.transform.GetComponentInParent<Player_Move>();
+        rightClickButtons[0].onClick.AddListener(player.Rest);
     }
 
     public void WindowClick()

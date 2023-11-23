@@ -29,6 +29,7 @@ public class Player_Window_Jump : MonoBehaviour
 
                     if (keydown >= 0.8f && door.isOpen)
                     {
+                        player.ismovement = false;
                         player.animator.SetTrigger("isClimbing");
 
                         if (player.transform.rotation.y < 0) //WD방향
@@ -44,6 +45,7 @@ public class Player_Window_Jump : MonoBehaviour
 
                         }
                         keydown = 0f;
+                        Invoke("isMoveOk", 2.5f);
                     }
                 }
                 else
@@ -60,6 +62,7 @@ public class Player_Window_Jump : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.E)) // 창문이 열려있는지 확인이 필요
             {
+                player.ismovement = false;
                 player.animator.SetTrigger("isClimbing");
 
                 if (player.transform.rotation.y < 0) //WD방향
@@ -74,9 +77,12 @@ public class Player_Window_Jump : MonoBehaviour
 
 
                 }
+                Invoke("isMoveOk", 2.5f);
+
             }
             else if(Input.GetKey(KeyCode.LeftShift))
             {
+                player.ismovement = false;
                 player.animator.SetTrigger("isFence");
 
                 if (player.transform.rotation.y < 0) //WD방향
@@ -91,8 +97,15 @@ public class Player_Window_Jump : MonoBehaviour
 
 
                 }
+                Invoke("isMoveOk", 2.5f);
             }
         }
     }
+
+    private void isMoveOk()
+    {
+        player.ismovement = true;
+    }
+
 }
 
