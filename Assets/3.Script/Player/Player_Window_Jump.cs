@@ -32,18 +32,37 @@ public class Player_Window_Jump : MonoBehaviour
                         player.ismovement = false;
                         player.animator.SetTrigger("isClimbing");
 
-                        if (player.transform.rotation.y < 0) //WD规氢
+                        if(other.transform.position.y>2f)
                         {
-                            player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y - 4f, 0);
+                            if (player.transform.rotation.y < 0) //WD规氢
+                            {
+                                player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y - 4f, 0);
 
 
+                            }
+                            else if (player.transform.rotation.y > 0) //S规氢
+                            {
+                                player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y - 4f, 0);
+
+
+                            }
                         }
-                        else if (player.transform.rotation.y > 0) //S规氢
+                        else
                         {
-                            player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y - 4f, 0);
+                            if (player.transform.rotation.y < 0) //WD规氢
+                            {
+                                player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y - 2f, 0);
 
 
-                        }
+                            }
+                            else if (player.transform.rotation.y > 0) //S规氢
+                            {
+                                player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y - 2f, 0);
+
+
+                            }
+                        }    
+    
                         keydown = 0f;
                         Invoke("isMoveOk", 2.5f);
                     }

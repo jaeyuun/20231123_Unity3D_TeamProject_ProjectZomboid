@@ -44,15 +44,4 @@ public class WindowActive : MonoBehaviour
         }
     }
 
-    public void WindowBroken()
-    {
-        // 창문 부수기, Player Attack에 window가 enter했을 때
-        WIndow_bool window = windowCollider.GetComponent<WIndow_bool>();
-        MusicController.instance.PlaySFXSound("Window_Bottele");
-        if (!window.isBroken)
-        {
-            window.isOpen = !window.isOpen;
-            window.isBroken = true;
-        }
-    }
 }

@@ -79,7 +79,8 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
             case "Window":
                 WindowClick();
                 break;
-            default: // player, sound, untagged 등
+            case "Player":
+            case "Sound":// player, sound, untagged 등
                 // player 관련 상호작용
                 PlayerClick();
                 break;

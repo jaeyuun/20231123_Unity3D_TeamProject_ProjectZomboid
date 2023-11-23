@@ -68,13 +68,16 @@ public class Player_Attack : MonoBehaviour
 
     [SerializeField] private RightClickMenu rightClickMenu;
     float keydown = 0f;
+
+    // Window Broken
+    private WindowActive window;
+
     private void Start()
     {
         anim = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         gun_Shot = GetComponent<Gun_Shot>();
-
-
+        TryGetComponent(out window);
     }
 
     private void Update()
@@ -225,6 +228,8 @@ public class Player_Attack : MonoBehaviour
                         Invoke("isMovement", 1f);
                         mace_exe += 1; //메이스 경험치 추가
                         strength_exe += 1;//경험치추가
+                        
+                       // window.WindowBroken(); // WindowBroken
                     }
                 }
                 if (!Melee_weapon && !Range_weapon)//둘다 없던가
