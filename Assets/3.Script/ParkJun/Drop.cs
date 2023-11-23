@@ -32,7 +32,7 @@ public class Drop : MonoBehaviour
 
     private void Start()
     {
-        UpdateSlotCount();
+        
         slots = go_SlotsParent.GetComponentsInChildren<Slot>();
       
     }
@@ -42,22 +42,10 @@ public class Drop : MonoBehaviour
       
         TryOpenInventory();
     }
-    private void UpdateSlotCount()
-    {
-        //  값을 슬롯 개수로 변환
-        int slotCount = Mathf.CeilToInt(dropmaxweight );
-
-        // 슬롯 개수에 따라 슬롯을 동적으로 생성
-        for (int i = 0; i < slotCount; i++)
-        {
-            // 슬롯을 생성하고 부모를 지정
-            GameObject slotObject = Instantiate(slotPrefab, go_SlotsParent.transform);
-          
-        }
-    }
+   
     private void TryOpenInventory()
     {
-        if (Input.GetKeyDown(KeyCode.I)) // 마우스 왼쪽 버튼 (1) 입력 확인
+        if (Input.GetKeyDown(KeyCode.Tab)) // 마우스 왼쪽 버튼 (1) 입력 확인
         {
             dropActiveated = !dropActiveated;
             if (dropActiveated)

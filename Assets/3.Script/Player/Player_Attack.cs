@@ -83,30 +83,30 @@ public class Player_Attack : MonoBehaviour
         //레벨업 확인
         if(health_exe >=10) // 레벨업
         {
-            Debug.Log("레벨업");//사운드로 바꿀것 ... todo
+            MusicController.instance.PlaySFXSound("LevelUp");
             level_up.Level_up(health);
             health_exe = 0;//경험치 초기화
         }
         else if(strength_exe >= 10)
         {
-            Debug.Log("레벨업");//사운드로 바꿀것 todo
+            MusicController.instance.PlaySFXSound("LevelUp");
             level_up.Level_up(strength);
             strength_exe = 0;//경험치 초기화
         }
         else if(mace_exe >= 5)
         {
-            Debug.Log("레벨업");//사운드로 바꿀것 todo
+            MusicController.instance.PlaySFXSound("LevelUp");
             level_up.Level_up(mace);
             mace_exe = 0;//경험치 초기화
         }
         else if(aiming_exe >= 5)
         {
-            Debug.Log("레벨업");//사운드로 바꿀것 todo
+            MusicController.instance.PlaySFXSound("LevelUp");
             level_up.Level_up(aiming);
             aiming_exe = 0;//경험치 초기화
         }
 
-        for (int i = 0; i < inventory.slots.Length; i++)//문제점을 찾았는데 어떻게 해야할까 
+        for (int i = 0; i < inventory.slots.Length; i++)
         {
             if (inventory.slots[i].itemName == "Bullet")
             {
@@ -129,7 +129,7 @@ public class Player_Attack : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.R) && !IsMovement)//재장전
             {
                 IsMovement = true; //행동제약
-                Debug.Log("재장전찰칵찰칵"); // todo... 사운드로 바꿀 것
+                MusicController.instance.PlaySFXSound("Reload");
                 Invoke("isMovement", 1.5f);
 
                 if (bullet >= 20)
@@ -260,8 +260,7 @@ public class Player_Attack : MonoBehaviour
                     {
                         IsMovement = true;
                         Invoke("isMovement", 0.3f);
-                        //총알 없는소리 찰칵찰칵 ... todo
-                        Debug.Log("찰칵찰칵");
+                        MusicController.instance.PlaySFXSound("NoBullet");
                     }
 
                 }

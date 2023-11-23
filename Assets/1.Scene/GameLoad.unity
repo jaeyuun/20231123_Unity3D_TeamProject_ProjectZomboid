@@ -286,7 +286,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 623194034}
-  - component: {fileID: 623194033}
   m_Layer: 0
   m_Name: SaveNLoad
   m_TagString: Untagged
@@ -294,36 +293,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &623194033
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 623194032}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dcb2bc0aaffd12543b9bf1ba4f01fdaa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  saveData:
-    playerPos: {x: 0, y: 0, z: 0}
-    playerRot: {x: 0, y: 0, z: 0}
-    savedHp: 0
-    savedSp: 0
-    savedDp: 0
-    saveAtt: 0
-    savedHungry: 0
-    savedThirsty: 0
-    invenArrayNumber: 
-    invenItemName: []
-    invenItemNumber: 
-    invenItemweight: []
-    quickSlotArrayNumber: 
-    quickSlotItemName: []
-    quickSlotItemNumber: 
-    quickSlotItemweigh: []
-  isLoad: 1
 --- !u!4 &623194034
 Transform:
   m_ObjectHideFlags: 0
@@ -1022,6 +991,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2121915382}
   - component: {fileID: 2121915381}
+  - component: {fileID: 2121915383}
   m_Layer: 0
   m_Name: LoadManager
   m_TagString: Untagged
@@ -1041,7 +1011,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36934fe8e35485e4a89dbe43309c6697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continueButton: {fileID: 0}
+  continueButton: {fileID: 974829590}
 --- !u!4 &2121915382
 Transform:
   m_ObjectHideFlags: 0
@@ -1056,3 +1026,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2121915383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2121915380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcb2bc0aaffd12543b9bf1ba4f01fdaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  saveData:
+    playerPos: {x: 0, y: 0, z: 0}
+    playerRot: {x: 0, y: 0, z: 0}
+    savedHp: 0
+    savedSp: 0
+    savedDp: 0
+    saveAtt: 0
+    savedHungry: 0
+    savedThirsty: 0
+    invenArrayNumber: 
+    invenItemName: []
+    invenItemNumber: 
+    invenItemweight: []
+    quickSlotArrayNumber: 
+    quickSlotItemName: []
+    quickSlotItemNumber: 
+    quickSlotItemweigh: []

@@ -1,17 +1,11 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-
 public class WindowActive : MonoBehaviour
 {
+    // Player_Move에 달려있음
     public float radius = 1f;
-    private GameObject window;
-    private int hitCount = 0;
-    /*[SerializeField] private AudioClip bottele;
-    private AudioSource audio;
-
-    private void Start()
-    {
-        audio = GetComponent<AudioSource>();
-    }*/
+    private Collider windowCollider;
 
     private void OnDrawGizmos()
     {
@@ -20,38 +14,45 @@ public class WindowActive : MonoBehaviour
 
     private void Update()
     {
-        WindowBroke();
+        WindowInteraction();
     }
 
-    private void WindowBroke()
+    private void WindowInteraction()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position + new Vector3(0, 1.5f, 0), radius);
-        if (Input.GetKeyDown(KeyCode.Y))
+        foreach (Collider collider in colliders)
         {
-            foreach (Collider collider in colliders)
+            if (collider.gameObject.CompareTag("Window"))
             {
-                if (collider.CompareTag("Window"))
+                windowCollider = collider;
+                // window tag는 깨진 창문 모델링에 달아두기
+                if (Input.GetKeyDown(KeyCode.E))
                 {
-                    window = collider.gameObject.transform.GetChild(0).gameObject;
-                    // audio.PlayOneShot(bottele);
-                    MusicController.instance.PlaySFXSound("Player_Hit");
-                    window.SetActive(false);
-                }
-
-                if (collider.CompareTag("WindowHit"))
-                {
-                    WIndow_bool window = collider.GetComponentInChildren<WIndow_bool>();
-                    if (window != null)
-                    {
-                        hitCount++;
-                        if (hitCount >= 3)
-                        {
-                            window.isOpen = !window.isOpen;
-                            hitCount = 0;
-                        }
-                    }
-                }
+                    WindowOpen();
+                };
             }
+        }
+    }
+
+    public void WindowOpen()
+    {
+        // player가 창문 여는 키 눌렀을 때
+        WIndow_bool window = windowCollider.GetComponent<WIndow_bool>();
+        if (!window.isBroken)
+        {
+            window.WindowAnimation();
+        }
+    }
+
+    public void WindowBroken()
+    {
+        // 창문 부수기, Player Attack에 window가 enter했을 때
+        WIndow_bool window = windowCollider.GetComponent<WIndow_bool>();
+        MusicController.instance.PlaySFXSound("Window_Bottele");
+        if (!window.isBroken)
+        {
+            window.isOpen = !window.isOpen;
+            window.isBroken = true;
         }
     }
 }

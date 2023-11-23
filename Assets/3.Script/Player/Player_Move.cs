@@ -115,7 +115,7 @@ public class Player_Move : MonoBehaviour
                 animator.SetBool("isWalk", true);
                 Sound.radius = 10f;
                 transform.position += movement * speed * Time.deltaTime;
-                StartCoroutine(walking_Sound());
+                //StartCoroutine(walking_Sound());
             }
         }
 

@@ -55,8 +55,8 @@ public class MusicController : MonoBehaviour
     public AudioMixer audioMixer;
     private Canvas canvas;
 
-    private AudioSource bgmPlayer;
-    private AudioSource sfxPlayer;
+    public AudioSource bgmPlayer;
+    public AudioSource sfxPlayer;
 
     [SerializeField] private GameObject musicUI;
     [SerializeField] private AudioClip[] bgmClips;
@@ -67,7 +67,7 @@ public class MusicController : MonoBehaviour
     private Button settingButton;
     private GameObject musicSettingPanel;
 
-    private HitColl player; // isDie °¡Á®¿À±â À§ÇÔ
+    private HitColl player; // isDie ê°€ì ¸ì˜¤ê¸° ìœ„í•¨
 
     public float bgmVolume = 0f;
     public float sfxVolume = 0f;
@@ -99,10 +99,14 @@ public class MusicController : MonoBehaviour
 
     public void ChangeSceneMusic()
     {
-        // SceneÀÌ ¹Ù²ğ¶§ Ãâ·ÂµÇ´Â ¸Ş¼Òµå
+        // Sceneì´ ë°”ë€”ë•Œ ì¶œë ¥ë˜ëŠ” ë©”ì†Œë“œ
         AwakeSetting();
         SettingButton();
-        PlayBGMSound();
+
+        if (!SceneManager.GetActiveScene().name.Equals("MainGame_Fake"))
+        {
+            PlayBGMSound();
+        }
         if (player == null)
         {
             player = FindObjectOfType<HitColl>();
@@ -115,6 +119,10 @@ public class MusicController : MonoBehaviour
         {
             canvas = GameObject.Find("Canvas").transform.GetComponent<Canvas>();
             musicSettingPanel = null;
+        }
+        if (player == null && SceneManager.GetActiveScene().name.Equals("MainGame_Fake"))
+        {
+            player = FindObjectOfType<HitColl>();
         }
     }
 
@@ -175,23 +183,19 @@ public class MusicController : MonoBehaviour
     public void PlayBGMSound()
     {
         string type = SceneManager.GetActiveScene().name;
-        if (player.isDie)
-        {
-            type = "Player_Death";
-        }
-        // ¹è°æÀ½ ÇÃ·¹ÀÌ
+        // ë°°ê²½ìŒ í”Œë ˆì´
         if (bgmPlayer.isPlaying)
         {
             bgmPlayer.Stop();
         }
-        int index = (int)(BGMSound)Enum.Parse(typeof(BGMSound), type); // stringÀ» enumÀ¸·Î º¯°æ ÈÄ int·Î º¯°æ
+        int index = (int)(BGMSound)Enum.Parse(typeof(BGMSound), type); // stringì„ enumìœ¼ë¡œ ë³€ê²½ í›„ intë¡œ ë³€ê²½
         bgmPlayer.clip = bgmClips[index];
         bgmPlayer.loop = true;
         bgmPlayer.Play();
     }
     public void PlaySFXSound(string type)
     {
-        // È¿°úÀ½ ÇÃ·¹ÀÌ
+        // íš¨ê³¼ìŒ í”Œë ˆì´
         int index = (int)(SFXSound)Enum.Parse(typeof(SFXSound), type);
         sfxPlayer.clip = sfxClips[index];
         sfxPlayer.PlayOneShot(sfxPlayer.clip);
@@ -214,7 +218,7 @@ public class MusicController : MonoBehaviour
 
     private void AudioListenerVolume(string type, float volume)
     {
-        // AudioSource ÇÒ´ç, volume¿¡ µû¸¥ À½¼Ò°Å ¼³Á¤
+        // AudioSource í• ë‹¹, volumeì— ë”°ë¥¸ ìŒì†Œê±° ì„¤ì •
         AudioSource typeAudio = null;
         if (type.Equals("BGM"))
         {

@@ -92,16 +92,14 @@ public class HitColl : MonoBehaviour
 
     public void Player_Die()
     {
+        player.game_Cursor.OnMouseExit();
         player.GetComponent<Player_Move>().enabled = false;
         player.GetComponent<Player_Attack>().enabled = false;
         player.anim.SetLayerWeight(1, 0);//상체 애니메이션 재생해제
         player.anim.SetTrigger("isDie");
-
-        // audioSource.PlayOneShot(Die_Sound);
         MusicController.instance.PlaySFXSound("Player_Die");
         player_Fog.viewAngle = 360f;
         player_Fog.ViewRadius = 50f;
         isDie = true;
-        //StartCoroutine(Die_Zombie_co());
     }
 }
