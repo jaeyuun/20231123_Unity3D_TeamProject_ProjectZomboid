@@ -19,7 +19,7 @@ public enum BGMSound
     Intro = 0,
     GameLoad,
     GameNew,
-    MainGame_Fake,
+    MainGame,
     Player_Death,
 }
 
@@ -103,7 +103,7 @@ public class MusicController : MonoBehaviour
         AwakeSetting();
         SettingButton();
 
-        if (!SceneManager.GetActiveScene().name.Equals("MainGame_Fake"))
+        if (!SceneManager.GetActiveScene().name.Equals("MainGame"))
         {
             PlayBGMSound();
         }
@@ -120,7 +120,7 @@ public class MusicController : MonoBehaviour
             canvas = GameObject.Find("Canvas").transform.GetComponent<Canvas>();
             musicSettingPanel = null;
         }
-        if (player == null && SceneManager.GetActiveScene().name.Equals("MainGame_Fake"))
+        if (player == null && SceneManager.GetActiveScene().name.Equals("MainGame"))
         {
             player = FindObjectOfType<HitColl>();
         }

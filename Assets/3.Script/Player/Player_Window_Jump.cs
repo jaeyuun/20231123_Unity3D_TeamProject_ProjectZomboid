@@ -51,13 +51,13 @@ public class Player_Window_Jump : MonoBehaviour
                         {
                             if (player.transform.rotation.y < 0) //WD방향
                             {
-                                player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y - 2f, 0);
+                                player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y - 1f, 0);
 
 
                             }
                             else if (player.transform.rotation.y > 0) //S방향
                             {
-                                player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y - 2f, 0);
+                                player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y-1f, 0);
 
 
                             }

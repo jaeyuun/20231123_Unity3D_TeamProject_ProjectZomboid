@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class LoadManager : MonoBehaviour
 {
-    private string sceneName = "MainGame_Fake";
+    private string sceneName = "MainGame";
     private GameObject canvas;
     public Button continueButton;
 

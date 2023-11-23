@@ -11,7 +11,7 @@ namespace WorldTime
     {
         private Light _light;
 
-        [SerializeField] private WorldTime _worldTime;
+        [SerializeField] private WorldTimeScript _worldTime;
         [SerializeField] private Gradient _gradient;
 
         private void Awake()

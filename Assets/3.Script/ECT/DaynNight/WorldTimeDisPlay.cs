@@ -9,7 +9,7 @@ namespace WorldTime
     [RequireComponent(typeof(TMP_Text))]
     public class WorldTimeDisPlay : MonoBehaviour
     {
-        [SerializeField] private WorldTime _worldTime;
+        [SerializeField] private WorldTimeScript _worldTime;
 
         private TMP_Text _text;
 

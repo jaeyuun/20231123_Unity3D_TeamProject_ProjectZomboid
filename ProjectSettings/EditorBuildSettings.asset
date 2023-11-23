@@ -15,6 +15,6 @@ EditorBuildSettings:
     path: Assets/1.Scene/GameLoad.unity
     guid: de0fd7c549366494cba4b21a907bdf43
   - enabled: 1
-    path: Assets/1.Scene/MainGame_Fake.unity
-    guid: b471804e55284df4e8f03220ba27fd93
+    path: Assets/1.Scene/MainGame.unity
+    guid: 6fc3a06d20fd27543a8597662beb9f24
   m_configObjects: {}

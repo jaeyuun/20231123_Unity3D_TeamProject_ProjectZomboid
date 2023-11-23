@@ -10,7 +10,7 @@ namespace WorldTime
 {
     public class WorldTimeWatcher : MonoBehaviour
     {
-        [SerializeField] private WorldTime _worldTime;
+        [SerializeField] private WorldTimeScript _worldTime;
 
         [SerializeField] private List<Schedule> _schedule;
 
