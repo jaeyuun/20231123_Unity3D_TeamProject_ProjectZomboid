@@ -25,6 +25,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     private GameObject go_CountImage;
 
     public GameObject Bat_B;
+    public GameObject Gun_B;
     public Player_Attack player_Attack;
 
 
@@ -33,33 +34,33 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     [SerializeField] private RectTransform baseRect;  // Inventory_Base 의 영역
     [SerializeField] private RectTransform dropRect;
-   // private Rect baseRect;  // Inventory_Base 이미지의 Rect 정보 받아 옴.
+    // private Rect baseRect;  // Inventory_Base 이미지의 Rect 정보 받아 옴.
     [SerializeField] RectTransform quickSlotBaseRect;
 
-   
+
     private ItemEffectDataBase theitemEffectDataBase;
 
     private Drop drop;
-    
+
     private Inventory inventory;
- 
+
     private ActionController thePlayer;
- 
+
     private InputNumber theInputNumber;
     private Player_Move playerMove;
     private void Start()
     {
-       /* Transform parentTransform = transform.parent.parent.parent;
-        baseRect = parentTransform.GetComponent<RectTransform>().rect;*/
+        /* Transform parentTransform = transform.parent.parent.parent;
+         baseRect = parentTransform.GetComponent<RectTransform>().rect;*/
 
-       
+
         theitemEffectDataBase = FindObjectOfType<ItemEffectDataBase>();
-         drop = FindObjectOfType<Drop>();
-         inventory = FindObjectOfType<Inventory>();
-         theInputNumber = FindObjectOfType<InputNumber>();
+        drop = FindObjectOfType<Drop>();
+        inventory = FindObjectOfType<Inventory>();
+        theInputNumber = FindObjectOfType<InputNumber>();
         thePlayer = FindObjectOfType<ActionController>();
         playerMove = FindObjectOfType<Player_Move>();
-    } 
+    }
 
     //이미지의 투명도 조절 
     private void SetColor(float _alpha)
@@ -123,19 +124,15 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     //슬롯 초기화
     public void ClearSlot()
     {
-       // itemweight -= item.itemweight * itemCount; // 들어온 무게 빼기
-        
-
+        // itemweight -= item.itemweight * itemCount; // 들어온 무게 빼기
 
 
         item = null;
-        itemCount = 0;
         itemImage.sprite = null;
         itemName = null;
         SetColor(0);
 
         go_NameImage.SetActive(false);
-
 
         text_Count.text = "0";
         go_CountImage.SetActive(false);
@@ -150,8 +147,21 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                 if (item.itemType == Item.ItemType.Equipment)
                 {
                     //장비 장착
-                    Bat_B.SetActive(true);
-                    player_Attack.Bat_Get = true;
+                    if (item.itemName == "Bat")
+                    {
+                        Bat_B.SetActive(true);
+                        Gun_B.SetActive(false);
+                        player_Attack.Bat_Get = true;
+                        player_Attack.Gun_Get = false;
+                    }
+                    else if (item.itemName == "Gun")
+                    {
+                        Gun_B.SetActive(true);
+                        Bat_B.SetActive(false);
+                        player_Attack.Gun_Get = true;
+                        player_Attack.Bat_Get = false;
+                    }
+
                 }
                 else if (item.itemType == Item.ItemType.Used)
                 {
@@ -165,15 +175,15 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                     {
                         isFirstClick = true;
                     }
-                    
+
                 }
                 else if (item.itemType == Item.ItemType.objectUsed)
                 {
                     StartCoroutine(UseObjectWithSlider(item, 8f));
-                 
+
 
                 }
-                else
+                else if (item.itemType == Item.ItemType.Ingredient)
                 {
                     // 첫 번째 클릭 시
                     if (isFirstClick)
@@ -187,6 +197,10 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                         inventory.OffBag(20);
                         isFirstClick = true;
                     }
+                }
+                else
+                {
+
                 }
             }
         }
@@ -206,19 +220,19 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         while (timer < duration)
         {
             timer += Time.deltaTime; //시간 흐를수록 타이머 제어
-            
+
             // 시간에 따라 슬라이더 갱신 
             slider.value = timer / duration;
 
             yield return null; // 다음 프레임까지 기다리고 
         }
 
-      
-        
-        
+
+
+
         // 아이템 효과 적용 
         theitemEffectDataBase.UseItem(_item);
-        
+
 
         // 슬라이더 비활성화
         slider.gameObject.SetActive(false);
@@ -249,7 +263,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
         // 아이템 효과 적용 
         theitemEffectDataBase.UseItem(_item);
-        
+
 
         // 슬라이더 비활성화
         slider.gameObject.SetActive(false);
@@ -296,24 +310,32 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
            && DragSlot.instance.transform.localPosition.y + baseRect.transform.localPosition.y < quickSlotBaseRect.rect.yMax + quickSlotBaseRect.transform.localPosition.y)))
         {
 
+            if (DragSlot.instance.dragSlot!=null)
+            {
+                for (int i = 0; i < DragSlot.instance.dragSlot.itemCount; i++)
+                {
+                    Instantiate(DragSlot.instance.dragSlot.item.itemPrefab,
+                                thePlayer.transform.position + thePlayer.transform.forward * 1.5f,
+                                Quaternion.identity);
+                   
 
-            /*if (DragSlot.instance.dragSlot != null)
-                theInputNumber.OK();
-           */
-            DragSlot.instance.dragSlot.ClearSlot();
+                }
+                DragSlot.instance.dragSlot.ClearSlot();
+            }
 
+            //아이템 버릴 때 사운드  Todo...      Exit_item
+          
 
         }
-        else
-        {
-            //drop.UpdateTotalWeight();
-           // inventory.UpdateTotalWeight2();
-            
-            DragSlot.instance.SetColor(0);
-            DragSlot.instance.dragSlot = null;
-        }
+        DragSlot.instance.SetColor(0);
+        DragSlot.instance.dragSlot = null;
         drop.UpdateTotalWeight();
         inventory.UpdateTotalWeight2();
+
+
+
+
+
     }
 
 
@@ -335,13 +357,13 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             }
             else
                 ChangeSlot();
-           
-               //ItemDisObject();
+
+            //ItemDisObject();
 
         }
         else
-       
-        ItemDisObject();
+
+            ItemDisObject();
 
 
 
@@ -349,7 +371,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         drop.UpdateTotalWeight();
         inventory.UpdateTotalWeight2();
 
-       
+
 
     }
     private void ChangeSlot()
@@ -371,7 +393,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
             itemweight -= _tempItemWeight * _tempItemCount;
 
-            
+
 
         }
         else
@@ -379,7 +401,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             ItemDisObject();
 
             DragSlot.instance.dragSlot.ClearSlot();
-            
+
 
         }
 
@@ -387,7 +409,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     private void ItemDisObject()
     {
         // OverlapBox에 사용할 박스 영역 정의
-        Vector3 halfExtents = new Vector3(0.7f, 4f, 0.7f);
+        Vector3 halfExtents = new Vector3(0.8f, 4f, 0.8f);
         // 플레이어 주변 지정된 박스 영역 내의 모든 콜라이더 가져오기
         Collider[] hitColliders = Physics.OverlapBox(thePlayer.transform.position, halfExtents);
 
@@ -408,26 +430,26 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                     {
                         Destroy(coll.gameObject);
                     }
-                    
+
                 }
             }
         }
     }
-/*    private void OnDrawGizmos()
-    {
-        // OverlapBox에 사용할 박스 영역 정의
-        Vector3 halfExtents = new Vector3(0.5f, 4f, 1f);
+    /*    private void OnDrawGizmos()
+        {
+            // OverlapBox에 사용할 박스 영역 정의
+            Vector3 halfExtents = new Vector3(0.5f, 4f, 1f);
 
-        // 기즈모의 색상 설정
-        Gizmos.color = Color.yellow;
+            // 기즈모의 색상 설정
+            Gizmos.color = Color.yellow;
 
-        // 기즈모로 박스의 윤곽선 그리기
-        Gizmos.DrawWireCube(thePlayer.transform.position,  halfExtents);
-    }
-*/
+            // 기즈모로 박스의 윤곽선 그리기
+            Gizmos.DrawWireCube(thePlayer.transform.position,  halfExtents);
+        }
+    */
 
 
- 
+
 
     //마우스가 슬롯에 들어갈 때 
     public void OnPointerEnter(PointerEventData eventData)

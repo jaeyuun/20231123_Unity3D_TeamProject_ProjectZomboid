@@ -15,7 +15,6 @@ public class TestDamage : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("µ¥¹ÌÁö?");
             theStat.DecreaseHP(25);
         }
     }

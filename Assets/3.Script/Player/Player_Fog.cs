@@ -15,17 +15,10 @@ public class Player_Fog : MonoBehaviour
     public float lookingAngle;
     public Vector3 lookDir;
 
-    private void Awake()
-    {
-       
-    }
-
-
-
-    private void OnDrawGizmos()
+    private void Update()
     {
         myPos = transform.position + Vector3.up * 1.5f; // 캐릭터 포지션
-        Gizmos.DrawWireSphere(myPos, ViewRadius);
+        //Gizmos.DrawWireSphere(myPos, ViewRadius);
 
         lookingAngle = transform.eulerAngles.y; //캐릭터가 바라보는 방향의 각도
         lookDir = AngleToDir(lookingAngle);
@@ -60,26 +53,6 @@ public class Player_Fog : MonoBehaviour
                 }
             }
         }
-        /* foreach (Collider playerColli in targets)
-         { // target list
-
-             Vector3 targetPos = playerColli.transform.position;
-             Vector3 targetDir = (targetPos - myPos).normalized;
-             float targetAngle = Mathf.Acos(Vector3.Dot(lookDir, targetDir)) * Mathf.Rad2Deg;
-             if (targetAngle <= viewAngle * 0.5f && !Physics.Raycast(myPos, targetDir, ViewRadius, ObstacleMask))
-             {
-                 hitTargetList.Add(playerColli);
-                 playerColli.transform.GetChild(0).gameObject.SetActive(true);
-                 Debug.DrawLine(myPos, targetPos, Color.red);
-             }
-             else
-             {
-                 playerColli.transform.GetChild(0).gameObject.SetActive(false);
-             }
-
-
-         }*/
-
 
 
 

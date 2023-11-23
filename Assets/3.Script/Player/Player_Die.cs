@@ -13,7 +13,12 @@ public class Player_Die : MonoBehaviour
     private bool isDie=false;
     private bool Die = false;
     //private bool NonTarget = false;
+    private GameObject gameover;
 
+    private void Start()
+    {
+        gameover = GameObject.FindGameObjectWithTag("Finish").transform.GetChild(0).gameObject;
+    }
 
     void Update()
     {
@@ -22,6 +27,7 @@ public class Player_Die : MonoBehaviour
         {
             Zombie.transform.position = Player.transform.position;//좀비를 고정시키는 옵션이라 예외처리가 필요함
             StartCoroutine(Die_Zombie_co());
+            gameover.SetActive(true);
             Die = true;
         }
 
@@ -32,7 +38,6 @@ public class Player_Die : MonoBehaviour
         
         if(other.gameObject.CompareTag("Zombie")&& isDie)
         {
-            Debug.Log("들어옴");
             other.gameObject.TryGetComponent(out ZombieController zombie);
             zombie.nonTarget = true;
         }
@@ -40,12 +45,12 @@ public class Player_Die : MonoBehaviour
 
     private IEnumerator Die_Zombie_co()
     {
-        isDie = true;
+        isDie = true;       
         yield return new WaitForSeconds(5f);
-        Player.SetActive(false);
-        Carmer.GetComponent<Camera_Controller>().enabled = false;
         Zombie.SetActive(true);
+        Carmer.GetComponent<Camera_Controller>().enabled = false;
         Carmer.GetComponent<Camera_Controller_Zomdie>().enabled = true;
+        Player.SetActive(false);        
         Zombie_icon.SetActive(true);
 
 

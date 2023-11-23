@@ -6,14 +6,14 @@ using UnityEngine.SceneManagement;
 
 public class NewLoad : MonoBehaviour
 {
-    public string sceneName = "PJunYeong";
+    private string sceneName = "MainGame_Fake";
     public Text text1;
     public Text text2;
     public Button continueButton;
- 
 
     private void Start()
     {
+        MusicController.instance.PlayBGMSound();
         StartCoroutine(ShowText1());
     }
 
@@ -37,9 +37,7 @@ public class NewLoad : MonoBehaviour
 
     public void NextScene()
     {
+        MusicController.instance.bgmPlayer.Stop();
         SceneManager.LoadScene(sceneName);
     }
-
-
-
 }

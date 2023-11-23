@@ -68,7 +68,6 @@ public class VehicleController : MonoBehaviour
             ApplyInput(motorInput, steeringInput);
             //Wheel_spin(steeringInput);
             Oil -= 0.1f*Time.deltaTime;//기름다는거
-            Debug.Log("기름쓰는중 : "+Oil);
         }
 
         //브레이크

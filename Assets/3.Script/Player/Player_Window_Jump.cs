@@ -11,7 +11,7 @@ public class Player_Window_Jump : MonoBehaviour
     private void Start()
     {
         player = GetComponentInParent<Player_Move>();
-        
+
     }
 
 
@@ -29,26 +29,47 @@ public class Player_Window_Jump : MonoBehaviour
 
                     if (keydown >= 0.8f && door.isOpen)
                     {
+                        player.ismovement = false;
                         player.animator.SetTrigger("isClimbing");
 
-                        if (player.transform.rotation.y < 0) //WD방향
+                        if(other.transform.position.y>2f)
                         {
-                            player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y - 4f, 0);
-                           
-                            
+                            if (player.transform.rotation.y < 0) //WD방향
+                            {
+                                player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y - 4f, 0);
+
+
+                            }
+                            else if (player.transform.rotation.y > 0) //S방향
+                            {
+                                player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y - 4f, 0);
+
+
+                            }
                         }
-                        else if (player.transform.rotation.y > 0) //S방향
+                        else
                         {
-                            player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y - 4f, 0);
-                            
-                            
-                        }
+                            if (player.transform.rotation.y < 0) //WD방향
+                            {
+                                player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y - 2f, 0);
+
+
+                            }
+                            else if (player.transform.rotation.y > 0) //S방향
+                            {
+                                player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y - 2f, 0);
+
+
+                            }
+                        }    
+    
                         keydown = 0f;
+                        Invoke("isMoveOk", 2.5f);
                     }
                 }
                 else
                 {
-                    
+
                 }
             }
             else
@@ -56,6 +77,54 @@ public class Player_Window_Jump : MonoBehaviour
                 keydown = 0f;
             }
         }
+        else if (other.gameObject.CompareTag("Fence"))
+        {
+            if (Input.GetKey(KeyCode.E)) // 창문이 열려있는지 확인이 필요
+            {
+                player.ismovement = false;
+                player.animator.SetTrigger("isClimbing");
+
+                if (player.transform.rotation.y < 0) //WD방향
+                {
+                    player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y+2f, 0);
+
+
+                }
+                else if (player.transform.rotation.y > 0) //S방향
+                {
+                    player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y + 2f, 0);
+
+
+                }
+                Invoke("isMoveOk", 2.5f);
+
+            }
+            else if(Input.GetKey(KeyCode.LeftShift))
+            {
+                player.ismovement = false;
+                player.animator.SetTrigger("isFence");
+
+                if (player.transform.rotation.y < 0) //WD방향
+                {
+                    player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y, 0);
+
+
+                }
+                else if (player.transform.rotation.y > 0) //S방향
+                {
+                    player.transform.position = other.transform.position + new Vector3(0, other.transform.position.y, 0);
+
+
+                }
+                Invoke("isMoveOk", 2.5f);
+            }
+        }
     }
+
+    private void isMoveOk()
+    {
+        player.ismovement = true;
+    }
+
 }
 

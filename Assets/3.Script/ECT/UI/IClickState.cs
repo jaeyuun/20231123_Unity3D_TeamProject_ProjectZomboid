@@ -5,7 +5,5 @@ using UnityEngine;
 public interface IClickState
 {
     void PlayerClick();
-    void DoorClick();
     void WindowClick();
-    void FenceClick();
 }

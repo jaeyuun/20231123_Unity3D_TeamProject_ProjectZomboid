@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 847e159dd81040640aa3e15f248a7d21, type: 3}
   m_Name: Rock
   m_EditorClassIdentifier: 
-  itemType: 3
-  itemName: "\uB3CC"
+  itemType: 4
+  itemName: Rock
   itemDesc: "\uC5B4\uB518\uAC00 \uC4F8\uBAA8 \uC788\uC744\uAC70\uC57C.."
   itemImage: {fileID: 21300000, guid: 13a54c03a3d262f43ab0d2e97bca916d, type: 3}
   itemPrefab: {fileID: 4294647195048149454, guid: 38b3d3f8496971946a46d22f52737600, type: 3}

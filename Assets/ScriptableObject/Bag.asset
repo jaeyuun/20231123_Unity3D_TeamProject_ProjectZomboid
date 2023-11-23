@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 847e159dd81040640aa3e15f248a7d21, type: 3}
   m_Name: Bag
   m_EditorClassIdentifier: 
-  itemType: 4
+  itemType: 3
   itemName: Bag
   itemDesc: "\uAC00\uBC29 \uBB34\uAC8C\uB97C \uB298\uB824\uBCF4\uC790"
   itemImage: {fileID: 21300000, guid: dd2067db17ae9f044a80f7b456267485, type: 3}

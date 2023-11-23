@@ -5,20 +5,22 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using DigitalRuby.RainMaker;
 
 #region Enum
 public enum SliderList
 {
-    Master = 0,
+    SFX = 0,
     BGM,
-    SFX,
 }
 
 public enum BGMSound
 {
-    Main = 0,
-    Loading,
-    Game,
+    Intro = 0,
+    GameLoad,
+    GameNew,
+    MainGame_Fake,
+    Player_Death,
 }
 
 public enum SFXSound
@@ -30,17 +32,21 @@ public enum SFXSound
     Player_Hit,
     Zombie_Hit,
     Zombie_Die,
+    Zombie_Die2,
     Car_StartUp,
     Car_Dirve,
     Car_Brake,
     Car_InOut,
     Window_Bottele,
-    Door_Open, // door open, broken, crash √£±‚
+    Door_Open,
     Door_Broken,
     Door_Crash,
     Gun_Shot,
     Rock_Hit,
     Rock_Broken,
+    Reload,
+    NoBullet,
+    LevelUp,
 }
 #endregion
 public class MusicController : MonoBehaviour
@@ -49,74 +55,108 @@ public class MusicController : MonoBehaviour
     public AudioMixer audioMixer;
     private Canvas canvas;
 
-    private AudioSource bgmPlayer;
-    private AudioSource sfxPlayer;
+    public AudioSource bgmPlayer;
+    public AudioSource sfxPlayer;
 
     [SerializeField] private GameObject musicUI;
     [SerializeField] private AudioClip[] bgmClips;
-    [SerializeField] private AudioClip[] sfxClips; // BGM ¿Ãø‹¿« Audio Clip ¿¸∫Œ ∞°¡Æø¿±‚
+    [SerializeField] private List<AudioClip> sfxClips;
     [SerializeField] private GameObject[] sliderObject;
     [SerializeField] private Slider[] slider;
 
     private Button settingButton;
-    private GameObject musicSettingPanel = null;
+    private GameObject musicSettingPanel;
+
+    private HitColl player; // isDie Í∞ÄÏ†∏Ïò§Í∏∞ ÏúÑÌï®
+
+    public float bgmVolume = 0f;
+    public float sfxVolume = 0f;
 
     private void Awake()
     {
         if (instance == null)
         {
+            PlayerPrefs.SetFloat("BGMVolume", 0f);
+            PlayerPrefs.SetFloat("SFXVolume", 0f);
             instance = this;
             DontDestroyOnLoad(instance);
-        } else
+        } 
+        else
         {
-            Destroy(instance);
+            instance.ChangeSceneMusic();
+            Destroy(gameObject);
         }
 
-        TryGetComponent(out bgmPlayer);
-        TryGetComponent(out sfxPlayer);
-
-        canvas = GameObject.Find("Canvas").transform.GetComponent<Canvas>();
-        settingButton = GameObject.FindGameObjectWithTag("SettingButton").transform.GetComponent<Button>();
-        settingButton.onClick.AddListener(SetActiveTrue);
-        settingButton.onClick.AddListener(SetActiveFalse);
+        // audioSource
+        bgmPlayer = transform.GetChild(0).GetComponent<AudioSource>();
+        sfxPlayer = transform.GetChild(1).GetComponent<AudioSource>();
     }
 
     private void OnEnable()
     {
+        ChangeSceneMusic();
+    }
+
+    public void ChangeSceneMusic()
+    {
+        // SceneÏù¥ Î∞îÎÄîÎïå Ï∂úÎ†•ÎêòÎäî Î©îÏÜåÎìú
+        AwakeSetting();
+        SettingButton();
+
+        if (!SceneManager.GetActiveScene().name.Equals("MainGame_Fake"))
+        {
+            PlayBGMSound();
+        }
+        if (player == null)
+        {
+            player = FindObjectOfType<HitColl>();
+        }
+    }
+
+    public void AwakeSetting()
+    {
         if (canvas == null)
         {
             canvas = GameObject.Find("Canvas").transform.GetComponent<Canvas>();
+            musicSettingPanel = null;
         }
-        canvas = GameObject.Find("Canvas").transform.GetComponent<Canvas>();
+        if (player == null && SceneManager.GetActiveScene().name.Equals("MainGame_Fake"))
+        {
+            player = FindObjectOfType<HitColl>();
+        }
+    }
+
+    public void SettingButton()
+    {
+        settingButton = null;
         if (settingButton == null)
         {
-            settingButton = GameObject.FindGameObjectWithTag("SettingButton").transform.GetComponent<Button>();
-            Debug.Log("AddListener");
+            /*if (settingButton.onClick != null)
+            {
+                settingButton.onClick.RemoveAllListeners(); // Event Remove All
+            }*/
+            settingButton = GameObject.FindGameObjectWithTag("SettingMenu").transform.GetChild(2).gameObject.transform.GetComponent<Button>();
             settingButton.onClick.AddListener(SetActiveTrue);
-            settingButton.onClick.AddListener(SetActiveFalse);
         }
     }
 
-    private void OnDisable()
+    public void SliderMusicSetting()
     {
-        settingButton.onClick.RemoveAllListeners(); //¿Ã∫•∆Æ ∏µŒ ¡¶∞≈
-    }
-
-    private void Start()
-    {
-        if (SceneManager.GetActiveScene().name.Equals("TestIntro_UIFix")) // IntroScene name
+        // Sound PlayerPrefs Check
+        if (PlayerPrefs.HasKey("BGMVolume"))
         {
-            PlayBGMSound("Main"); // GameStart
+            bgmVolume = PlayerPrefs.GetFloat("BGMVolume");
+            slider[(int)SliderList.BGM].value = PlayerPrefs.GetFloat("BGMVolume");
+        }
+        if (PlayerPrefs.HasKey("SFXVolume"))
+        {
+            sfxVolume = PlayerPrefs.GetFloat("SFXVolume");
+            slider[(int)SliderList.SFX].value = PlayerPrefs.GetFloat("SFXVolume");
         }
     }
 
     private void SetActiveTrue()
     {
-        Debug.Log("SetActive");
-        if (!musicSettingPanel.activeSelf)
-        {
-            musicSettingPanel.SetActive(true);
-        }
         // Setting Button Click, Menu activeSelf true
         if (musicSettingPanel == null)
         {
@@ -128,66 +168,57 @@ public class MusicController : MonoBehaviour
                 {
                     slider[i] = sliderObject[i].transform.GetComponent<Slider>();
                 }
-                slider[(int)SliderList.Master].onValueChanged.AddListener(SetMasterVolume);
                 slider[(int)SliderList.BGM].onValueChanged.AddListener(SetBGMVolume);
                 slider[(int)SliderList.SFX].onValueChanged.AddListener(SetSFXVolume);
             }
         }
-    }
-
-    private void SetActiveFalse()
-    {
-        // Menu activeSelf false
-        if (musicSettingPanel.activeSelf)
+        if (!musicSettingPanel.activeSelf)
         {
-            musicSettingPanel.SetActive(false);
+            musicSettingPanel.SetActive(true);
         }
+        SliderMusicSetting();
     }
 
     #region Sound Play
-    public void PlayBGMSound(string type)
+    public void PlayBGMSound()
     {
-        // πË∞Ê¿Ω «√∑π¿Ã
+        string type = SceneManager.GetActiveScene().name;
+        // Î∞∞Í≤ΩÏùå ÌîåÎ†àÏù¥
         if (bgmPlayer.isPlaying)
         {
             bgmPlayer.Stop();
         }
-        int index = (int)(BGMSound)Enum.Parse(typeof(BGMSound), type); // string¿ª enum¿∏∑Œ ∫Ø∞Ê »ƒ int∑Œ ∫Ø∞Ê
+        int index = (int)(BGMSound)Enum.Parse(typeof(BGMSound), type); // stringÏùÑ enumÏúºÎ°ú Î≥ÄÍ≤Ω ÌõÑ intÎ°ú Î≥ÄÍ≤Ω
         bgmPlayer.clip = bgmClips[index];
         bgmPlayer.loop = true;
         bgmPlayer.Play();
     }
     public void PlaySFXSound(string type)
     {
-        // »ø∞˙¿Ω «√∑π¿Ã
-        int index = (int)(SFXSound)Enum.Parse(typeof(BGMSound), type);
+        // Ìö®Í≥ºÏùå ÌîåÎ†àÏù¥
+        int index = (int)(SFXSound)Enum.Parse(typeof(SFXSound), type);
         sfxPlayer.clip = sfxClips[index];
         sfxPlayer.PlayOneShot(sfxPlayer.clip);
     }
     #endregion
     #region Volume Setting
-    public void SetMasterVolume(float volume)
-    {
-        // audioMixer.SetFloat("Master", volume);
-        SetBGMVolume(volume);
-        SetSFXVolume(volume);
-    }
-
     public void SetBGMVolume(float volume)
     {
         audioMixer.SetFloat("BGM", volume);
+        bgmVolume = volume;
         AudioListenerVolume("BGM", volume);
     }
 
     public void SetSFXVolume(float volume)
     {
         audioMixer.SetFloat("SFX", volume);
+        sfxVolume = volume;
         AudioListenerVolume("SFX", volume);
     }
 
     private void AudioListenerVolume(string type, float volume)
     {
-        // AudioSource «“¥Á
+        // AudioSource Ìï†Îãπ, volumeÏóê Îî∞Î•∏ ÏùåÏÜåÍ±∞ ÏÑ§Ï†ï
         AudioSource typeAudio = null;
         if (type.Equals("BGM"))
         {

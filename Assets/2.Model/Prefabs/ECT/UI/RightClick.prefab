@@ -89,7 +89,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54a2f7617fc8395438b84161e65f08c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonPrefab: {fileID: 4107468195266575924, guid: 706c6da059f7ffb4eb5ef5cabd787631, type: 3}
+  buttonPrefab: {fileID: 4107468195266575882, guid: 706c6da059f7ffb4eb5ef5cabd787631, type: 3}
+  isAim: 0
 --- !u!1 &8673378528943439424
 GameObject:
   m_ObjectHideFlags: 0

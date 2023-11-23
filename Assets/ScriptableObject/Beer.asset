@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Beer
   m_EditorClassIdentifier: 
   itemType: 1
-  itemName: "\uCE74\uC2A4"
+  itemName: Beer
   itemDesc: "\uC0E4\uC6CC\uD558\uACE0 \uB531 \uBB35\uC790"
   itemImage: {fileID: 21300000, guid: 490d4b0fd1a99b147a8c8e4966f1fb52, type: 3}
   itemPrefab: {fileID: 8916837287168550194, guid: a73bcdd09538329469a2ed7cc836bc35, type: 3}
