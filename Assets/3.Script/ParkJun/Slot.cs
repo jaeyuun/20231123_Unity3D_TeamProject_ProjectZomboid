@@ -183,7 +183,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
 
                 }
-                else
+                else if (item.itemType == Item.ItemType.Ingredient)
                 {
                     // 첫 번째 클릭 시
                     if (isFirstClick)
@@ -197,6 +197,10 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                         inventory.OffBag(20);
                         isFirstClick = true;
                     }
+                }
+                else
+                {
+
                 }
             }
         }

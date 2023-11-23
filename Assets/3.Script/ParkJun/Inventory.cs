@@ -36,7 +36,7 @@ public class Inventory : MonoBehaviour
     public GameObject Bag;
     [SerializeField ]
     public Slot[] slots;
-    private Slot[] quickSlots; // Äü½½·ÔÀÇ ½½·Ôµé
+    public Slot[] quickSlots; // Äü½½·ÔÀÇ ½½·Ôµé
     [SerializeField]
     private Drop drop;
 

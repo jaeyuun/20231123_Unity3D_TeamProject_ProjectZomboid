@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 847e159dd81040640aa3e15f248a7d21, type: 3}
   m_Name: Bandage1
   m_EditorClassIdentifier: 
-  itemType: 1
+  itemType: 4
   itemName: Bandage1
   itemDesc: "\uBD95\uB300 \uBAB0\uB77C?"
   itemImage: {fileID: 21300000, guid: 5bf6faaa2f5b1114f9a54d7bb85b35fc, type: 3}

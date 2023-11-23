@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 847e159dd81040640aa3e15f248a7d21, type: 3}
   m_Name: Bullet_Ammo
   m_EditorClassIdentifier: 
-  itemType: 1
+  itemType: 4
   itemName: Bullet
   itemDesc: "\uCD1D\uC54C"
   itemImage: {fileID: 21300000, guid: 97c12bc5ff6712d49be1d2dab494e636, type: 3}
