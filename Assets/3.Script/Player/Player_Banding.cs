@@ -39,7 +39,6 @@ public class Player_Banding : MonoBehaviour, IPointerClickHandler//우클릭 마우스
         {
             player.animator.SetBool("isMaking", true);
             StartCoroutine(player_anim_co());
-            //넣어줘 밴디지값을 하나 까는걸
             inventory.slots[slot_num].SetSlotCount(-1);
             inventory.quickSlots[slot_num].SetSlotCount(-1);
         }

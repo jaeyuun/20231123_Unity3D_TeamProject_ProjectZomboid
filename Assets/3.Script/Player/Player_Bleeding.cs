@@ -48,6 +48,7 @@ public class Player_Bleeding : MonoBehaviour
             else if (hit_part[i] == true && Point[i].isBanding)
             {
                 hitColl.Bleeding.SetActive(false);//아이콘을 끈다
+                statusController.increaseHP(0.001f);
             }
         }
         yield return null;

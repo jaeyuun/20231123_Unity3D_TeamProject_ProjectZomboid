@@ -30,6 +30,8 @@ TagManager:
   - Stomp
   - MusicSlider
   - SettingButton
+  - SettingMenu
+  - HighFence
   layers:
   - Default
   - TransparentFX

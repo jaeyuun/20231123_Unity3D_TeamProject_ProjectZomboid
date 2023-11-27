@@ -132,7 +132,7 @@ public class StatusController : MonoBehaviour
             
     }
     
-    public void increaseHP(int _count)
+    public void increaseHP(float _count)
     {
         if (currentHp + _count < hp)
         {
