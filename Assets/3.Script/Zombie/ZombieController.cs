@@ -140,6 +140,9 @@ public class ZombieController : HP, IState
         {
             StartCoroutine(ZombieDamage_Co());
         }
+
+       
+
     }
 
     private void OnTriggerStay(Collider other)
@@ -185,6 +188,12 @@ public class ZombieController : HP, IState
             {
                 Die();
             }
+        }
+
+        if (collision.gameObject.CompareTag("Car") && !isDie)
+        {
+            zombieAnim.SetTrigger("isDamage");
+            Die();
         }
     }
 
@@ -285,7 +294,7 @@ public class ZombieController : HP, IState
         MusicController.instance.PlaySFXSound("Zombie_Die");
 
         rigid.isKinematic = true;
-        collider.enabled = false;
+        collider.isTrigger = true; //collider.enabled -> collider.isTrigger로 수정 1127_MHK 죽고나서 기둥이 안없어져서 수정했음
 
         if (onDead != null)
         {
