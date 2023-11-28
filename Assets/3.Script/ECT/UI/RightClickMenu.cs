@@ -108,6 +108,7 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
         ClickMenuLoad(menu);
         Player_Move player = hitObject.collider.transform.GetComponentInParent<Player_Move>();
         rightClickButtons[0].onClick.AddListener(player.Rest);
+        rightClickButtons[0].onClick.AddListener(ListClear);
     }
 
     public void WindowClick()
@@ -118,6 +119,8 @@ public class RightClickMenu : MonoBehaviour, IPointerClickHandler, IClickState
         WIndow_bool window = hitObject.collider.transform.GetComponent<WIndow_bool>();
         rightClickButtons[0].onClick.AddListener(window.WindowAnimation);
         rightClickButtons[1].onClick.AddListener(window.WindowAnimation);
+        rightClickButtons[0].onClick.AddListener(ListClear);
+        rightClickButtons[1].onClick.AddListener(ListClear);
     }
     #endregion
 }
