@@ -47,10 +47,8 @@ public class DoorControll : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Door"))
         {
-            Debug.Log("트리거 문이다");
             if (Input.GetKeyDown(KeyCode.E))
             {
-                Debug.Log("E키입력");
                 Door_bool door = other.transform.gameObject.GetComponentInChildren<Door_bool>();
 
                 if (door != null)
