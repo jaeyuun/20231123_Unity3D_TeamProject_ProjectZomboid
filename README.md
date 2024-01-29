@@ -1,4 +1,4 @@
-# Kidstopia
+# Project Zomboid
 > Project Zomboid 모작입니다.   
 > 플레이어가 좀비 아포칼립스 세계에서 살아남는 게임입니다.
 ## Project
