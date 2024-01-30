@@ -8,9 +8,9 @@ RPG, Survival
 2023.11.01 ~ 2023.11.23
 #### 2. 참여 인원 (4인)
 - 김민호 ([BANIKIM](https://github.com/BANIKIM))
-  > 플레이어, 장비, 차량 상호작용
+  > 플레이어, 장비 및 차량 상호작용
 - 박수진 ([Sujiii1](https://github.com/Sujiii1))
-  > 맵 레벨링, 맵 상호작용
+  > 맵 레벨링, 맵 상호작용, 시간
 - 박준영 ([0Baek](https://github.com/0Baek))
   > 인벤토리, 저장
 - 이재윤 ([jaeyuun](https://github.com/jaeyuun))
